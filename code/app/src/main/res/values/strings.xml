@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">betterTrialBook</string>
+    <string name="display1">Sort:</string>
+    <string name="button1">Create</string>
+    <string name="button2">QR Code</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string-array name="method">
+        <item></item>
+        <item>User</item>
+        <item>Alphabet</item>
+    </string-array>
 </resources>
