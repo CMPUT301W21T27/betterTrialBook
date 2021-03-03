@@ -1,8 +1,10 @@
 package com.example.bettertrialbook;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 public class ProfileViewActivity extends AppCompatActivity {
 
@@ -12,8 +14,9 @@ public class ProfileViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_view);
 
         int ID = 1234;
-        String username = "";
-        String email = "";
-        String phone = "";
+        String username = " ";
+        String email = " ";
+        String phone = " ";
+
     }
 }
