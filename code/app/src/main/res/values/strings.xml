@@ -3,6 +3,7 @@
     <string name="display1">Sort:</string>
     <string name="button1">Create</string>
     <string name="button2">QR Code</string>
+    <string name="ID">ID: </string>
     <string name="profile_picture">Profile Picture</string>
     <string-array name="method">
         <item></item>
