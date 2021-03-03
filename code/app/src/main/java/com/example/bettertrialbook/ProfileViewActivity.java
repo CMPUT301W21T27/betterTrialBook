@@ -10,5 +10,10 @@ public class ProfileViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_view);
+
+        int ID = 1234;
+        String username = "";
+        String email = "";
+        String phone = "";
     }
 }
