@@ -10,7 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BetterTrialBook">
         <activity android:name=".SignUp"></activity>
-        <activity android:name=".NonUserProfile" />
         <activity android:name=".ForumViewActivity" />
         <activity android:name=".ProfileViewActivity" />
         <activity android:name=".ExperimentViewActivity" />
