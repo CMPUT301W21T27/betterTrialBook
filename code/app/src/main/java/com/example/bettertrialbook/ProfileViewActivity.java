@@ -1,6 +1,5 @@
 package com.example.bettertrialbook;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,9 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class ProfileViewActivity extends AppCompatActivity {
+import com.example.bettertrialbook.models.User;
 
-    int ID; //send you're user ID if calling this activity
+public class ProfileViewActivity extends AppCompatActivity implements EditContactFragment.OnFragmentInteractionListener {
+
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,18 +20,40 @@ public class ProfileViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_view);
 
         Intent intent = getIntent();
+        user = intent.getParcelableExtra("User");
 
-        //If user in database, replace sign up with edit contact info
-        ID = intent.getIntExtra("userID",0);
+        displayInformation();
     }
 
+    public void setUser(User setTo){
+        user=setTo;
+    }
     public void displayInformation(){
         TextView display;
+        Button button;
 
         display = (TextView) findViewById(R.id.userID_display);
-        display.setText(ID);
+        display.setText(Integer.toString(user.getID()));
+        display.invalidate();
 
-        //if in database, populate with database information
+        display = (TextView) findViewById(R.id.username_display);
+        display.setText(user.getUsername());
+        display.invalidate();
+
+        display = (TextView) findViewById(R.id.email_display);
+        display.setText(user.getContact().getEmail());
+        display.invalidate();
+
+        display = (TextView) findViewById(R.id.phone_display);
+        display.setText(user.getContact().getPhone());
+        display.invalidate();
+
+        if (!user.getUsername().equals(" ")){
+            button = (Button) findViewById(R.id.button2);
+            button.setText("Edit Contact Info");
+            button.invalidate();
+        }
+
 
     }
 
@@ -44,20 +67,54 @@ public class ProfileViewActivity extends AppCompatActivity {
             userSignUp();
         }
         else{
-            //userEditInfo()
+            userEditInfo();
         }
     }
 
     public void userSignUp(){
-        Intent intent = new Intent(this, ProfileViewActivity.class);
-        startActivity(intent);
-        //Check if user in database, otherwise user pressed cancel
-        //If user in database, change signup to say edit
+        Intent intent = new Intent(this, SignUp.class);
+        intent.putExtra("User",user);
+        startActivityForResult(intent,1);
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        User user = intent.getExtras().getParcelable("User");   //Accessing Parcelable Objects
+
+        //Check if user has a username, else sign up was canceled
+        if(user.getUsername().equals(" ")){
+            return;
+        }
+
+        Button button = (Button) findViewById(R.id.button2);
+        button.setText("Edit Contact Info");
+
+        setUser(user);
+        displayInformation();
     }
 
     public void userEditInfo(){
+        new EditContactFragment().show(getSupportFragmentManager(), "EDIT_EXP");
+    }
+
+    @Override
+    public void onOkPressed(String email, String phone){
+        if(!email.equals("")){
+            user.getContact().setEmail(email);
+        }
+        if(!phone.equals("")){
+            user.getContact().setPhone(phone);
+        }
+
+        displayInformation();
 
     }
+
+
+
+
 }
 
