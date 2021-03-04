@@ -95,35 +95,47 @@
     </EditText>
 
     <TextView
-        android:id="@+id/geolocation_Text"
+        android:id="@+id/region_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:text="Geo-Location Required: "
+        android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mintrials_Text">
+        app:layout_constraintTop_toBottomOf="@+id/mintrials_Text" />
 
-    </TextView>
-
-
-    <Button
-        android:id="@+id/geolocation_Yes"
+    <EditText
+        android:id="@+id/region_editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        app:layout_constraintStart_toEndOf="@+id/geolocation_No"
-        app:layout_constraintTop_toBottomOf="@+id/mintrials_editText">
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/region_text"
+        app:layout_constraintTop_toBottomOf="@+id/mintrials_editText" />
 
-    </Button>
-
-    <Button
-        android:id="@+id/geolocation_No"
+    <TextView
+        android:id="@+id/geolocation_Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Geo-Location Required: "
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/region_text">
+
+    </TextView>
+
+    <Button
+        android:id="@+id/geolocation_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="No"
         app:layout_constraintStart_toEndOf="@+id/geolocation_Text"
-        app:layout_constraintTop_toBottomOf="@+id/mintrials_editText">
+        app:layout_constraintTop_toBottomOf="@+id/region_editText">
 
     </Button>
 
@@ -133,7 +145,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/publish_button"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Cancel">
 
     </Button>
 
@@ -144,8 +157,10 @@
         android:layout_marginStart="117dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cancel_button">
+        app:layout_constraintStart_toEndOf="@+id/cancel_button"
+        android:text="Publish">
 
     </Button>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

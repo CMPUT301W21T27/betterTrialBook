@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">betterTrialBook</string>
+
+    <string-array name="experimentTypes">
+        <item>Count-Based</item>
+        <item>Binomial</item>
+        <item>Non-Negative Integer</item>
+        <item>Measurement</item>
+    </string-array>
 </resources>
