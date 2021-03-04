@@ -26,19 +26,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
-        // When you click the profile, it will bring you to (profile / signup / non-user )
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                nonUserProfileDisplay();
-            }
-        });
-    }
-
-    // Start the (profile / signup / non-user ) activity, whoever next
-    public void nonUserProfileDisplay(){
-        Intent intent = new Intent(this, NonUserProfile.class);
-        startActivity(intent);
+//        // When you click the profile, it will bring you to (profile / signup / non-user )
+//        profile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                nonUserProfileDisplay();
+//            }
+//        });
+//    }
+//
+//    // Start the (profile / signup / non-user ) activity, whoever next
+//    public void nonUserProfileDisplay(){
+//        Intent intent = new Intent(this, NonUserProfile.class);
+//        startActivity(intent);
     }
 
     @Override
@@ -49,5 +49,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    public void viewYourProfile(View view){
+        Intent intent = new Intent(this, ProfileViewActivity.class);
+        startActivity(intent);
     }
 }
