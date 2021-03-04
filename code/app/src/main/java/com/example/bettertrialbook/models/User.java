@@ -14,8 +14,30 @@ public class User implements Parcelable {
         contact = new ContactInfo();
     }
 
+    protected User(Parcel in) {
+        ID = in.readInt();
+        username = in.readString();
+        contact = in.readParcelable(ContactInfo.class.getClassLoader());
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
     public int getID() {
         return ID;
+    }
+
+    public void setID(int id){
+        this.ID=id;
     }
 
     public String getUsername() {
@@ -31,26 +53,10 @@ public class User implements Parcelable {
         contact.setPhone(phone);
     }
 
-    public ContactInfo getContact(ContactInfo contact) {
+    public ContactInfo getContact() {
         return contact;
     }
 
-
-    //Parcelable methods to send user between activities
-    protected User(Parcel in) {
-    }
-
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
 
     @Override
     public int describeContents() {
@@ -59,5 +65,8 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(ID);
+        dest.writeString(username);
+        dest.writeParcelable(contact, flags);
     }
 }
