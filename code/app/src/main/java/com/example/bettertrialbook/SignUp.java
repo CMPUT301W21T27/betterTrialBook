@@ -2,18 +2,24 @@ package com.example.bettertrialbook;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.bettertrialbook.dal.UserDAL;
+import com.example.bettertrialbook.models.User;
+
 import java.util.HashMap;
 
-public class SignUp extends AppCompatActivity {
+public class SignUp extends AppCompatActivity implements InvalidUsernameFragment.OnFragmentInteractionListener{
 
     private String username;
     private String email;
     private String phone;
+    private User user;
 
 
     @Override
@@ -21,32 +27,48 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up_information);
 
+        Intent intent = getIntent();
+        user = intent.getParcelableExtra("User");
+
     }
 
     public void cancelPressed(View view){
-        finish();
+        endActivity();
     }
 
     public void confirmPressed(View view){
         TextView input;
-        boolean isValid=false;
-
         input = (TextView) findViewById(R.id.Email);
         email = input.getText().toString();
 
         input = (TextView) findViewById(R.id.Contact);
         phone = input.getText().toString();
 
-        //Keep looping till valid username is inputted
-        while(!isValid){
-            input = (TextView) findViewById(R.id.Username);
-            username = input.getText().toString();
+        input = (TextView) findViewById(R.id.Username);
+        username = input.getText().toString();
 
-            //check if username is in database
-            //if not
-            isValid=true;
+        if(username.equals("InvalidUsername")||username.equals("")){
+            new InvalidUsernameFragment().show(getSupportFragmentManager(), "ERROR_EXP");
+            input.setText("");
+
+        }else{
+            user.setUsername(username);
+            user.setContact(email,phone);
+            endActivity();
         }
 
+    }
+
+    public void endActivity(){
+        Intent intent = new Intent();
+        intent.putExtra("User",user);
+        setResult(Activity.RESULT_OK,intent);
+        finish();
+    }
+
+    @Override
+    public void onOkPressed(){
 
     }
+
 }
