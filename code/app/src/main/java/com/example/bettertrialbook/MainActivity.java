@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.AdapterView;
@@ -52,7 +53,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void viewYourProfile(View view){
+        int ID = 1234;
         Intent intent = new Intent(this, ProfileViewActivity.class);
+        intent.putExtra("userID", ID);
         startActivity(intent);
     }
 }
