@@ -11,7 +11,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 
+import com.example.bettertrialbook.dal.UserDAL;
+import com.example.bettertrialbook.models.User;
+
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+
+    int ID = 1234;
+    User you = new User(ID);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +59,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void viewYourProfile(View view){
-        int ID = 1234;
         Intent intent = new Intent(this, ProfileViewActivity.class);
-        intent.putExtra("userID", ID);
+        intent.putExtra("User",you);
         startActivity(intent);
     }
 }
