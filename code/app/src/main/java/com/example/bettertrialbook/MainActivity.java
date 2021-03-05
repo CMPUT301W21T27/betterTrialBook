@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +16,10 @@ import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.User;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+
+    int uniqueID;
+    UserDAL uDAL;
+    User you;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,19 +35,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
-//        // When you click the profile, it will bring you to (profile / signup / non-user )
-//        profile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                nonUserProfileDisplay();
-//            }
-//        });
-//    }
-//
-//    // Start the (profile / signup / non-user ) activity, whoever next
-//    public void nonUserProfileDisplay(){
-//        Intent intent = new Intent(this, NonUserProfile.class);
-//        startActivity(intent);
+        generateID();
     }
 
     @Override
@@ -63,11 +56,28 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //send this user to profile activity if started
         //OR - don't make a user and pass only the ID around
 
-        int ID = 1234;
-        User you = new User(ID);
-
         Intent intent = new Intent(this, ProfileViewActivity.class);
         intent.putExtra("User",you);
-        startActivity(intent);
+        startActivityForResult(intent,1);
     }
+
+    public void generateID(){
+        uniqueID = 1234;
+        uDAL = new UserDAL();
+
+        you = uDAL.findUserByID(uniqueID);
+
+        //If no user found, create user
+        if (you==null){
+            you = uDAL.addUser(uniqueID);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        you = intent.getExtras().getParcelable("User");   //Accessing Parcelable Objects
+
+    }
+
 }
