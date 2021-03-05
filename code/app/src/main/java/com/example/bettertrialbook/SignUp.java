@@ -20,6 +20,7 @@ public class SignUp extends AppCompatActivity implements InvalidUsernameFragment
     private String email;
     private String phone;
     private User user;
+    UserDAL uDAL = new UserDAL();
 
 
     @Override
@@ -47,16 +48,18 @@ public class SignUp extends AppCompatActivity implements InvalidUsernameFragment
         input = (TextView) findViewById(R.id.Username);
         username = input.getText().toString();
 
-        if(username.equals("InvalidUsername")||username.equals("")){
+        if( username.equals("") || uDAL.userNameTaken(username) ){
             new InvalidUsernameFragment().show(getSupportFragmentManager(), "ERROR_EXP");
             input.setText("");
-
-        }else{
-            user.setUsername(username);
-            user.setContact(email,phone);
-            endActivity();
+            return;
         }
 
+        user.setUsername(username);
+        user.setContact(email,phone);
+
+        uDAL.editUser(user);    //apply changes to database
+
+        endActivity();
     }
 
     public void endActivity(){
