@@ -1,18 +1,24 @@
 package com.example.bettertrialbook;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.User;
 
 public class ProfileViewActivity extends AppCompatActivity implements EditContactFragment.OnFragmentInteractionListener {
 
     User user;
+    UserDAL uDAL = new UserDAL();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,12 +28,17 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
         Intent intent = getIntent();
         user = intent.getParcelableExtra("User");
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+
         displayInformation();
     }
 
     public void setUser(User setTo){
         user=setTo;
     }
+
     public void displayInformation(){
         TextView display;
         Button button;
@@ -48,7 +59,7 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
         display.setText(user.getContact().getPhone());
         display.invalidate();
 
-        if (!user.getUsername().equals(" ")){
+        if (!user.getUsername().equals("")){
             button = (Button) findViewById(R.id.button2);
             button.setText("Edit Contact Info");
             button.invalidate();
@@ -85,7 +96,7 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
         User user = intent.getExtras().getParcelable("User");   //Accessing Parcelable Objects
 
         //Check if user has a username, else sign up was canceled
-        if(user.getUsername().equals(" ")){
+        if(user.getUsername().equals("")){
             return;
         }
 
@@ -109,8 +120,24 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
             user.getContact().setPhone(phone);
         }
 
+        uDAL.editContactInfo(user);
+
         displayInformation();
 
+    }
+
+    /* BACK BUTTON
+     *   Prepares Experiment object to send back to Main
+     *   Returns to main */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        /* Get return object ready  */
+        Intent intent = new Intent();
+        intent.putExtra("User",user);
+        setResult(Activity.RESULT_OK,intent);
+
+        this.finish();
+        return true;
     }
 
 
