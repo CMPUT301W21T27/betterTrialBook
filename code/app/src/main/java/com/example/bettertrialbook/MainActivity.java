@@ -16,9 +16,6 @@ import com.example.bettertrialbook.models.User;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
-    int ID = 1234;
-    User you = new User(ID);
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +56,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void viewYourProfile(View view){
+        //On opening app - generate a unique ID
+        //Check if ID is already in database
+        //If not, add to database with other fields as empty strings
+        //create a user object to represent you with the fields from the database
+        //send this user to profile activity if started
+        //OR - don't make a user and pass only the ID around
+
+        int ID = 1234;
+        User you = new User(ID);
+
         Intent intent = new Intent(this, ProfileViewActivity.class);
         intent.putExtra("User",you);
         startActivity(intent);
