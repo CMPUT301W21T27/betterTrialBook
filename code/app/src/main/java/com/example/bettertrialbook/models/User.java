@@ -10,7 +10,7 @@ public class User implements Parcelable {
 
     public User(int ID) {
         this.ID = ID;
-        username=" ";
+        username="";
         contact = new ContactInfo();
     }
 
