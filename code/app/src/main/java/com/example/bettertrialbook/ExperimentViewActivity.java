@@ -68,15 +68,12 @@ public class ExperimentViewActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // get all the input
                 if (descriptionEdit.getText().length() > 0 && minTrialsEdit.getText().length() > 0 && typeSpinner.getSelectedItem().toString().length() > 0) {
-                    Boolean geoLocation;
-                    if (geoLocationButton.getText() == "No") {
-                        geoLocation = false;
-                    } else {
-                        geoLocation = true;
-                    }
+                    boolean geoLocation;
+                    geoLocation = geoLocationButton.getText() != "No";
                     ExperimentDAL experimentDAL = new ExperimentDAL();
-                    experimentDAL.addExperiment(descriptionEdit.getText().toString(), regionEdit.getText().toString(),
-                            typeSpinner.getSelectedItem().toString(), Integer.parseInt(minTrialsEdit.getText().toString()), geoLocation);
+                    ExperimentInfo experimentInfo = new ExperimentInfo(descriptionEdit.getText().toString(), "Active", typeSpinner.getSelectedItem().toString(),
+                            geoLocation, Integer.parseInt(minTrialsEdit.getText().toString()), regionEdit.getText().toString());
+                    experimentDAL.addExperiment(experimentInfo);
 
                 } else {
                     Toast toast = Toast.makeText(getApplicationContext(), "Please fill out all fields", Toast.LENGTH_LONG);

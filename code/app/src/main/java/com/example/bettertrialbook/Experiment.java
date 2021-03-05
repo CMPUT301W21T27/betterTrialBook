@@ -1,21 +1,24 @@
 package com.example.bettertrialbook;
 
+import com.example.bettertrialbook.dal.ExperimentDAL;
+
 public class Experiment {
     private ExperimentInfo info;
-    private List<Trial> trials;
-    private List<User> subscribers;
-    private List<User> blackList;
-    private List<Question> questions;
-    private CollectionReference collectionRef;
+    // private List<Trial> trials;
+    // private List<User> subscribers;
+    // private List<User> blackList;
+    // private List<Question> questions;
+    // private CollectionReference collectionRef;
 
-    public Experiment(ExperimentInfo info, String description, String region, int minTrials, String status, Boolean geoLocationRequired, User owner, String trialType, CollectionReference cr) {
-
+    public Experiment(ExperimentInfo info) {
+        this.info = info;
     }
 
     public ExperimentInfo getInfo() {
         return info;
     }
 
+    /*
     public List<Trial> getTrials() {
         return trials;
     }
@@ -35,4 +38,5 @@ public class Experiment {
     public CollectionReference getCollectionRef() {
         return collectionRef;
     }
+    */
 }
