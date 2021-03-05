@@ -8,8 +8,8 @@ public class ContactInfo implements Parcelable {
     private String phone;
 
     public ContactInfo() {
-        email = " ";
-        phone = " ";
+        email = "";
+        phone = "";
     }
 
     public String getEmail() {
