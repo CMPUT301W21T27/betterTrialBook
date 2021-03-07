@@ -9,15 +9,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BetterTrialBook">
-        <activity android:name=".ForumViewActivity"></activity>
+        <activity
+            android:name=".ExperimentViewActivity"
+            android:label="@string/title_activity_experiment_view"
+            android:theme="@style/Theme.BetterTrialBook.NoActionBar"></activity>
+        <activity android:name=".ForumViewActivity" />
         <activity android:name=".ProfileViewActivity" />
-        <activity android:name=".ExperimentViewActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".ExperimentAddActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity">
+
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
         </activity>
     </application>
 
