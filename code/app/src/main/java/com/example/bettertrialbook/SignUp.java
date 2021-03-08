@@ -49,7 +49,11 @@ public class SignUp extends AppCompatActivity implements InvalidUsernameFragment
         username = input.getText().toString();
 
         if( username.equals("") || uDAL.userNameTaken(username) ){
-            new InvalidUsernameFragment().show(getSupportFragmentManager(), "ERROR_EXP");
+            String message = "Username Taken";
+            if(username.equals("")){
+                message="Must Enter a Username";
+            }
+            new InvalidUsernameFragment(message).show(getSupportFragmentManager(), "ERROR_EXP");
             input.setText("");
             return;
         }

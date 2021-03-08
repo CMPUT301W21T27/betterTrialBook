@@ -14,7 +14,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 public class InvalidUsernameFragment extends DialogFragment {
+    private String message;
     private OnFragmentInteractionListener listener;
+
+    public InvalidUsernameFragment(String message) {
+        this.message = message;
+    }
 
     /* Ok pressed interface */
     public interface OnFragmentInteractionListener{
@@ -40,7 +45,7 @@ public class InvalidUsernameFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
-                .setTitle("Add Experiment")
+                .setTitle(message)
 
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
