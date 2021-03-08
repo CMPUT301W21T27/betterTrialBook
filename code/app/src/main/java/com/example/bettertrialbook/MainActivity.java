@@ -2,9 +2,12 @@ package com.example.bettertrialbook;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -15,9 +18,11 @@ import android.widget.ImageButton;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.User;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+import java.io.File;
+import java.util.UUID;
 
-    int uniqueID;
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
     UserDAL uDAL;
     User you;
 
@@ -62,15 +67,36 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void generateID(){
-        uniqueID = 1234;
-        uDAL = new UserDAL();
+        // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+        SharedPreferences sharedPref = this.getSharedPreferences("uniqueID", Context.MODE_PRIVATE);
+        String defaultIDValue = sharedPref.getString("uniqueID", null);
+        if (defaultIDValue == null) {
+            Log.d("Generate", "Empty id");
+            String uID = UUID.randomUUID().toString();
+            Log.d("Generate", uID.toString());
 
-        you = uDAL.findUserByID(uniqueID);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("uniqueID", uID);
+            editor.apply();
+            defaultIDValue = uID;
 
-        //If no user found, create user
-        if (you==null){
-            you = uDAL.addUser(uniqueID);
+        } else {
+            Log.d("TEST", "1. "+defaultIDValue);
         }
+
+        uDAL = new UserDAL();
+        // WORKS IN GENERAL BUT HAS SOME ISSUES WHEN MORE FEATURES ADDED
+        uDAL.findUserByID(defaultIDValue, new UserDAL.FindUserByIDCallback() {
+            @Override
+            public void onCallback(User user) {
+                // If no user found, create user
+                if (user == null) {
+                    //you = uDAL.addUser(defaultIDValue);
+                } else {
+                    Log.d("TEST", "4. "+user.getID()+user.getUsername());
+                }
+            }
+        });
     }
 
     @Override

@@ -4,18 +4,18 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class User implements Parcelable {
-    private int ID;
+    private String ID;
     private String username;
     private ContactInfo contact;
 
-    public User(int ID) {
+    public User(String ID) {
         this.ID = ID;
         username="";
         contact = new ContactInfo();
     }
 
     protected User(Parcel in) {
-        ID = in.readInt();
+        ID = in.readString();
         username = in.readString();
         contact = in.readParcelable(ContactInfo.class.getClassLoader());
     }
@@ -32,11 +32,11 @@ public class User implements Parcelable {
         }
     };
 
-    public int getID() {
+    public String getID() {
         return ID;
     }
 
-    public void setID(int id){
+    public void setID(String id){
         this.ID=id;
     }
 
@@ -65,7 +65,7 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(ID);
+        dest.writeString(ID);
         dest.writeString(username);
         dest.writeParcelable(contact, flags);
     }
