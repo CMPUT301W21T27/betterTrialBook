@@ -46,12 +46,12 @@ public class EditContactFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
-                .setTitle("Add Experiment")
+                .setTitle("Edit Contact Info")
 
                 .setNegativeButton("Cancel",null)
                 //exit fragment
 
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Apply", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String email = emailInput.getText().toString();
