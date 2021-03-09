@@ -16,22 +16,13 @@
             android:theme="@style/Theme.BetterTrialBook.NoActionBar"></activity>
         <activity android:name=".ForumViewActivity" />
         <activity android:name=".ProfileViewActivity" />
-        <activity android:name=".ExperimentAddActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ExperimentAddActivity" />
         <activity android:name=".MainActivity">
-
-            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            -->
         </activity>
     </application>
 
