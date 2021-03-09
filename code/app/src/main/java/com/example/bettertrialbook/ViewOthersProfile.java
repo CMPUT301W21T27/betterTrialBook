@@ -34,7 +34,6 @@ public class ViewOthersProfile extends AppCompatActivity {
 
     public void displayInformation(){
         TextView display;
-        Button button;
 
         display = (TextView) findViewById(R.id.userID_display);
         display.setText(user.getID());
