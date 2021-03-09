@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -48,22 +49,29 @@ public class SignUp extends AppCompatActivity implements InvalidUsernameFragment
         input = (TextView) findViewById(R.id.Username);
         username = input.getText().toString();
 
-        if( username.equals("") || uDAL.userNameTaken(username) ){
-            String message = "Username Taken";
-            if(username.equals("")){
-                message="Must Enter a Username";
-            }
+        if( username.equals("") ){
+            String message ="Must Enter a Username";
             new InvalidUsernameFragment(message).show(getSupportFragmentManager(), "ERROR_EXP");
             input.setText("");
-            return;
+
+        }else{
+            uDAL.userNameTaken(username, new UserDAL.UsernameTakenCallback() {
+                @Override
+                public void onCallback(boolean isNotTaken) {
+                    Log.d("TEST","Callback Success: isNotTaken = "+isNotTaken);
+                    if(!isNotTaken ){
+                        String message ="Username Unavailable";
+                        new InvalidUsernameFragment(message).show(getSupportFragmentManager(), "ERROR_EXP");
+                    }else{
+                        user.setUsername(username);
+                        user.setContact(email,phone);
+
+                        uDAL.editUser(user);    //apply changes to database
+                        endActivity();
+                    }
+                }
+            });
         }
-
-        user.setUsername(username);
-        user.setContact(email,phone);
-
-        uDAL.editUser(user);    //apply changes to database
-
-        endActivity();
     }
 
     public void endActivity(){
