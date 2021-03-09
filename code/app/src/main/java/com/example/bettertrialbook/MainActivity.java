@@ -53,8 +53,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         FirebaseFirestore db;
         db = FirebaseFirestore.getInstance();
         CollectionReference reference = db.collection("Experiments");
-
-        // Testing4: Test out the search and print out related details (Using SearchView) (Complete)
+        
         searchItem.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
