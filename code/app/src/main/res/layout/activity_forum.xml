@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:context=".forum.ForumActivity">
+
+    <TextView
+        android:id="@+id/qlist_experiment_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        android:textSize="40dp"
+        android:text="Experiment Title" />
+
+    <ListView
+        android:id="@+id/question_list"
+        android:layout_width="match_parent"
+        android:layout_height="600dp" />
+
+
+</LinearLayout>
