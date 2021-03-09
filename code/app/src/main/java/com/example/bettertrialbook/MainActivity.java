@@ -30,19 +30,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void viewYourProfile(View view){
-        //On opening app - generate a unique ID
-        //Check if ID is already in database
-        //If not, add to database with other fields as empty strings
-        //create a user object to represent you with the fields from the database
-        //send this user to profile activity if started
-        //OR - don't make a user and pass only the ID around
-
+        /*Calls the ProfileViewActivity
+        * Sends user object "you" to display their info
+        * Expects an updated "you" object as a return
+        * */
         Intent intent = new Intent(this, ProfileViewActivity.class);
         intent.putExtra("User",you);
         startActivityForResult(intent,1);
     }
 
     public void generateID(){
+        /*
+        * Generates a unqiue ID per user
+        * Checks if ID is in database
+        *   Adds ID to DB if it's not
+        * Creates user object "you" to represent you
+        * */
+
+        // Generating ID
         // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
         SharedPreferences sharedPref = this.getSharedPreferences("uniqueID", Context.MODE_PRIVATE);
         String defaultIDValue = sharedPref.getString("uniqueID", null);
@@ -60,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
             Log.d("TEST", "1. "+defaultIDValue);
         }
 
+        // Checking if ID in Database, else adds it to database
         final String finalID = defaultIDValue;
-
         uDAL = new UserDAL();
 
         // https://www.youtube.com/watch?v=0ofkvm97i0s - Callback
@@ -79,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //Return from ProfileViewActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);

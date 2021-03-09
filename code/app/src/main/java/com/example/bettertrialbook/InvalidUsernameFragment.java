@@ -12,7 +12,12 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-
+/*
+* Fragment called when either:
+*   No username entered
+*   Username entered is already taken
+* Title of fragment changes depending on which reason it was called for
+* */
 public class InvalidUsernameFragment extends DialogFragment {
     private String message;
     private OnFragmentInteractionListener listener;

@@ -12,10 +12,10 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-
+/*
+* Fragment for entering new contact info
+* */
 public class EditContactFragment extends DialogFragment {
-    private EditText email;
-    private EditText phone;
     private OnFragmentInteractionListener listener;
 
     /* Ok pressed interface */
@@ -40,8 +40,6 @@ public class EditContactFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.edit_contact_fragment,null);
         EditText emailInput = view.findViewById(R.id.email_editText);
         EditText phoneInput = view.findViewById(R.id.phone_editText);
-
-
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder

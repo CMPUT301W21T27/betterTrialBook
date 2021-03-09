@@ -40,6 +40,8 @@ public class SignUp extends AppCompatActivity implements InvalidUsernameFragment
 
     public void confirmPressed(View view){
         TextView input;
+
+        //Get inputted values
         input = (TextView) findViewById(R.id.Email);
         email = input.getText().toString();
 
@@ -49,12 +51,14 @@ public class SignUp extends AppCompatActivity implements InvalidUsernameFragment
         input = (TextView) findViewById(R.id.Username);
         username = input.getText().toString();
 
+        //Validate username
         if( username.equals("") ){
             String message ="Must Enter a Username";
             new InvalidUsernameFragment(message).show(getSupportFragmentManager(), "ERROR_EXP");
             input.setText("");
 
         }else{
+            //Using callbacks like in main
             uDAL.userNameTaken(username, new UserDAL.UsernameTakenCallback() {
                 @Override
                 public void onCallback(boolean isNotTaken) {
@@ -75,6 +79,8 @@ public class SignUp extends AppCompatActivity implements InvalidUsernameFragment
     }
 
     public void endActivity(){
+        //Ends the activity
+        //returns updated user object
         Intent intent = new Intent();
         intent.putExtra("User",user);
         setResult(Activity.RESULT_OK,intent);
@@ -83,7 +89,7 @@ public class SignUp extends AppCompatActivity implements InvalidUsernameFragment
 
     @Override
     public void onOkPressed(){
-
+        //Ok button on fragment
     }
 
 }
