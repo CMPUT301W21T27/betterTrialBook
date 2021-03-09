@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bettertrialbook.models.User;
 
+/*
+* Like viewing your own profile, but no signup/edit button
+* */
 public class ViewOthersProfile extends AppCompatActivity {
 
     User user;
@@ -36,7 +39,11 @@ public class ViewOthersProfile extends AppCompatActivity {
         TextView display;
 
         display = (TextView) findViewById(R.id.userID_display);
-        display.setText(user.getID());
+        if(user.getID().length()<8){
+            display.setText(user.getID());
+        }else{
+            display.setText(user.getID().substring(0,8));
+        }
         display.invalidate();
 
         display = (TextView) findViewById(R.id.username_display);
@@ -54,15 +61,9 @@ public class ViewOthersProfile extends AppCompatActivity {
     }
 
     /* BACK BUTTON
-     *   Prepares Experiment object to send back to Main
-     *   Returns to main */
+     *   Returns to experiment view */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        /* Get return object ready  */
-        Intent intent = new Intent();
-        intent.putExtra("User",user);
-        setResult(Activity.RESULT_OK,intent);
-
         this.finish();
         return true;
     }

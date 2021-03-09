@@ -25,26 +25,37 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_view);
 
+        //Get user to display
         Intent intent = getIntent();
         user = intent.getParcelableExtra("User");
 
+        //Initialize back arrow button to return to main
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-
+        //Display user information
         displayInformation();
     }
 
     public void setUser(User setTo){
+        //Displays all information in User object
         user=setTo;
     }
 
     public void displayInformation(){
+        //Displays information
+        //Sets name of button depending on if user signed up or not
+
         TextView display;
         Button button;
 
+        //Display only 8 chars of ID
         display = (TextView) findViewById(R.id.userID_display);
-        display.setText(user.getID());
+        if(user.getID().length()<8){
+            display.setText(user.getID());
+        }else{
+            display.setText(user.getID().substring(0,8));
+        }
         display.invalidate();
 
         display = (TextView) findViewById(R.id.username_display);
@@ -59,13 +70,12 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
         display.setText(user.getContact().getPhone());
         display.invalidate();
 
+        //If user signed up, change button name
         if (!user.getUsername().equals("")){
             button = (Button) findViewById(R.id.button2);
             button.setText("Edit Contact Info");
             button.invalidate();
         }
-
-
     }
 
     public void buttonClicked(View view){
@@ -83,12 +93,16 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
     }
 
     public void userSignUp(){
+        //Calls sign up activity
+        //Sends user object to sign up to update
+        //Expects updated user object as return
         Intent intent = new Intent(this, SignUp.class);
         intent.putExtra("User",user);
         startActivityForResult(intent,1);
 
     }
 
+    //Return from Signup Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -100,17 +114,22 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
             return;
         }
 
+        //If user did sign up, change button name
         Button button = (Button) findViewById(R.id.button2);
         button.setText("Edit Contact Info");
 
+        //Set user to edited user object
+        //Display updated information
         setUser(user);
         displayInformation();
     }
 
+    //Calls edit fragment
     public void userEditInfo(){
         new EditContactFragment().show(getSupportFragmentManager(), "EDIT_EXP");
     }
 
+    //Edit contact fragment results
     @Override
     public void onOkPressed(String email, String phone){
         if(!email.equals("")){
@@ -127,7 +146,7 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
     }
 
     /* BACK BUTTON
-     *   Prepares Experiment object to send back to Main
+     *   Prepares user object to send back to Main
      *   Returns to main */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
