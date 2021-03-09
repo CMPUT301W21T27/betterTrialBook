@@ -8,17 +8,13 @@ import com.example.bettertrialbook.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.model.Document;
 
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class UserDAL {
 
@@ -65,6 +61,10 @@ public class UserDAL {
         void onCallback(User user);
     }
 
+    public interface UsernameTakenCallback {
+        void onCallback(boolean isNotTaken);
+    }
+
     public User addUser(String id){
         //Add user when ID is first generated and not in Database
         HashMap<String, Object> data = new HashMap<>();
@@ -96,7 +96,21 @@ public class UserDAL {
 
     }
 
-    public boolean userNameTaken(String username){
-        return false;
+    public void userNameTaken(String username, UsernameTakenCallback callback){
+
+        collRef.whereEqualTo("username",username).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            boolean isNotTaken = task.getResult().isEmpty();
+                            Log.d("TEST","Task Success: isNotTaken = "+isNotTaken);
+                            callback.onCallback(isNotTaken);
+
+                        } else {
+                            Log.d("TEST", "Failed with:", task.getException());
+                        }
+                    }
+                });
     }
 }
