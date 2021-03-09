@@ -84,16 +84,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Log.d("TEST", "1. "+defaultIDValue);
         }
 
+        final String finalID = defaultIDValue;
+
         uDAL = new UserDAL();
-        // WORKS IN GENERAL BUT HAS SOME ISSUES WHEN MORE FEATURES ADDED
+
+        // https://www.youtube.com/watch?v=0ofkvm97i0s - Callback
         uDAL.findUserByID(defaultIDValue, new UserDAL.FindUserByIDCallback() {
             @Override
             public void onCallback(User user) {
                 // If no user found, create user
                 if (user == null) {
-                    //you = uDAL.addUser(defaultIDValue);
+                    you = uDAL.addUser(finalID);
                 } else {
                     Log.d("TEST", "4. "+user.getID()+user.getUsername());
+                    you = user;
                 }
             }
         });
