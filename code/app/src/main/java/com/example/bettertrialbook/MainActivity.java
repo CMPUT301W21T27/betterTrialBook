@@ -23,7 +23,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
     private ArrayList<ExperimentInfo> trialInfoList;
     private ArrayAdapter<ExperimentInfo> trialInfoAdapter;
@@ -34,7 +34,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
 
         Button scanQR = findViewById(R.id.ScanQR_Button);               // Button to go to the scan QR page
+        /* ON HOLD
         Spinner spinner = findViewById(R.id.Option_Display);
+        */
         Button createQR = findViewById(R.id.CreateQR_Button);           // Button to go to the create QR page
         ListView resultList = findViewById(R.id.Result_ListView);
         SearchView searchItem = findViewById(R.id.SearchItem);
@@ -43,11 +45,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         trialInfoAdapter = new CustomList(this, trialInfoList);
         resultList.setAdapter(trialInfoAdapter);
 
+        /* ON HOLD
         // Choose the option for the sorting method
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.method, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
+        */
 
         // Connection to the FireStore FireBase
         FirebaseFirestore db;
@@ -93,15 +97,5 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     // Check for the keywords in the description of the document in the FireBase FireStore
     public boolean checkforKeyWords(String word, String key) {
         return word.toLowerCase().contains(key.toLowerCase());
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String text = parent.getItemAtPosition(position).toString();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        // Empty Body
     }
 }
