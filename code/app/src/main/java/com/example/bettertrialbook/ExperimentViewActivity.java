@@ -24,7 +24,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // get id of currently selected experiment
-                experimentId = getIntent().getStringExtra(Intents.EXTRA_EXPERIMENT_ID);
+                experimentId = getIntent().getStringExtra(Extras.EXPERIMENT_ID);
 
                 if (unpublishButton.getText().equals("Unpublish")) {
                     unpublishButton.setText("Publish");
@@ -39,8 +39,9 @@ public class ExperimentViewActivity extends AppCompatActivity {
         });
     }
 
-    private  void openForum() {
+    public void openForum(View view) {
         Intent intent = new Intent(this, ForumActivity.class);
-        intent.putExtra(Intents.EXTRA_EXPERIMENT_ID, experimentId);
+        intent.putExtra(Extras.EXPERIMENT_ID, experimentId);
+        startActivity(intent);
     }
 }

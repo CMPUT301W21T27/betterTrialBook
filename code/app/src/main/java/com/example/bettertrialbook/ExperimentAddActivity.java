@@ -12,7 +12,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.bettertrialbook.dal.ExperimentDAL;
-import com.example.bettertrialbook.models.Experiment;
 import com.example.bettertrialbook.models.ExperimentInfo;
 
 
@@ -94,7 +93,7 @@ public class ExperimentAddActivity extends AppCompatActivity {
 
     public void openExperimentViewActivity(String experimentId) {
         Intent intent = new Intent(ExperimentAddActivity.this, ExperimentViewActivity.class);
-        intent.putExtra(Intents.EXTRA_EXPERIMENT_ID, experimentId);
+        intent.putExtra(Extras.EXPERIMENT_ID, experimentId);
         startActivity(intent);
     }
 }
