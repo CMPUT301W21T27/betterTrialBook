@@ -1,16 +1,5 @@
 <resources>
     <string name="app_name">betterTrialBook</string>
-    <string name="display1">Sort:</string>
-    <string name="button1">Create</string>
-    <string name="button2">QR Code</string>
-    <string name="ID">ID: </string>
-    <string name="profile_picture">Profile Picture</string>
-    <string-array name="method">
-        <item></item>
-        <item>User</item>
-        <item>Alphabet</item>
-    </string-array>
-
     <string-array name="experimentTypes">
         <item>Count-Based</item>
         <item>Binomial</item>
@@ -26,4 +15,14 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <!-- Strings used in the initial screen -->
+    <string name="Status">Status</string>
+    <string name="type_display">Type:</string>
+    <string name="sort_display">Sort:</string>
+    <string name="trialType">TrialType</string>
+    <string name="scanQR_text">Scan QR</string>
+    <string name="createQR_text">Create</string>
+    <string name="description">Description</string>
+    <string name="profile_description">Profile Image</string>
 </resources>
