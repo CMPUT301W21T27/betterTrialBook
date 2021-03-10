@@ -24,4 +24,13 @@
         app:layout_constraintVertical_bias="0.024"
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 
+    <Button
+        android:id="@+id/experiment_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

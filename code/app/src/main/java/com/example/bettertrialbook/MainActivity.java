@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Telephony;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.User;
@@ -24,6 +26,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Button experimentButton = findViewById(R.id.experiment_button);
+
+        experimentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ExperimentAddActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         generateID();
