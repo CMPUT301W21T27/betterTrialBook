@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         generateID();
     }
 
@@ -89,6 +88,11 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, intent);
         you = intent.getExtras().getParcelable("User");   //Accessing Parcelable Objects
 
+    }
+
+    public void createExperiment(View view) {
+        Intent intent = new Intent(this, ExperimentAddActivity.class);
+        startActivity(intent);
     }
 
 }
