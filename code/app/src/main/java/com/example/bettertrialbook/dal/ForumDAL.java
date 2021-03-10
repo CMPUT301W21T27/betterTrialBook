@@ -31,7 +31,4 @@ public class ForumDAL {
         collRef.document(qId).set(question);
     }
 
-    public interface Callback<T> {
-        void execute(T t);
-    }
 }

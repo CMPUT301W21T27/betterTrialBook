@@ -3,8 +3,8 @@ package com.example.bettertrialbook.dal;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-import com.example.bettertrialbook.models.Experiment;
 import com.example.bettertrialbook.models.ExperimentInfo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -16,13 +16,20 @@ import java.util.HashMap;
 public class ExperimentDAL {
 
     final String TAG = "ExperimentDAL";
+    // initialize db
+    FirebaseFirestore db;
+    CollectionReference collRef;
 
-    public void addExperiment(ExperimentInfo experimentInfo) {
-        // initialize db
-        FirebaseFirestore db;
-
+    public ExperimentDAL() {
         db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("Experiments");
+        collRef = db.collection("Experiments");
+    }
+
+    /**
+     * @param experimentInfo
+     * @param onCreate
+     */
+    public void addExperiment(ExperimentInfo experimentInfo, @Nullable Callback<String> onCreate) {
 
         HashMap<String, Object> data = new HashMap<>();
         data.put("Description", experimentInfo.getDescription());
@@ -33,24 +40,17 @@ public class ExperimentDAL {
         data.put("TrialType", experimentInfo.getTrialType());
         data.put("Visible", true);
 
-        String experimentId = collectionReference.document().getId();
-
-        collectionReference
-                .document(experimentId)
-                .set(data)
+        collRef
+                .add(data)
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d(TAG, "Data could not be added" + e.toString());
                     }
                 })
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Data has been added");
-                        Log.d(TAG, experimentId);
-                        experimentInfo.setId(experimentId);
-                    }
+                .addOnSuccessListener(docRef -> {
+                    if (onCreate != null)
+                        onCreate.execute(docRef.getId());
                 });
     }
 

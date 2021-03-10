@@ -1,5 +1,6 @@
 package com.example.bettertrialbook;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -7,8 +8,10 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bettertrialbook.dal.ExperimentDAL;
+import com.example.bettertrialbook.forum.ForumActivity;
 
 public class ExperimentViewActivity extends AppCompatActivity {
+    String experimentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,19 +24,23 @@ public class ExperimentViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // get id of currently selected experiment
-                String id = "3DPU8vG4aHcAJd7iHR7M";
-
+                experimentId = getIntent().getStringExtra(Intents.EXTRA_EXPERIMENT_ID);
 
                 if (unpublishButton.getText().equals("Unpublish")) {
                     unpublishButton.setText("Publish");
                     ExperimentDAL experimentDAL = new ExperimentDAL();
-                    experimentDAL.unpublishExperiment(id);
+                    experimentDAL.unpublishExperiment(experimentId);
                 } else {
                     unpublishButton.setText("Unpublish");
                     ExperimentDAL experimentDAL = new ExperimentDAL();
-                    experimentDAL.publishExperiment(id);
+                    experimentDAL.publishExperiment(experimentId);
                 }
             }
         });
+    }
+
+    private  void openForum() {
+        Intent intent = new Intent(this, ForumActivity.class);
+        intent.putExtra(Intents.EXTRA_EXPERIMENT_ID, experimentId);
     }
 }

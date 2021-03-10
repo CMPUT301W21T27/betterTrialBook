@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.bettertrialbook.dal.ExperimentDAL;
+import com.example.bettertrialbook.models.Experiment;
 import com.example.bettertrialbook.models.ExperimentInfo;
 
 
@@ -36,7 +37,6 @@ public class ExperimentAddActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         typeSpinner.setAdapter(adapter);
-
 
 
         EditText descriptionEdit = findViewById(R.id.description_editText);
@@ -73,11 +73,16 @@ public class ExperimentAddActivity extends AppCompatActivity {
                     boolean geoLocation;
                     geoLocation = geoLocationButton.getText().equals("Yes");
                     ExperimentDAL experimentDAL = new ExperimentDAL();
-                    ExperimentInfo experimentInfo = new ExperimentInfo("", descriptionEdit.getText().toString(), "Active", typeSpinner.getSelectedItem().toString(),
-                            geoLocation, Integer.parseInt(minTrialsEdit.getText().toString()), regionEdit.getText().toString());
-                    experimentDAL.addExperiment(experimentInfo);
-                    Intent intent = new Intent(ExperimentAddActivity.this, ExperimentViewActivity.class);
-                    startActivity(intent);
+                    ExperimentInfo experimentInfo = new ExperimentInfo(
+                            "",
+                            descriptionEdit.getText().toString(),
+                            "Active",
+                            typeSpinner.getSelectedItem().toString(),
+                            geoLocation,
+                            Integer.parseInt(minTrialsEdit.getText().toString()),
+                            regionEdit.getText().toString()
+                    );
+                    experimentDAL.addExperiment(experimentInfo, s -> openExperimentViewActivity(s));
 
                 } else {
                     Toast toast = Toast.makeText(getApplicationContext(), "Please fill out all fields", Toast.LENGTH_LONG);
@@ -85,7 +90,11 @@ public class ExperimentAddActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
-
+    public void openExperimentViewActivity(String experimentId) {
+        Intent intent = new Intent(ExperimentAddActivity.this, ExperimentViewActivity.class);
+        intent.putExtra(Intents.EXTRA_EXPERIMENT_ID, experimentId);
+        startActivity(intent);
     }
 }
