@@ -67,5 +67,11 @@ public class ViewOthersProfile extends AppCompatActivity {
         this.finish();
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        this.finish();
+        super.onBackPressed();
+    }
     
 }
