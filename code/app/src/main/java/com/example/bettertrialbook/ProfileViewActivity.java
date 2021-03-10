@@ -17,8 +17,8 @@ import com.example.bettertrialbook.models.User;
 
 public class ProfileViewActivity extends AppCompatActivity implements EditContactFragment.OnFragmentInteractionListener {
 
-    User user;
-    UserDAL uDAL = new UserDAL();
+    private User user;
+    private UserDAL uDAL = new UserDAL();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +26,7 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
         setContentView(R.layout.activity_profile_view);
 
         //Get user to display
-        Intent intent = getIntent();
-        user = intent.getParcelableExtra("User");
+        user =  getIntent().getParcelableExtra("User");
 
         //Initialize back arrow button to return to main
         ActionBar actionBar = getSupportActionBar();
@@ -102,6 +101,14 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
 
     }
 
+    public void endActivity(){
+        Intent intent = new Intent();
+        intent.putExtra("User",user);
+        setResult(Activity.RESULT_OK,intent);
+
+        this.finish();
+    }
+
     //Return from Signup Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -151,16 +158,15 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         /* Get return object ready  */
-        Intent intent = new Intent();
-        intent.putExtra("User",user);
-        setResult(Activity.RESULT_OK,intent);
-
-        this.finish();
+        endActivity();
         return true;
     }
 
-
-
+    @Override
+    public void onBackPressed() {
+        endActivity();
+        super.onBackPressed();
+    }
 
 }
 
