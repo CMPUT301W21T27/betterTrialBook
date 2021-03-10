@@ -6,7 +6,7 @@
     <string name="sort_display">Sort:</string>
     <string name="trialType">TrialType</string>
     <string name="scanQR_text">Scan QR</string>
-    <string name="createQR_text">Create QR</string>
+    <string name="createQR_text">Create</string>
     <string name="description">Description</string>
     <string name="profile_description">Profile Image</string>
     <string-array name="method">
