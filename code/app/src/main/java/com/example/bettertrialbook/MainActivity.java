@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.content.Intent;
 import android.widget.ListView;
 import android.content.Context;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.ArrayAdapter;
 import android.content.SharedPreferences;
@@ -41,26 +42,43 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button scanQR = findViewById(R.id.ScanQR_Button);               // Button to go to the scan QR page
-        Button createQR = findViewById(R.id.CreateQR_Button);           // Button to go to the create QR page
-        ListView resultList = findViewById(R.id.Result_ListView);
+        Button create = findViewById(R.id.CreateQR_Button);           // Button to go to the create Experiment
         SearchView searchItem = findViewById(R.id.SearchItem);
+        ImageView profilePic = findViewById(R.id.ProfilePicture);       // Used to go to the profile page
+        ListView resultList = findViewById(R.id.Result_ListView);
 
         trialInfoList = new ArrayList<>();
         trialInfoAdapter = new CustomList(this, trialInfoList);
         resultList.setAdapter(trialInfoAdapter);
 
-        // Connection to the FireStore FireBase
+        generateID();
+
+        // Go to the Profile View Screen
+        profilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewYourProfile(v);
+            }
+        });
+
+        // Go to Create Experiment Screen
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createExperiment(v);
+            }
+        });
+
+        // Search the Result (Will Refined)
         FirebaseFirestore db;
         db = FirebaseFirestore.getInstance();
         CollectionReference reference = db.collection("Experiments");
-
         searchItem.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // Empty Body: May add-on new features
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 reference.addSnapshotListener((queryDocumentSnapshots, error) -> {
@@ -68,15 +86,15 @@ public class MainActivity extends AppCompatActivity {
                     if (newText.length() > 0) {
                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                             // Only search for the key words in the description
-                            // Further search method will be refined after I have figured out what kind of search we are gonna do
-                            if (checkforKeyWords((String) doc.getData().get("Description"), newText)) {
+                            // Further search method will be refined after
+                            String description = (String) doc.getData().get("Description");
+                            if (description.toLowerCase().contains(newText.toLowerCase())) {
                                 // MinTrials hasn't done yet. Want to wait for further production and then decide.
                                 // GeoLocationRequired hasn't done yet. Want to wait for further production and then decide.
                                 String id = doc.getId();
                                 String region = (String) doc.getData().get("Region");
                                 String status = (String) doc.getData().get("Status");
                                 String trialType = (String) doc.getData().get("TrialType");
-                                String description = (String) doc.getData().get("Description");
                                 trialInfoList.add(new ExperimentInfo(id, description, status, trialType, false, 0, region));
                             }
                         }
@@ -87,8 +105,6 @@ public class MainActivity extends AppCompatActivity {
                 });
                 return false;
             }});
-
-        generateID();
     }
 
     public void viewYourProfile(View view) {
@@ -99,6 +115,19 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ProfileViewActivity.class);
         intent.putExtra("User", you);
         startActivityForResult(intent, 1);
+    }
+
+    //Return from ProfileViewActivity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        you = intent.getExtras().getParcelable("User");             //Accessing Parcelable Objects
+
+    }
+
+    public void createExperiment(View view) {
+        Intent intent = new Intent(this, ExperimentAddActivity.class);
+        startActivity(intent);
     }
 
     public void generateID() {
@@ -144,23 +173,5 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
-
-    //Return from ProfileViewActivity
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        you = intent.getExtras().getParcelable("User");   //Accessing Parcelable Objects
-
-    }
-
-    public void createExperiment(View view) {
-        Intent intent = new Intent(this, ExperimentAddActivity.class);
-        startActivity(intent);
-    }
-
-    // Check for the keywords in the description of the document in the FireBase FireStore
-    public boolean checkforKeyWords(String word, String key) {
-        return word.toLowerCase().contains(key.toLowerCase());
     }
 }
