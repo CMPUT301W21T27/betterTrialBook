@@ -64,6 +64,21 @@ public class User implements Parcelable {
     }
 
 
+    @Override
+    public boolean equals(Object obj){
+        if(obj==null){
+            return false;
+        }
+
+        if(this.getClass()==obj.getClass()){
+            User user = (User) obj;
+            return this.ID.equals(user.getID());
+
+        }else{
+            return false;
+        }
+    }
+
     //Parcelable methods
     protected User(Parcel in) {
         ID = in.readString();
