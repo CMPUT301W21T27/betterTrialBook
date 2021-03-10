@@ -14,7 +14,7 @@
             android:name=".ExperimentViewActivity"
             android:label="@string/title_activity_experiment_view"
             android:theme="@style/Theme.BetterTrialBook.NoActionBar"></activity>
-        <activity android:name=".ForumViewActivity" />
+        <activity android:name=".forum.ForumActivity" />
         <activity android:name=".ProfileViewActivity" />
         <activity android:name=".ExperimentAddActivity" />
         <activity android:name=".MainActivity">

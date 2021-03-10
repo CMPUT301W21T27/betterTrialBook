@@ -1,28 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/qposter"
-        android:layout_width="wrap_content"
+        android:id="@+id/q_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:text="Poster"
-        android:textSize="30sp">
-    </TextView>
+        android:paddingVertical="10dp"
+        android:text="Title"
+        android:textSize="30sp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/qtitle"
-        android:textSize="30sp"
-        android:layout_marginLeft="20dp"
-        android:text="Title">
-    </TextView>
+        android:gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/q_poster"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Poster"
+            android:textSize="20dp"
+            android:layout_marginHorizontal="20dp"
+            />
+
+        <TextView
+            android:id="@+id/q_reply_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:text="0 Replies"
+            android:textSize="20dp" />
+
+    </LinearLayout>
 
 
 </LinearLayout>

@@ -1,5 +1,7 @@
 package com.example.bettertrialbook.dal;
 
+import android.util.Log;
+
 import com.example.bettertrialbook.models.Question;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
