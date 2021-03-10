@@ -2,18 +2,14 @@
     Initial Screen
     Current Version: V1.1
  */
-
 package com.example.bettertrialbook;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.example.bettertrialbook.models.ExperimentInfo;
