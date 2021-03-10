@@ -26,8 +26,11 @@ public class ExperimentDAL {
     }
 
     /**
+     * adds the experiment to the firestore database
      * @param experimentInfo
+     *  the information regarding the experiment that needs to be added
      * @param onCreate
+     *  a callback used after successfully adding the data to the database
      */
     public void addExperiment(ExperimentInfo experimentInfo, @Nullable Callback<String> onCreate) {
 
@@ -38,7 +41,6 @@ public class ExperimentDAL {
         data.put("Status", experimentInfo.getStatus());
         data.put("GeoLocationRequired", experimentInfo.getGeoLocationRequired());
         data.put("TrialType", experimentInfo.getTrialType());
-        data.put("Visible", true);
 
         collRef
                 .add(data)
@@ -54,6 +56,12 @@ public class ExperimentDAL {
                 });
     }
 
+    /**
+     * Sets the status of the experiment with id: experimentId to be 'Unpublished'
+     * meaning it can only be viewed by the owner
+     * @param experimentId
+     *  the unique id of the experiment to be unpublished
+     */
     public void unpublishExperiment(String experimentId) {
         // initialize db
         FirebaseFirestore db;
@@ -63,7 +71,7 @@ public class ExperimentDAL {
 
         collectionReference
                 .document(experimentId)
-                .update("Visible", false)
+                .update("Status", "Unpublished")
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -78,6 +86,12 @@ public class ExperimentDAL {
                 });
     }
 
+    /**
+     * Sets the status of the experiment with id: experimentId to be 'Active'
+     * meaning it can be viewed by all users
+     * @param experimentId
+     *  the unique id of the experiment to be published
+     */
     public void publishExperiment(String experimentId) {
         // initialize db
         FirebaseFirestore db;
@@ -87,7 +101,7 @@ public class ExperimentDAL {
 
         collectionReference
                 .document(experimentId)
-                .update("Visible", true)
+                .update("Status", "Active")
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
