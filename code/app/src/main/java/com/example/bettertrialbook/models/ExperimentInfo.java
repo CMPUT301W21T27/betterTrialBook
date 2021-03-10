@@ -1,5 +1,5 @@
 // Testing Class: Copy from Chris Branch
-package com.example.bettertrialbook;
+package com.example.bettertrialbook.models;
 
 public class ExperimentInfo {
 
