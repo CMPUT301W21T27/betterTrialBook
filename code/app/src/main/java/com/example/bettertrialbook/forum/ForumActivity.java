@@ -1,35 +1,43 @@
 package com.example.bettertrialbook.forum;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.bettertrialbook.R;
+import com.example.bettertrialbook.dal.ForumDAL;
 import com.example.bettertrialbook.models.Question;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
 public class ForumActivity extends AppCompatActivity {
     String expId = "3DPU8vG4aHcAJd7iHR7M";
     ArrayAdapter<Question> questionAdapter;
+    CollectionReference collRef;
+    ForumDAL forumDAL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum);
 
-        CollectionReference collRef = FirebaseFirestore.getInstance().collection("Questions");
+        collRef = FirebaseFirestore.getInstance().collection("Questions");
+        forumDAL = new ForumDAL();
 
-        ArrayList<Question> questions = new ArrayList<>();
-        questions.add(new Question("text", "user", "id", "title", "2734"));
 
-        questionAdapter = new QuestionList(this, questions);
+        questionAdapter = new QuestionList(this);
         ListView questionList = findViewById(R.id.question_list);
         questionList.setAdapter(questionAdapter);
+
+        setupSnapshotListener();
+    }
+
+    private void setupSnapshotListener() {
+        forumDAL.subscribeToQuestions(expId, questions -> {
+            questionAdapter.clear();
+            questionAdapter.addAll(questions);
+        });
     }
 }

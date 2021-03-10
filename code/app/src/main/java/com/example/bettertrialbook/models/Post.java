@@ -5,6 +5,9 @@ public class Post {
     private String posterId;
     private String id;
 
+    // default constructor for firebase
+    public Post() {
+    }
 
     public Post(String text, String posterId, String id) {
         this.text = text;
@@ -24,4 +27,16 @@ public class Post {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "text='" + text + '\'' +
+                ", posterId='" + posterId + '\'' +
+                ", id='" + id + '\'' +
+                '}';
+    }
 }

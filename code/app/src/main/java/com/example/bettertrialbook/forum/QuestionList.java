@@ -13,18 +13,12 @@ import androidx.annotation.Nullable;
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.models.Question;
 
-import org.w3c.dom.Text;
-
-import java.util.List;
-
 public class QuestionList extends ArrayAdapter<Question> {
-   private List<Question> questions;
    private Context context;
 
 
-   public QuestionList(@NonNull Context context, List<Question> questions) {
-      super(context, 0, questions);
-      this.questions = questions;
+   public QuestionList(@NonNull Context context) {
+      super(context, 0);
       this.context = context;
    }
 
@@ -37,7 +31,7 @@ public class QuestionList extends ArrayAdapter<Question> {
           view = LayoutInflater.from(getContext()).inflate(R.layout.question_list, parent, false);
        }
 
-       Question question = questions.get(position);
+       Question question = this.getItem(position);
        TextView title = view.findViewById(R.id.qtitle);
 
        title.setText(question.getTitle());

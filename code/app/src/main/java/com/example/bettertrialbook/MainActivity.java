@@ -25,27 +25,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
         generateID();
     }
 
-    public void viewYourProfile(View view){
+    public void viewYourProfile(View view) {
         /*Calls the ProfileViewActivity
-        * Sends user object "you" to display their info
-        * Expects an updated "you" object as a return
-        * */
+         * Sends user object "you" to display their info
+         * Expects an updated "you" object as a return
+         * */
         Intent intent = new Intent(this, ProfileViewActivity.class);
-        intent.putExtra("User",you);
-        startActivityForResult(intent,1);
+        intent.putExtra("User", you);
+        startActivityForResult(intent, 1);
     }
 
-    public void generateID(){
+    public void generateID() {
         /*
-        * Generates a unqiue ID per user
-        * Checks if ID is in database
-        *   Adds ID to DB if it's not
-        * Creates user object "you" to represent you
-        * */
+         * Generates a unqiue ID per user
+         * Checks if ID is in database
+         *   Adds ID to DB if it's not
+         * Creates user object "you" to represent you
+         * */
 
         // Generating ID
         // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
@@ -62,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             defaultIDValue = uID;
 
         } else {
-            Log.d("TEST", "1. "+defaultIDValue);
+            Log.d("TEST", "1. " + defaultIDValue);
         }
 
         // Checking if ID in Database, else adds it to database
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 if (user == null) {
                     you = uDAL.addUser(finalID);
                 } else {
-                    Log.d("TEST", "4. "+user.getID()+user.getUsername());
+                    Log.d("TEST", "4. " + user.getID() + user.getUsername());
                     you = user;
                 }
             }
