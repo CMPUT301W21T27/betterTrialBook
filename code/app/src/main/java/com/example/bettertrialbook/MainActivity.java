@@ -1,6 +1,6 @@
 /*
     Initial Screen
-    Current Version: V1
+    Current Version: V1.1
  */
 
 package com.example.bettertrialbook;
@@ -65,19 +65,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public boolean onQueryTextChange(String newText) {
                 reference.addSnapshotListener((queryDocumentSnapshots,error) -> {
                     trialInfoList.clear();
-                    for(QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        // Only search for the key words in the description
-                        // Further search method will be refined after I have figured out what kind of search we are gonna do
-                        if (checkforKeyWords((String) doc.getData().get("Description"), newText)) {
-                            // MinTrials hasn't done yet. Want to wait for further production and then decide.
-                            // GeoLocationRequired hasn't done yet. Want to wait for further production and then decide.
-                            String id = doc.getId();
-                            String region = (String) doc.getData().get("Region");
-                            String status = (String) doc.getData().get("Status");
-                            String trialType = (String) doc.getData().get("TrialType");
-                            String description = (String) doc.getData().get("Description");
-                            trialInfoList.add(new ExperimentInfo(id, description,status, trialType,false,0,region));
+                    if (newText.length() > 0) {
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            // Only search for the key words in the description
+                            // Further search method will be refined after I have figured out what kind of search we are gonna do
+                            if (checkforKeyWords((String) doc.getData().get("Description"), newText)) {
+                                // MinTrials hasn't done yet. Want to wait for further production and then decide.
+                                // GeoLocationRequired hasn't done yet. Want to wait for further production and then decide.
+                                String id = doc.getId();
+                                String region = (String) doc.getData().get("Region");
+                                String status = (String) doc.getData().get("Status");
+                                String trialType = (String) doc.getData().get("TrialType");
+                                String description = (String) doc.getData().get("Description");
+                                trialInfoList.add(new ExperimentInfo(id, description, status, trialType, false, 0, region));
+                            }
                         }
+                    } else {
+                        trialInfoList.clear();
                     }
                     trialInfoAdapter.notifyDataSetChanged();
                 });
