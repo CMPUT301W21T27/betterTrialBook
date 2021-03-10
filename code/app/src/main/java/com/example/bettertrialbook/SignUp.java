@@ -92,4 +92,10 @@ public class SignUp extends AppCompatActivity implements InvalidUsernameFragment
         //Ok button on fragment
     }
 
+    @Override
+    public void onBackPressed() {
+        endActivity();
+        super.onBackPressed();
+    }
+
 }
