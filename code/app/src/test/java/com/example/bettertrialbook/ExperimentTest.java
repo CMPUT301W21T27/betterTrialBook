@@ -2,6 +2,7 @@ package com.example.bettertrialbook;
 
 import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.models.ExperimentInfo;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.Before;
 import org.junit.Test;

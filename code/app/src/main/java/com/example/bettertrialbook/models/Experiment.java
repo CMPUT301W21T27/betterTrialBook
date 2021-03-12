@@ -2,9 +2,11 @@ package com.example.bettertrialbook.models;
 
 import com.example.bettertrialbook.dal.ExperimentDAL;
 
+import java.util.List;
+
 public class Experiment {
     private ExperimentInfo info;
-    // private List<Trial> trials;
+    private List<Trial> trials;
     // private List<User> subscribers;
     // private List<User> blackList;
     // private List<Question> questions;
@@ -18,11 +20,11 @@ public class Experiment {
         return info;
     }
 
-    /*
     public List<Trial> getTrials() {
         return trials;
     }
 
+    /*
     public List<User> getSubscribers() {
         return subscribers;
     }
