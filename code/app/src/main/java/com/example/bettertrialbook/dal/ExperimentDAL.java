@@ -6,7 +6,7 @@ import android.widget.ArrayAdapter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.bettertrialbook.CustomTrialList;
+import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.models.BinomialTrial;
 import com.example.bettertrialbook.models.CountTrial;
 import com.example.bettertrialbook.models.ExperimentInfo;
@@ -22,14 +22,9 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ExperimentDAL {
 
@@ -122,6 +117,13 @@ public class ExperimentDAL {
                 });
     }
 
+    /**
+     * Adds a trial to an array of trials for the currently selected experiment
+     * @param experimentId
+     *  the id of the currently selected experiment
+     * @param trial
+     *  the trial to be added
+     */
     public void addTrial(String experimentId, Trial trial) {
         collRef
                 .document(experimentId)
@@ -140,6 +142,17 @@ public class ExperimentDAL {
                 });
     }
 
+    /**
+     * Sets a documentsnapshot listener to update the list of trials for an experiment in real time
+     * @param experimentId
+     *  the id of the currently selected experiment
+     * @param trialDataList
+     *  the list of trials that the array adapter is displaying
+     * @param trialAdapter
+     *  the adapter for the experiment view being displayed
+     * @param experimentType
+     *  the type of experiment currently selected
+     */
     public void addTrialListener(String experimentId, ArrayList<Trial> trialDataList, ArrayAdapter<Trial> trialAdapter, String experimentType) {
         final DocumentReference docRef = collRef.document(experimentId);
         Log.d(TAG, experimentId);
@@ -147,41 +160,37 @@ public class ExperimentDAL {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 trialDataList.clear();
-                if (experimentType.equals("Count-Based")) {
+                // handle each of the four kinds of experiments
+                if (experimentType.equals(Extras.COUNT_TYPE)) {
                     if (value != null && value.exists()) {
+                        // kinda jank, from what I can tell, a hashmap is returned so need to access values through their keys
                         ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
                         if (trials != null) {
                             for (HashMap<Object, Object> trial : trials) {
-                                CountTrial countTrial = new CountTrial();
-                                countTrial.setTrialID(String.valueOf(trial.get("trialID")));
-                                countTrial.setCount(Integer.parseInt(String.valueOf(trial.get("count"))));
+                                CountTrial countTrial = new CountTrial(Integer.parseInt(String.valueOf(trial.get("count"))), String.valueOf(trial.get("trialID")));
                                 Log.d(TAG, String.valueOf(trial.get("trialID")));
                                 Log.d(TAG, String.valueOf(trial.get("count")));
                                 trialDataList.add(countTrial);
                             }
                         }
                     }
-                } else if (experimentType.equals("Binomial")) {
+                } else if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
                     if (value != null && value.exists()) {
                         ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
                         if (trials != null) {
                             for (HashMap<Object, Object> trial : trials) {
-                                BinomialTrial binomialTrial = new BinomialTrial();
-                                binomialTrial.setTrialID(String.valueOf(trial.get("trialID")));
-                                binomialTrial.setFailCount(Integer.parseInt(String.valueOf(trial.get("failCount"))));
-                                binomialTrial.setPassCount(Integer.parseInt(String.valueOf(trial.get("passCount"))));
+                                BinomialTrial binomialTrial = new BinomialTrial(Integer.parseInt(String.valueOf(trial.get("passCount"))),
+                                        Integer.parseInt(String.valueOf(trial.get("failCount"))), String.valueOf(trial.get("trialID")));
                                 trialDataList.add(binomialTrial);
                             }
                         }
                     }
-                } else if (experimentType.equals("Non-Negative Integer")) {
+                } else if (experimentType.equals(Extras.NONNEG_TYPE)) {
                     if (value != null && value.exists()) {
                         ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
                         if (trials != null) {
                             for (HashMap<Object, Object> trial : trials) {
-                                NonNegTrial nonNegTrial = new NonNegTrial();
-                                nonNegTrial.setTrialID(String.valueOf(trial.get("trialID")));
-                                nonNegTrial.setCount(Integer.parseInt(String.valueOf(trial.get("count"))));
+                                NonNegTrial nonNegTrial = new NonNegTrial(Integer.parseInt(String.valueOf(trial.get("count"))), String.valueOf(trial.get("trialID")));
                                 trialDataList.add(nonNegTrial);
                             }
                         }
@@ -191,9 +200,7 @@ public class ExperimentDAL {
                         ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
                         if (trials != null) {
                             for (HashMap<Object, Object> trial : trials) {
-                                MeasurementTrial measurementTrial = new MeasurementTrial();
-                                measurementTrial.setTrialID(String.valueOf(trial.get("trialID")));
-                                measurementTrial.setMeasurement(Double.parseDouble(String.valueOf(trial.get("measurement"))));
+                                MeasurementTrial measurementTrial = new MeasurementTrial(Double.parseDouble(String.valueOf(trial.get("measurement"))), String.valueOf(trial.get("trialID")));
                                 trialDataList.add(measurementTrial);
                             }
                         }

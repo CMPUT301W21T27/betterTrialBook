@@ -1,5 +1,5 @@
 /*
-
+Custom list for displaying trials in an experiment view
 */
 
 package com.example.bettertrialbook;
@@ -17,12 +17,10 @@ import androidx.annotation.Nullable;
 
 import com.example.bettertrialbook.models.BinomialTrial;
 import com.example.bettertrialbook.models.CountTrial;
-import com.example.bettertrialbook.models.ExperimentInfo;
 import com.example.bettertrialbook.models.MeasurementTrial;
 import com.example.bettertrialbook.models.NonNegTrial;
 import com.example.bettertrialbook.models.Trial;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class CustomTrialList extends ArrayAdapter<Trial> {
@@ -56,17 +54,17 @@ public class CustomTrialList extends ArrayAdapter<Trial> {
 
         Log.d("tag", "Trial type is: " + trialType);
 
-        if (trialType.equals("Count-Based")) {
+        // Need to set the result to a different format for each kind of trial type
+        if (trialType.equals(Extras.COUNT_TYPE)) {
             CountTrial countTrial = (CountTrial) trial;
             trialResult.setText(String.valueOf(countTrial.getCount()));
-        } else if (trialType.equals("Binomial")) {
+        } else if (trialType.equals(Extras.BINOMIAL_TYPE)) {
             BinomialTrial binomialTrial = (BinomialTrial) trial;
             trialResult.setText(binomialTrial.getPassCount() + " " + binomialTrial.getFailCount());
-        } else if (trialType.equals("Non-Negative-Integer")) {
-            // for some reason it add a dash between negative and integer
+        } else if (trialType.equals(Extras.NONNEG_TYPE)) {
             NonNegTrial nonNegTrial = (NonNegTrial) trial;
             trialResult.setText(String.valueOf(nonNegTrial.getCount()));
-        } else if (trialType.equals("Measurement")) {
+        } else if (trialType.equals(Extras.MEASUREMENT_TYPE)) {
             MeasurementTrial measurementTrial = (MeasurementTrial) trial;
             trialResult.setText(String.valueOf(measurementTrial.getMeasurement()));
         }
