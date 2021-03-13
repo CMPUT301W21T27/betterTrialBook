@@ -22,11 +22,12 @@ import com.example.bettertrialbook.models.NonNegTrial;
 
 import java.util.UUID;
 
-/**
+/*
  * https://developer.android.com/reference/android/app/DialogFragment
  */
 public class AddTrialDialogFragment extends DialogFragment {
-
+    // when creating an instance of the fragment, we will store the type of trial/experiment as well as the
+    // id of the selected experiment. These can be accessed throughout the fragment
     static AddTrialDialogFragment newInstance(String trialType, String experimentId) {
         AddTrialDialogFragment f = new AddTrialDialogFragment();
 
@@ -46,7 +47,10 @@ public class AddTrialDialogFragment extends DialogFragment {
         String experimentId = (String) trialBundle.get("experimentId");
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        if (trialType.equals((getResources().getStringArray(R.array.experimentTypes))[0])) {
+        // access to the array of experiment types (can only be done with a view context so
+        // hardcoded in some other classes)
+        // First is 'Count-Based'
+        if (trialType.equals(Extras.COUNT_TYPE)) {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_countbased_trial, null);
             EditText countEditText = view.findViewById(R.id.count_editText);
             return builder
@@ -56,17 +60,16 @@ public class AddTrialDialogFragment extends DialogFragment {
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            // create trial with count = countEditText.getText();
-                            CountTrial trial = new CountTrial();
-                            trial.setTrialID(UUID.randomUUID().toString());
-                            trial.setCount(Integer.parseInt(String.valueOf(countEditText.getText())));
+                            CountTrial trial = new CountTrial(Integer.parseInt(String.valueOf(countEditText.getText())), UUID.randomUUID().toString());
                             ExperimentDAL experimentDAL = new ExperimentDAL();
+                            // use the dal to add the trial to the db
                             experimentDAL.addTrial(experimentId, trial);
                         }
                     }).create();
-
-        } else if (trialType.equals((getResources().getStringArray(R.array.experimentTypes))[1])) {
+        // 'Binomial'
+        } else if (trialType.equals(Extras.BINOMIAL_TYPE)) {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_binomial_trial, null);
+            // use these weird final one element arrays for access in the onClick function
             final int[] successes = {0};
             final int[] failures = {0};
             TextView successTextView = view.findViewById(R.id.success_textView);
@@ -114,15 +117,13 @@ public class AddTrialDialogFragment extends DialogFragment {
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            BinomialTrial trial = new BinomialTrial();
-                            trial.setTrialID(UUID.randomUUID().toString());
-                            trial.setPassCount(successes[0]);
-                            trial.setFailCount(failures[0]);
+                            BinomialTrial trial = new BinomialTrial(successes[0], failures[0], UUID.randomUUID().toString());
                             ExperimentDAL experimentDAL = new ExperimentDAL();
                             experimentDAL.addTrial(experimentId, trial);
                         }
                     }).create();
-        } else if (trialType.equals((getResources().getStringArray(R.array.experimentTypes))[2])) {
+        // 'Non-Negative Integer'
+        } else if (trialType.equals(Extras.NONNEG_TYPE)) {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_nonnegative_trial, null);
             EditText amountEditText = view.findViewById(R.id.intamount_editText);
             return builder
@@ -132,14 +133,12 @@ public class AddTrialDialogFragment extends DialogFragment {
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            // create trial with count = amountEditText.getText();
-                            NonNegTrial trial = new NonNegTrial();
-                            trial.setTrialID(UUID.randomUUID().toString());
-                            trial.setCount(Integer.parseInt(String.valueOf(amountEditText.getText())));
+                            NonNegTrial trial = new NonNegTrial(Integer.parseInt(String.valueOf(amountEditText.getText())), UUID.randomUUID().toString());
                             ExperimentDAL experimentDAL = new ExperimentDAL();
                             experimentDAL.addTrial(experimentId, trial);
                         }
                     }).create();
+        // 'Measurement'
         } else {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_measurement_trial, null);
             EditText amountEditText = view.findViewById(R.id.amount_editText);
@@ -150,10 +149,7 @@ public class AddTrialDialogFragment extends DialogFragment {
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            // create trial with count = amountEditText.getText();
-                            MeasurementTrial trial = new MeasurementTrial();
-                            trial.setTrialID(UUID.randomUUID().toString());
-                            trial.setMeasurement(Double.parseDouble(String.valueOf(amountEditText.getText())));
+                            MeasurementTrial trial = new MeasurementTrial(Double.parseDouble(String.valueOf(amountEditText.getText())), UUID.randomUUID().toString());
                             ExperimentDAL experimentDAL = new ExperimentDAL();
                             experimentDAL.addTrial(experimentId, trial);
                         }

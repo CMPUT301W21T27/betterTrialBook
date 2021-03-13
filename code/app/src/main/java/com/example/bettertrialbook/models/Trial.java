@@ -18,9 +18,20 @@ public abstract class Trial {
         return trialID;
     }
 
+    /**
+     * sets the id of the trial
+     * @param trialID
+     *  the string id for the trial
+     */
     public void setTrialID(String trialID) {
         this.trialID = trialID;
     }
 
+    /**
+     * gets the type of trial/experiment for the trial
+     * note this is implemented in other classes extending this one
+     * @return
+     *  the type of trial/experiment for the trial
+     */
     public abstract String getTrialType();
 }

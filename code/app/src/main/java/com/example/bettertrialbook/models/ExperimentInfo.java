@@ -117,6 +117,8 @@ public class ExperimentInfo implements Comparable<ExperimentInfo> {
         return region;
     }
 
+    // I don't remember what this is for...did I add this?
+    // Might not be necessary -Shasta
     @Override
     public boolean equals(Object obj){
         if (obj == null) {
