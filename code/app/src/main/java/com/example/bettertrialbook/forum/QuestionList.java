@@ -36,7 +36,7 @@ public class QuestionList extends ArrayAdapter<Question> {
        TextView replyCount = view.findViewById(R.id.q_reply_count);
 
        title.setText(question.getTitle());
-       replyCount.setText(question.getReplyIds().size() + " Response(s)");
+       replyCount.setText(question.getReplies().size() + " Response(s)");
        return view;
    }
 }

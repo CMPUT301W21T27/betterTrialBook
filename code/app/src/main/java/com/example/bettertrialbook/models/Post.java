@@ -1,18 +1,25 @@
 package com.example.bettertrialbook.models;
 
-public class Post {
+public abstract class Post {
     private String text;
     private String posterId;
     private String id;
+    private String experimentId;
 
-    // default constructor for firebase
-    public Post() {
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public Post(String text, String posterId, String id) {
-        this.text = text;
+    public void setPosterId(String posterId) {
         this.posterId = posterId;
-        this.id = id;
+    }
+
+    public String getExperimentId() {
+        return experimentId;
+    }
+
+    public void setExperimentId(String experimentId) {
+        this.experimentId = experimentId;
     }
 
     public String getText() {
@@ -29,6 +36,16 @@ public class Post {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    /**
+     * Checks if all required fields have been set.
+     */
+    public boolean validate() {
+        if (text == null) return false;
+        if (posterId == null) return false;
+        if (experimentId == null) return false;
+        return true;
     }
 
     @Override
