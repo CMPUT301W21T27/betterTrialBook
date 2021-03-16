@@ -45,10 +45,10 @@ public class ExperimentDAL {
      * @param onCreate
      *  a callback used after successfully adding the data to the database
      */
-    public void addExperiment(ExperimentInfo experimentInfo, @Nullable Callback<String> onCreate) {
-
+    public void addExperiment(ExperimentInfo experimentInfo, @Nullable Callback<ExperimentInfo> onCreate) {
         HashMap<String, Object> data = new HashMap<>();
         data.put("Description", experimentInfo.getDescription());
+        data.put("Owner", experimentInfo.getOwnerId());
         data.put("Region", experimentInfo.getRegion());
         data.put("MinTrials", experimentInfo.getMinTrials());
         data.put("Status", experimentInfo.getStatus());
@@ -64,8 +64,10 @@ public class ExperimentDAL {
                     }
                 })
                 .addOnSuccessListener(docRef -> {
-                    if (onCreate != null)
-                        onCreate.execute(docRef.getId());
+                    if (onCreate != null) {
+                        experimentInfo.setId(docRef.getId());
+                        onCreate.execute(experimentInfo);
+                    }
                 });
     }
 
@@ -154,8 +156,8 @@ public class ExperimentDAL {
      *  the type of experiment currently selected
      */
     public void addTrialListener(String experimentId, ArrayList<Trial> trialDataList, ArrayAdapter<Trial> trialAdapter, String experimentType) {
-        final DocumentReference docRef = collRef.document(experimentId);
         Log.d(TAG, experimentId);
+        final DocumentReference docRef = collRef.document(experimentId);
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -168,8 +170,8 @@ public class ExperimentDAL {
                         if (trials != null) {
                             for (HashMap<Object, Object> trial : trials) {
                                 CountTrial countTrial = new CountTrial(Integer.parseInt(String.valueOf(trial.get("count"))), String.valueOf(trial.get("trialID")));
-                                Log.d(TAG, String.valueOf(trial.get("trialID")));
-                                Log.d(TAG, String.valueOf(trial.get("count")));
+                                // Log.d(TAG, String.valueOf(trial.get("trialID")));
+                                // Log.d(TAG, String.valueOf(trial.get("count")));
                                 trialDataList.add(countTrial);
                             }
                         }

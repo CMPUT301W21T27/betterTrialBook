@@ -92,11 +92,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             if (description.toLowerCase().contains(newText.toLowerCase())) {
                                 // MinTrials hasn't done yet. Want to wait for further production and then decide.
                                 // GeoLocationRequired hasn't done yet. Want to wait for further production and then decide.
+                                String ownerId = you.getID();
                                 String id = doc.getId();
                                 String region = (String) doc.getData().get("Region");
                                 String status = (String) doc.getData().get("Status");
                                 String trialType = (String) doc.getData().get("TrialType");
-                                trialInfoList.add(new ExperimentInfo(id, description, status, trialType, false, 0, region));
+                                trialInfoList.add(new ExperimentInfo(description, ownerId, status, id, trialType, false, 0, region));
                             }
                         }
                     } else {
@@ -128,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public void createExperiment(View view) {
         Intent intent = new Intent(this, ExperimentAddActivity.class);
+        intent.putExtra("OwnerId", you.getID());
         startActivity(intent);
     }
 
@@ -182,8 +184,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String experimentId = trialInfoAdapter.getItem(position).getId();
         String experimentType = trialInfoAdapter.getItem(position).getTrialType();
         String experimentStatus = trialInfoAdapter.getItem(position).getStatus();
+        Boolean isOwner = ((trialInfoAdapter.getItem(position).getOwnerId()).equals(you.getID()));
+        Log.d("TEST", (trialInfoAdapter.getItem(position).getOwnerId()));
 
         Intent myIntent = new Intent(view.getContext(), ExperimentViewActivity.class);
+        myIntent.putExtra("IsOwner", isOwner);
+        myIntent.putExtra("NewExperiment", false);
         myIntent.putExtra("ExperimentId", experimentId);
         myIntent.putExtra("ExperimentType", experimentType);
         myIntent.putExtra("ExperimentStatus", experimentStatus);

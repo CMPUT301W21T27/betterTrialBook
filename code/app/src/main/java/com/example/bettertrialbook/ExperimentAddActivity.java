@@ -1,7 +1,5 @@
 package com.example.bettertrialbook;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.models.ExperimentInfo;
@@ -22,6 +22,7 @@ import com.example.bettertrialbook.models.ExperimentInfo;
  */
 
 public class ExperimentAddActivity extends AppCompatActivity {
+    String ownerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class ExperimentAddActivity extends AppCompatActivity {
         // Apply the adapter to the spinner
         typeSpinner.setAdapter(adapter);
 
+        ownerId = getIntent().getStringExtra("OwnerId");
 
         EditText descriptionEdit = findViewById(R.id.description_editText);
         EditText minTrialsEdit = findViewById(R.id.mintrials_editText);
@@ -73,9 +75,10 @@ public class ExperimentAddActivity extends AppCompatActivity {
                     geoLocation = geoLocationButton.getText().equals("Yes");
                     ExperimentDAL experimentDAL = new ExperimentDAL();
                     ExperimentInfo experimentInfo = new ExperimentInfo(
-                            "",
                             descriptionEdit.getText().toString(),
+                            ownerId,
                             "Active",
+                            "",
                             typeSpinner.getSelectedItem().toString(),
                             geoLocation,
                             Integer.parseInt(minTrialsEdit.getText().toString()),
@@ -91,9 +94,18 @@ public class ExperimentAddActivity extends AppCompatActivity {
         });
     }
 
-    public void openExperimentViewActivity(String experimentId) {
-        Intent intent = new Intent(ExperimentAddActivity.this, ExperimentViewActivity.class);
-        intent.putExtra(Extras.EXPERIMENT_ID, experimentId);
-        startActivity(intent);
+    public void openExperimentViewActivity(ExperimentInfo experimentInfo) {
+        String experimentId = experimentInfo.getId();
+        String experimentType = experimentInfo.getTrialType();
+        String experimentStatus = experimentInfo.getStatus();
+        Boolean isOwner = true;
+
+        Intent myIntent = new Intent(ExperimentAddActivity.this, ExperimentViewActivity.class);
+        myIntent.putExtra("IsOwner", isOwner);
+        myIntent.putExtra("NewExperiment", true);
+        myIntent.putExtra("ExperimentId", experimentId);
+        myIntent.putExtra("ExperimentType", experimentType);
+        myIntent.putExtra("ExperimentStatus", experimentStatus);
+        startActivity(myIntent);
     }
 }
