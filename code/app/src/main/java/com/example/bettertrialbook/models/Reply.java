@@ -2,6 +2,8 @@ package com.example.bettertrialbook.models;
 
 public class Reply extends Post{
     private String questionId;
+    // used by firestore during automatic serialization
+    private String type = "reply";
 
     public String getQuestionId() {
         return questionId;

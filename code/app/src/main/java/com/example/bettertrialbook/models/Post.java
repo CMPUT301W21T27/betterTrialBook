@@ -1,6 +1,6 @@
 package com.example.bettertrialbook.models;
 
-public abstract class Post {
+public class Post {
     private String text;
     private String posterId;
     private String id;
