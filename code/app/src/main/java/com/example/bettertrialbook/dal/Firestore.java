@@ -14,7 +14,7 @@ public class Firestore {
     /**
      * All subsequent calls to getInstance will return a FirebaseFirestore that uses the local emulator.
      */
-    public void useEmulator() {
+    public static void useEmulator() {
         usingEmulator = true;
     }
 
@@ -23,7 +23,7 @@ public class Firestore {
      * method has been called.
      * @return a FirebaseFirestore instance
      */
-    FirebaseFirestore getInstance() {
+    public static FirebaseFirestore getInstance() {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         if (usingEmulator) {
             // Connecting app to firestore emulator

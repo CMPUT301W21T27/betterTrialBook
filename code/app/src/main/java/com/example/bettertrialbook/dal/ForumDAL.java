@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ForumDAL {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseFirestore db = Firestore.getInstance();
     CollectionReference collRef = db.collection("Posts");
 
     public void subscribeToQuestions(String expId, Callback<List<Question>> callback) {

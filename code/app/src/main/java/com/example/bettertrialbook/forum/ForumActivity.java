@@ -8,10 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.R;
+import com.example.bettertrialbook.dal.Firestore;
 import com.example.bettertrialbook.dal.ForumDAL;
 import com.example.bettertrialbook.models.Question;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ForumActivity extends AppCompatActivity {
     String expId;
@@ -25,7 +25,7 @@ public class ForumActivity extends AppCompatActivity {
         setContentView(R.layout.activity_forum);
 
         expId = getIntent().getStringExtra(Extras.EXPERIMENT_ID);
-        collRef = FirebaseFirestore.getInstance().collection("Questions");
+        collRef = Firestore.getInstance().collection("Questions");
         forumDAL = new ForumDAL();
 
         questionAdapter = new QuestionList(this);
