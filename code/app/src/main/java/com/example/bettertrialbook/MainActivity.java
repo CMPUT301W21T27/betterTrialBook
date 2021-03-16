@@ -4,32 +4,32 @@
  */
 package com.example.bettertrialbook;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.os.Bundle;
-import android.widget.Button;
-import android.content.Intent;
-import android.widget.ListView;
-import android.content.Context;
-import android.widget.ImageView;
-import android.widget.SearchView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.content.SharedPreferences;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SearchView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bettertrialbook.dal.UserDAL;
-import com.example.bettertrialbook.models.User;
-
-import java.util.UUID;
-import java.util.ArrayList;
-
 import com.example.bettertrialbook.models.ExperimentInfo;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.bettertrialbook.models.User;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.UUID;
+
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     User you;
     UserDAL uDAL;
@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         trialInfoList = new ArrayList<>();
         trialInfoAdapter = new CustomList(this, trialInfoList);
         resultList.setAdapter(trialInfoAdapter);
+        resultList.setOnItemClickListener(this);
 
         generateID();
 
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Search the Result (Will Refined)
+        // Search the Result (Will Refine)
         FirebaseFirestore db;
         db = FirebaseFirestore.getInstance();
         CollectionReference reference = db.collection("Experiments");
@@ -132,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void generateID() {
         /*
-         * Generates a unqiue ID per user
+         * Generates a unique ID per user
          * Checks if ID is in database
          *   Adds ID to DB if it's not
          * Creates user object "you" to represent you
@@ -173,5 +174,19 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    // Goes to experiment's page if clicked
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String experimentId = trialInfoAdapter.getItem(position).getId();
+        String experimentType = trialInfoAdapter.getItem(position).getTrialType();
+        String experimentStatus = trialInfoAdapter.getItem(position).getStatus();
+
+        Intent myIntent = new Intent(view.getContext(), ExperimentViewActivity.class);
+        myIntent.putExtra("ExperimentId", experimentId);
+        myIntent.putExtra("ExperimentType", experimentType);
+        myIntent.putExtra("ExperimentStatus", experimentStatus);
+        startActivity(myIntent);
     }
 }

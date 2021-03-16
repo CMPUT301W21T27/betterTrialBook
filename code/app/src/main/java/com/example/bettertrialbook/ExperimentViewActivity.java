@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class ExperimentViewActivity extends AppCompatActivity {
     String experimentId;
     String experimentType;
+    String experimentStatus;
     final String TAG = "ExperimentViewActivity";
 
     @Override
@@ -26,14 +27,15 @@ public class ExperimentViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_view);
 
-        // get id of currently selected experiment
-        // experimentId = getIntent().getStringExtra(Extras.EXPERIMENT_ID);
-
-        // testing id
-        experimentId = "FwrSePYufKWUSlVCQnL4";
-        experimentType = "Measurement";
+        // get current experiment information from intent
+        experimentId = getIntent().getStringExtra("ExperimentId");
+        experimentType = getIntent().getStringExtra("ExperimentType");
+        experimentStatus = getIntent().getStringExtra("ExperimentStatus");
 
         Button unpublishButton = findViewById(R.id.unpublish_button);
+        if (experimentStatus.equals("Unpublished")) {
+            unpublishButton.setText("Publish");
+        }
 
         unpublishButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +58,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
         ArrayAdapter<Trial> trialAdapter = new CustomTrialList(this, trialDataList);
         trialList.setAdapter(trialAdapter);
         ExperimentDAL experimentDAL = new ExperimentDAL();
+
         // create a documentsnapshot listener in the dal to update the list of trials
         experimentDAL.addTrialListener(experimentId, trialDataList, trialAdapter, experimentType);
 
@@ -73,5 +76,11 @@ public class ExperimentViewActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ForumActivity.class);
         intent.putExtra(Extras.EXPERIMENT_ID, experimentId);
         startActivity(intent);
+    }
+
+    // when back button pressed
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }
