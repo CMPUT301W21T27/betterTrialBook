@@ -26,6 +26,15 @@
     <string name="createQR_text">Create</string>
     <string name="description">Description</string>
     <string name="profile_description">Profile Image</string>
+
+    <!--    Strings used in forum-->
+    <string name="post_question">Post Question</string>
+    <string name="title">Title</string>
+    <string name="body">Body</string>
+
+    <!--    General purpose strings-->
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

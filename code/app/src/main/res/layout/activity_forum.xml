@@ -9,17 +9,27 @@
     tools:context=".forum.ForumActivity">
 
     <TextView
-        android:id="@+id/qlist_experiment_title"
+        android:id="@+id/forum_experiment_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingVertical="10dp"
-        android:textSize="40dp"
+        android:textSize="40sp"
         android:text="Experiment Title" />
 
     <ListView
         android:id="@+id/question_list"
         android:layout_width="match_parent"
         android:layout_height="600dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="10dp"
+        android:contentDescription="@string/post_question"
+        android:clickable="true"
+        android:onClick="openCreateQuestionActivity"
+        app:srcCompat="@android:drawable/ic_input_add" />
 
 
 </LinearLayout>

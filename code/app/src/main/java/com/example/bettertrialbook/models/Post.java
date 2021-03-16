@@ -1,6 +1,8 @@
 package com.example.bettertrialbook.models;
 
-public class Post {
+import java.io.Serializable;
+
+public class Post implements Serializable {
     private String text;
     private String posterId;
     private String id;

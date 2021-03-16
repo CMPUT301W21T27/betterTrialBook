@@ -9,11 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BetterTrialBook">
-        <activity android:name=".SignUp"></activity>
+        <activity android:name=".forum.CreatePostActivity"></activity>
+        <activity android:name=".SignUp" />
         <activity
             android:name=".ExperimentViewActivity"
             android:label="@string/title_activity_experiment_view"
-            android:theme="@style/Theme.BetterTrialBook.NoActionBar"></activity>
+            android:theme="@style/Theme.BetterTrialBook.NoActionBar" />
         <activity android:name=".forum.ForumActivity" />
         <activity android:name=".ProfileViewActivity" />
         <activity android:name=".ExperimentAddActivity" />

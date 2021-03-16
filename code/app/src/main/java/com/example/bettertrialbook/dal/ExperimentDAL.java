@@ -40,10 +40,9 @@ public class ExperimentDAL {
 
     /**
      * adds the experiment to the firestore database
-     * @param experimentInfo
-     *  the information regarding the experiment that needs to be added
-     * @param onCreate
-     *  a callback used after successfully adding the data to the database
+     *
+     * @param experimentInfo the information regarding the experiment that needs to be added
+     * @param onCreate       a callback used after successfully adding the data to the database
      */
     public void addExperiment(ExperimentInfo experimentInfo, @Nullable Callback<String> onCreate) {
 
@@ -72,8 +71,8 @@ public class ExperimentDAL {
     /**
      * Sets the status of the experiment with id: experimentId to be 'Unpublished'
      * meaning it can only be viewed by the owner
-     * @param experimentId
-     *  the unique id of the experiment to be unpublished
+     *
+     * @param experimentId the unique id of the experiment to be unpublished
      */
     public void unpublishExperiment(String experimentId) {
         collRef
@@ -96,8 +95,8 @@ public class ExperimentDAL {
     /**
      * Sets the status of the experiment with id: experimentId to be 'Active'
      * meaning it can be viewed by all users
-     * @param experimentId
-     *  the unique id of the experiment to be published
+     *
+     * @param experimentId the unique id of the experiment to be published
      */
     public void publishExperiment(String experimentId) {
         collRef
@@ -119,10 +118,9 @@ public class ExperimentDAL {
 
     /**
      * Adds a trial to an array of trials for the currently selected experiment
-     * @param experimentId
-     *  the id of the currently selected experiment
-     * @param trial
-     *  the trial to be added
+     *
+     * @param experimentId the id of the currently selected experiment
+     * @param trial        the trial to be added
      */
     public void addTrial(String experimentId, Trial trial) {
         collRef
@@ -144,14 +142,11 @@ public class ExperimentDAL {
 
     /**
      * Sets a documentsnapshot listener to update the list of trials for an experiment in real time
-     * @param experimentId
-     *  the id of the currently selected experiment
-     * @param trialDataList
-     *  the list of trials that the array adapter is displaying
-     * @param trialAdapter
-     *  the adapter for the experiment view being displayed
-     * @param experimentType
-     *  the type of experiment currently selected
+     *
+     * @param experimentId   the id of the currently selected experiment
+     * @param trialDataList  the list of trials that the array adapter is displaying
+     * @param trialAdapter   the adapter for the experiment view being displayed
+     * @param experimentType the type of experiment currently selected
      */
     public void addTrialListener(String experimentId, ArrayList<Trial> trialDataList, ArrayAdapter<Trial> trialAdapter, String experimentType) {
         final DocumentReference docRef = collRef.document(experimentId);
