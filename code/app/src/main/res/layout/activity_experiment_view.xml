@@ -78,7 +78,7 @@
 
     <Button
         android:id="@+id/subscribe_button"
-        android:layout_width="127dp"
+        android:layout_width="140dp"
         android:layout_height="42dp"
         android:text="Subscribe"
         android:layout_marginRight="16dp"

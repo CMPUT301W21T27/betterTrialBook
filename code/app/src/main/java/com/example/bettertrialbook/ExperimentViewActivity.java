@@ -80,6 +80,12 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
                 addTrialButton.setEnabled(false);
             }
 
+            /* once user subscribing condition set up
+            if () {
+                subscribeButton.setText("Unsubscribe");
+            }
+            */
+
         } else {
             subscribeButton.setVisibility(View.INVISIBLE);
 
@@ -99,6 +105,13 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
             @Override
             public void onClick(View view) {
                 confirmationDialog((String) unpublishButton.getText());
+            }
+        });
+
+        subscribeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confirmationDialog((String) subscribeButton.getText());
             }
         });
 
@@ -173,6 +186,15 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
 
             ExperimentDAL experimentDAL = new ExperimentDAL();
             experimentDAL.setExperimentStatus(experimentId, "Active");
+
+        } else if (tag.equals("Subscribe to")) {
+            subscribeButton.setText(("Unsubscribe"));
+            // change user subscription status
+
+        } else if (tag.equals("Unsubscribe from")) {
+            subscribeButton.setText(("Subscribe"));
+            // change user subscription status
+
         }
     }
 

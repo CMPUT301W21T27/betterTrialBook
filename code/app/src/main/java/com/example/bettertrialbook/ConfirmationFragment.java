@@ -49,6 +49,11 @@ public class ConfirmationFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_confirmation,null);
         TextView confirmationText = view.findViewById(R.id.confirmation_text);
+        if (tag.equals("Subscribe")) {
+            tag += " to";
+        } else if (tag.equals("Unsubscribe")) {
+            tag += " from";
+        }
         confirmationText.setText(String.format("Are you sure you want to %s the experiment?", tag.toLowerCase()));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
