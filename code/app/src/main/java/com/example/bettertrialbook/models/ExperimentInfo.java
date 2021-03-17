@@ -1,6 +1,9 @@
 package com.example.bettertrialbook.models;
 
-public class ExperimentInfo implements Comparable<ExperimentInfo> {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class ExperimentInfo implements Comparable<ExperimentInfo>, Parcelable {
     private String description;
     private String ownerId;
     public String status;
@@ -158,7 +161,51 @@ public class ExperimentInfo implements Comparable<ExperimentInfo> {
     public int compareTo(ExperimentInfo experimentInfo) {
         return this.id.compareTo(experimentInfo.getId()) + this.description.compareTo(experimentInfo.getDescription())
                 + this.status.compareTo(experimentInfo.getStatus()) + this.trialType.compareTo(experimentInfo.getTrialType())
-                + String.valueOf(this.geoLocationRequired).compareTo(String.valueOf(experimentInfo.getGeoLocationRequired())) + String.valueOf(this.minTrials).compareTo(String.valueOf(experimentInfo.getMinTrials()))
+                + String.valueOf(this.geoLocationRequired).compareTo(String.valueOf(experimentInfo.getGeoLocationRequired()))
+                + String.valueOf(this.minTrials).compareTo(String.valueOf(experimentInfo.getMinTrials()))
                 + this.region.compareTo(experimentInfo.getRegion());
+    }
+
+    // parcelable implementation
+    protected ExperimentInfo(Parcel in) {
+        description = in.readString();
+        ownerId = in.readString();
+        status = in.readString();
+        id = in.readString();
+        trialType = in.readString();
+        byte tmpGeoLocationRequired = in.readByte();
+        geoLocationRequired = tmpGeoLocationRequired == 0 ? null : tmpGeoLocationRequired == 1;
+        minTrials = in.readInt();
+        region = in.readString();
+    }
+
+    public static final Creator<ExperimentInfo> CREATOR = new Creator<ExperimentInfo>() {
+        @Override
+        public ExperimentInfo createFromParcel(Parcel in) {
+            return new ExperimentInfo(in);
+        }
+
+        @Override
+        public ExperimentInfo[] newArray(int size) {
+            return new ExperimentInfo[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(description);
+        dest.writeString(ownerId);
+        dest.writeString(status);
+        dest.writeString(id);
+        dest.writeString(trialType);
+        dest.writeBoolean(geoLocationRequired);
+        dest.writeInt(minTrials);
+        dest.writeString(region);
+
     }
 }

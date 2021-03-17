@@ -72,11 +72,36 @@ public class ExperimentDAL {
     }
 
     /**
+     * Update status of experiment
+     * @param experimentId
+     *  the unique id of the experiment to be updated
+     * @param status
+     * the new status of the experiment
+     */
+    public void setExperimentStatus(String experimentId, String status) {
+        collRef
+                .document(experimentId)
+                .update("Status", status)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data could not be updated" + e.toString());
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data has been updated");
+                    }
+                });
+    }
+
+    /**
      * Sets the status of the experiment with id: experimentId to be 'Unpublished'
      * meaning it can only be viewed by the owner
      * @param experimentId
      *  the unique id of the experiment to be unpublished
-     */
+     *
     public void unpublishExperiment(String experimentId) {
         collRef
                 .document(experimentId)
@@ -95,12 +120,12 @@ public class ExperimentDAL {
                 });
     }
 
-    /**
+    /
      * Sets the status of the experiment with id: experimentId to be 'Active'
      * meaning it can be viewed by all users
      * @param experimentId
      *  the unique id of the experiment to be published
-     */
+
     public void publishExperiment(String experimentId) {
         collRef
                 .document(experimentId)
@@ -117,7 +142,7 @@ public class ExperimentDAL {
                         Log.d(TAG, "Data has been updated");
                     }
                 });
-    }
+    }**/
 
     /**
      * Adds a trial to an array of trials for the currently selected experiment

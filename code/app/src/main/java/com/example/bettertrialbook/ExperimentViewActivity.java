@@ -6,12 +6,14 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.forum.ForumActivity;
+import com.example.bettertrialbook.models.ExperimentInfo;
 import com.example.bettertrialbook.models.Trial;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
     Boolean isOwner;
     String experimentId;
     String experimentType;
-    String experimentStatus;
+    ExperimentInfo experimentInfo;
     final String TAG = "ExperimentViewActivity";
 
     @Override
@@ -32,18 +34,33 @@ public class ExperimentViewActivity extends AppCompatActivity {
         // get current experiment information from intent
         isOwner = getIntent().getBooleanExtra("IsOwner", false);
         newExperiment = getIntent().getBooleanExtra("NewExperiment", false);
-        experimentId = getIntent().getStringExtra("ExperimentId");
-        experimentType = getIntent().getStringExtra("ExperimentType");
-        experimentStatus = getIntent().getStringExtra("ExperimentStatus");
+        experimentInfo = getIntent().getExtras().getParcelable("ExperimentInfo");
+
+        experimentId = experimentInfo.getId();
+        experimentType = experimentInfo.getTrialType();
+
+        // Populates experiment page with relevant text
+        TextView regionText = findViewById(R.id.region_text);
+        TextView descriptionText = findViewById(R.id.description_text);
+        regionText.setText("Region: "+experimentInfo.getRegion());
+        descriptionText.setText("Description: "+experimentInfo.getDescription());
 
         // hides owner-function buttons if current user is not the owner
         Button unpublishButton = findViewById(R.id.unpublish_button);
+        Button endButton = findViewById(R.id.end_button);
         if (!isOwner) {
             unpublishButton.setVisibility(View.INVISIBLE);
+            endButton.setVisibility(View.INVISIBLE);
+
         } else {
             // if already unpublished, sets button to allow re-publishing
-            if (experimentStatus.equals("Unpublished")) {
+            if (experimentInfo.getStatus().equals("Unpublished")) {
                 unpublishButton.setText("Publish");
+
+            } else if (experimentInfo.getStatus().equals("Closed")) {
+                endButton.setText("Closed");
+                // if permanently closed
+                // endButton.setEnabled(false);
             }
         }
 
@@ -53,11 +70,26 @@ public class ExperimentViewActivity extends AppCompatActivity {
                 if (unpublishButton.getText().equals("Unpublish")) {
                     unpublishButton.setText("Publish");
                     ExperimentDAL experimentDAL = new ExperimentDAL();
-                    experimentDAL.unpublishExperiment(experimentId);
+                    experimentDAL.setExperimentStatus(experimentId, "Unpublish");
                 } else {
                     unpublishButton.setText("Unpublish");
                     ExperimentDAL experimentDAL = new ExperimentDAL();
-                    experimentDAL.publishExperiment(experimentId);
+                    experimentDAL.setExperimentStatus(experimentId, "Active");
+                }
+            }
+        });
+
+        endButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (endButton.getText().equals("End")) {
+                    endButton.setText("Restart");
+                    ExperimentDAL experimentDAL = new ExperimentDAL();
+                    experimentDAL.setExperimentStatus(experimentId, "Closed");
+                } else {
+                    endButton.setText("End");
+                    ExperimentDAL experimentDAL = new ExperimentDAL();
+                    experimentDAL.setExperimentStatus(experimentId, "Active");
                 }
             }
         });
