@@ -19,6 +19,7 @@ import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bettertrialbook.dal.Firestore;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.ExperimentInfo;
 import com.example.bettertrialbook.models.User;
@@ -41,10 +42,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button scanQR = findViewById(R.id.ScanQR_Button);               // Button to go to the scan QR page
-        Button create = findViewById(R.id.CreateQR_Button);           // Button to go to the create Experiment
+        Button scanQR = findViewById(R.id.ScanQR_Button); // Button to go to the scan QR page
+        Button create = findViewById(R.id.CreateQR_Button); // Button to go to the create Experiment
         SearchView searchItem = findViewById(R.id.SearchItem);
-        ImageView profilePic = findViewById(R.id.ProfilePicture);       // Used to go to the profile page
+        ImageView profilePic = findViewById(R.id.ProfilePicture); // Used to go to the profile page
         ListView resultList = findViewById(R.id.Result_ListView);
 
         trialInfoList = new ArrayList<>();
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // Search the Result (Will Refine)
         FirebaseFirestore db;
-        db = FirebaseFirestore.getInstance();
+        db = Firestore.getInstance();
         CollectionReference reference = db.collection("Experiments");
         searchItem.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 // Empty Body: May add-on new features
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 reference.addSnapshotListener((queryDocumentSnapshots, error) -> {
@@ -90,15 +92,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             // Further search method will be refined after
                             String description = (String) doc.getData().get("Description");
                             if (description.toLowerCase().contains(newText.toLowerCase())) {
-                                // MinTrials hasn't done yet. Want to wait for further production and then decide.
-                                // GeoLocationRequired hasn't done yet. Want to wait for further production and then decide.
+                                // MinTrials hasn't done yet. Want to wait for further production and then
+                                // decide.
+                                // GeoLocationRequired hasn't done yet. Want to wait for further production and
+                                // then decide.
                                 String ownerId = (String) doc.getData().get("Owner");
                                 String status = (String) doc.getData().get("Status");
-                                if ((ownerId != null && ownerId.equals(you.getID())) || (status != null && !status.equals("Unpublished"))) {
+                                if ((ownerId != null && ownerId.equals(you.getID()))
+                                        || (status != null && !status.equals("Unpublished"))) {
                                     String id = doc.getId();
                                     String region = (String) doc.getData().get("Region");
                                     String trialType = (String) doc.getData().get("TrialType");
-                                    trialInfoList.add(new ExperimentInfo(description, ownerId, status, id, trialType, false, 0, region));
+                                    trialInfoList.add(new ExperimentInfo(description, ownerId, status, id, trialType,
+                                            false, 0, region));
                                 }
                             }
                         }
@@ -108,24 +114,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     trialInfoAdapter.notifyDataSetChanged();
                 });
                 return false;
-            }});
+            }
+        });
     }
 
     public void viewYourProfile(View view) {
-        /*Calls the ProfileViewActivity
-         * Sends user object "you" to display their info
+        /*
+         * Calls the ProfileViewActivity Sends user object "you" to display their info
          * Expects an updated "you" object as a return
-         * */
+         */
         Intent intent = new Intent(this, ProfileViewActivity.class);
         intent.putExtra("User", you);
         startActivityForResult(intent, 1);
     }
 
-    //Return from ProfileViewActivity
+    // Return from ProfileViewActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        you = intent.getExtras().getParcelable("User");             //Accessing Parcelable Objects
+        you = intent.getExtras().getParcelable("User"); // Accessing Parcelable Objects
 
     }
 
@@ -137,24 +144,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public void generateID() {
         /*
-         * Generates a unique ID per user
-         * Checks if ID is in database
-         *   Adds ID to DB if it's not
-         * Creates user object "you" to represent you
-         * */
+         * Generates a unique ID per user Checks if ID is in database Adds ID to DB if
+         * it's not Creates user object "you" to represent you
+         */
 
         // Generating ID
-        // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
-        SharedPreferences sharedPref = this.getSharedPreferences("uniqueID", Context.MODE_PRIVATE);
-        String defaultIDValue = sharedPref.getString("uniqueID", null);
+        String defaultIDValue = uDAL.getDeviceUserId(this);
         if (defaultIDValue == null) {
             Log.d("Generate", "Empty id");
             String uID = UUID.randomUUID().toString();
             Log.d("Generate", uID.toString());
 
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString("uniqueID", uID);
-            editor.apply();
+            uDAL.setDeviceUserId(this, uID);
             defaultIDValue = uID;
 
         } else {
@@ -167,17 +168,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // https://www.youtube.com/watch?v=0ofkvm97i0s - Callback
         uDAL.findUserByID(defaultIDValue, new UserDAL.FindUserByIDCallback() {
-                    @Override
-                    public void onCallback(User user) {
-                        // If no user found, create user
-                        if (user == null) {
-                            you = uDAL.addUser(finalID);
-                        } else {
-                            Log.d("TEST", "4. " + user.getID() + user.getUsername());
-                            you = user;
-                        }
-                    }
-                });
+            @Override
+            public void onCallback(User user) {
+                // If no user found, create user
+                if (user == null) {
+                    you = uDAL.addUser(finalID);
+                } else {
+                    Log.d("TEST", "4. " + user.getID() + user.getUsername());
+                    you = user;
+                }
+            }
+        });
     }
 
     // Goes to experiment's page if clicked
