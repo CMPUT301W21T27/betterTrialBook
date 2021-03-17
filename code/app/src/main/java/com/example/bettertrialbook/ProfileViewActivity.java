@@ -92,9 +92,9 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
     }
 
     public void userSignUp(){
-        //Calls sign up activity
-        //Sends user object to sign up to update
-        //Expects updated user object as return
+        // Calls sign up activity
+        // Sends user object to sign up to update
+        // Expects updated user object as return
         Intent intent = new Intent(this, SignUp.class);
         intent.putExtra("User",user);
         startActivityForResult(intent,1);
@@ -109,36 +109,36 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
         this.finish();
     }
 
-    //Return from Signup Activity
+    // Return from Signup Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
         User user = intent.getExtras().getParcelable("User");   //Accessing Parcelable Objects
 
-        //Check if user has a username, else sign up was canceled
+        // Check if user has a username, else sign up was canceled
         if(user.getUsername().equals("")){
             return;
         }
 
-        //If user did sign up, change button name
+        // If user did sign up, change button name
         Button button = (Button) findViewById(R.id.button2);
         button.setText("Edit Contact Info");
 
-        //Set user to edited user object
-        //Display updated information
+        // Set user to edited user object
+        // Display updated information
         setUser(user);
         displayInformation();
     }
 
-    //Calls edit fragment
+    // Calls edit fragment
     public void userEditInfo(){
         String email = user.getContact().getEmail();
         String phone = user.getContact().getPhone();
         new EditContactFragment(email, phone).show(getSupportFragmentManager(), "EDIT_EXP");
     }
 
-    //Edit contact fragment results
+    // Edit contact fragment results
     @Override
     public void onOkPressed(String email, String phone){
         if(!email.equals("")){

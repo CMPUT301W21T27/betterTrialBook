@@ -7,35 +7,38 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-/*
-* Fragment called when either:
-*   No username entered
-*   Username entered is already taken
-* Title of fragment changes depending on which reason it was called for
-* */
-public class InvalidUsernameFragment extends DialogFragment {
-    private String message;
+
+public class ConfirmationFragment extends DialogFragment {
+    private String tag = "";
     private OnFragmentInteractionListener listener;
 
-    public InvalidUsernameFragment(String message) {
-        this.message = message;
+    /* Ok pressed interface */
+    public interface OnFragmentInteractionListener {
+        void onOkPressedConfirm(String tag);
     }
 
-    /* Ok pressed interface */
-    public interface OnFragmentInteractionListener{
-        void onOkPressed();
+    public ConfirmationFragment() {
+        super();
+    }
+
+    public ConfirmationFragment(String tag) {
+        super();
+        if (tag.equals(""));
+        this.tag = tag;
     }
 
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
-        if(context instanceof OnFragmentInteractionListener){
+        if (context instanceof OnFragmentInteractionListener) {
             listener = (OnFragmentInteractionListener) context;
-        }else{
+
+        } else {
             throw new RuntimeException(context.toString()
                     +" must implement OnFragmentInteractionListener");
         }
@@ -44,17 +47,19 @@ public class InvalidUsernameFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.invalid_username_fragment,null);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_confirmation,null);
+        TextView confirmationText = view.findViewById(R.id.confirmation_text);
+        confirmationText.setText(String.format("Are you sure you want to %s the experiment?", tag.toLowerCase()));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
-                .setTitle(message)
-
+                .setTitle("Confirmation")
+                .setNegativeButton("Cancel", null)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onOkPressed();
+                        listener.onOkPressedConfirm(tag);
                     }
                 })
                 .create();
