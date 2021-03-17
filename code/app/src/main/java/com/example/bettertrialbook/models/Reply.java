@@ -2,6 +2,8 @@ package com.example.bettertrialbook.models;
 
 public class Reply extends Post{
     private String questionId;
+    // used by firestore during automatic serialization
+    private String type = "reply";
 
     public String getQuestionId() {
         return questionId;
@@ -9,6 +11,10 @@ public class Reply extends Post{
 
     public void setQuestionId(String questionId) {
         this.questionId = questionId;
+    }
+
+    public String getType() {
+        return type;
     }
 
     @Override

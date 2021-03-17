@@ -34,9 +34,11 @@ public class QuestionList extends ArrayAdapter<Question> {
        Question question = this.getItem(position);
        TextView title = view.findViewById(R.id.q_title);
        TextView replyCount = view.findViewById(R.id.q_reply_count);
+       TextView poster = view.findViewById(R.id.q_poster);
 
        title.setText(question.getTitle());
        replyCount.setText(question.getReplies().size() + " Response(s)");
+       poster.setText("By: " + question.getPosterId());
        return view;
    }
 }
