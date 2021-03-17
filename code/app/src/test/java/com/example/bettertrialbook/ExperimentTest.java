@@ -11,7 +11,7 @@ public class ExperimentTest {
     ExperimentInfo testInfo;
 
     private ExperimentInfo mockInfo() {
-        return new ExperimentInfo("abcdefg", "Test Info", "Active", "Binomial", false, 10, "Alberta");
+        return new ExperimentInfo("abcdefg", "1234", "Test Info", "Active", "Binomial", false, 10, "Alberta");
     }
 
     @Before
@@ -21,7 +21,7 @@ public class ExperimentTest {
 
     @Test
     public void createExperimentTest() {
-        ExperimentInfo comparisonInfo = new ExperimentInfo("abcdefg", "Test Info", "Active", "Binomial", false, 10, "Alberta");
+        ExperimentInfo comparisonInfo = new ExperimentInfo("abcdefg", "1234","Test Info", "Active", "Binomial", false, 10, "Alberta");
         assertEquals(0, comparisonInfo.compareTo(testInfo));
     }
 
