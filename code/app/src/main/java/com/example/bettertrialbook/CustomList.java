@@ -59,7 +59,14 @@ public class CustomList extends ArrayAdapter<ExperimentInfo> {
             userDAL.findUserByID(experiment.getOwnerId(), new UserDAL.FindUserByIDCallback() {
                 @Override
                 public void onCallback(User user) {
-                    ownerName.setText("Owner: " + user.getUsername());
+                    if (user != null) {
+                        if (user.getUsername() != null) {
+                            ownerName.setText("Owner: " + user.getUsername());
+
+                        } else {
+                            ownerName.setText("Owner: " + experiment.getOwnerId());
+                        }
+                    }
                 }
             });
         }

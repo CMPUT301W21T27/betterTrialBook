@@ -30,7 +30,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
 
 
     TextView regionText, descriptionText, ownerIdText, totalTrialsText;
-    Button unpublishButton, endButton, addTrialButton, forumButton;
+    Button unpublishButton, endButton, addTrialButton, forumButton, subscribeButton;
     ListView trialList;
     ArrayList<Trial> trialDataList;
     ArrayAdapter<Trial> trialAdapter;
@@ -69,6 +69,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         // hides owner-function buttons if current user is not the owner
         unpublishButton = findViewById(R.id.unpublish_button);
         endButton = findViewById(R.id.end_button);
+        subscribeButton = findViewById(R.id.subscribe_button);
         forumButton = findViewById(R.id.forum_button);
         addTrialButton = findViewById(R.id.addTrial_button);
         if (!isOwner) {
@@ -80,6 +81,8 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
             }
 
         } else {
+            subscribeButton.setVisibility(View.INVISIBLE);
+
             // if already unpublished, sets button to allow re-publishing
             if (experimentInfo.getStatus().equals("Unpublish")) {
                 unpublishButton.setText("Publish");
