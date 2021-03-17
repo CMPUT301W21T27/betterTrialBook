@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     // Goes to experiment's page if clicked
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
         Boolean isOwner = ((trialInfoAdapter.getItem(position).getOwnerId()).equals(you.getID()));
         ExperimentInfo experimentInfo = trialInfoAdapter.getItem(position);
 

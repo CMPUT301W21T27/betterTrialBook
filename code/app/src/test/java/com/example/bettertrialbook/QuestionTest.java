@@ -25,4 +25,23 @@ public class QuestionTest{
         // should only return true once all required fields have been set
         assertTrue(q.validate());
     }
+
+    @Test
+    public void testEquals() {
+        Question a = new Question();
+        Question b = new Question();
+        assertFalse(a.equals(b));
+        assertFalse(a.equals(null));
+
+        a.setId("id");
+        assertFalse(a.equals(b));
+
+        b.setId("id");
+        assertTrue(a.equals(b));
+        assertTrue(b.equals(a));
+
+        a.setId("id2");
+        assertFalse(b.equals(a));
+        assertFalse(a.equals(b));
+    }
 }

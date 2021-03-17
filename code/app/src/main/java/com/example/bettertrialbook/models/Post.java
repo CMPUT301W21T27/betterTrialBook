@@ -1,5 +1,7 @@
 package com.example.bettertrialbook.models;
 
+import androidx.annotation.Nullable;
+
 import java.io.Serializable;
 
 public class Post implements Serializable {
@@ -48,6 +50,19 @@ public class Post implements Serializable {
         if (posterId == null) return false;
         if (experimentId == null) return false;
         return true;
+    }
+
+    /**
+     * Checks if this post's id equals another post.
+     * Firestore guarantees that ids will be unique.
+     * Does NOT check if any of the posts' content match.
+     * @param other
+     * @return true if ids match
+     */
+    public boolean equals(@Nullable Post other) {
+        if (other == null)
+            return false;
+        return getId().equals(other.id);
     }
 
     @Override

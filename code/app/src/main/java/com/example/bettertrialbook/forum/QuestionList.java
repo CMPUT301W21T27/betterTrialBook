@@ -1,6 +1,7 @@
 package com.example.bettertrialbook.forum;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +14,20 @@ import androidx.annotation.Nullable;
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.models.Question;
 
+import java.util.HashSet;
+
 /**
  * Displays a list of questions, expands them to show replies and reply button when tapped.
  */
 public class QuestionList extends ArrayAdapter<Question> {
    private Context context;
-   private Question expandedQuestion;
+   private HashSet<String> expandedQuestionIds;
 
 
    public QuestionList(@NonNull Context context) {
       super(context, 0);
       this.context = context;
+      expandedQuestionIds = new HashSet<>();
    }
 
    @NonNull
@@ -46,26 +50,39 @@ public class QuestionList extends ArrayAdapter<Question> {
        poster.setText("By: " + question.getPosterId());
 
        title.setOnClickListener(titleView -> toggleExpandQuestion(question));
-//       if (questionIsExpanded(question))
-//           showExpandedQuestion(view, question);
+       drawExpandedQuestion(view, question);
        return view;
    }
 
    private void toggleExpandQuestion(Question question) {
        // collapse the question if it was already opened
-       if (expandedQuestion != null && questionIsExpanded(question))
-           expandedQuestion = null;
-       else expandedQuestion = question;
+       String qid = question.getId();
+       if (expandedQuestionIds.contains(qid))
+           expandedQuestionIds.remove(qid);
+       else expandedQuestionIds.add(qid);
+       this.notifyDataSetChanged();
    }
 
    private boolean questionIsExpanded(Question q) {
-       return expandedQuestion.getId().equals(q.getId());
+       return expandedQuestionIds.contains(q.getId());
    }
 
-   private void showExpandedQuestion(View view, Question q) {
+    /**
+     * Checks if the question should be expanded and sets the visibility of the question's expanded view to match.
+     * Populates replies for expanded questions
+     * @param view
+     * @param q
+     */
+   private void drawExpandedQuestion(View view, Question q) {
        View expanded = view.findViewById(R.id.q_expanded);
+       if (!questionIsExpanded(q)) {
+           expanded.setVisibility(View.GONE);
+           return;
+       }
        expanded.setVisibility(View.VISIBLE);
        TextView body = view.findViewById(R.id.q_body);
        body.setText(q.getText());
    }
+
+
 }
