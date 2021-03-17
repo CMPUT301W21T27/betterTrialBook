@@ -15,7 +15,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.ExperimentInfo;
+import com.example.bettertrialbook.models.User;
 
 import java.util.ArrayList;
 
@@ -40,17 +42,27 @@ public class CustomList extends ArrayAdapter<ExperimentInfo> {
             view = LayoutInflater.from(context).inflate(R.layout.content, parent, false);
         }
 
-        ExperimentInfo trial = trials.get(position);
+        ExperimentInfo experiment = trials.get(position);
 
-        TextView id = view.findViewById(R.id.ID_Text);
-        TextView status = view.findViewById(R.id.Status_Text);
-        TextView trialType = view.findViewById(R.id.TrialType_Text);
         TextView description = view.findViewById(R.id.Description_Text);
+        TextView ownerName = view.findViewById(R.id.username_Text);
+        TextView trialType = view.findViewById(R.id.TrialType_Text);
+        TextView status = view.findViewById(R.id.Status_Text);
 
-        id.setText(trial.getId());
-        status.setText(trial.getStatus());
-        trialType.setText(trial.getTrialType());
-        description.setText(trial.getDescription());
+        description.setText(experiment.getDescription());
+        trialType.setText("Type: " + experiment.getTrialType());
+        status.setText(experiment.getStatus());
+
+        // get owner name
+        if (experiment.getOwnerId() != null) {
+            UserDAL userDAL = new UserDAL();
+            userDAL.findUserByID(experiment.getOwnerId(), new UserDAL.FindUserByIDCallback() {
+                @Override
+                public void onCallback(User user) {
+                    ownerName.setText("Owner: " + user.getUsername());
+                }
+            });
+        }
 
         return view;
     }
