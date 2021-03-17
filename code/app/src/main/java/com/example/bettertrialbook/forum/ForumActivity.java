@@ -10,8 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bettertrialbook.ExperimentAddActivity;
 import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.R;
+import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.dal.Firestore;
 import com.example.bettertrialbook.dal.ForumDAL;
 import com.example.bettertrialbook.models.Post;
@@ -24,6 +26,7 @@ public class ForumActivity extends AppCompatActivity {
     ArrayAdapter<Question> questionAdapter;
     CollectionReference collRef;
     ForumDAL forumDAL;
+    ExperimentDAL experimentDAL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public class ForumActivity extends AppCompatActivity {
         expId = getIntent().getStringExtra(Extras.EXPERIMENT_ID);
         collRef = Firestore.getInstance().collection("Questions");
         forumDAL = new ForumDAL();
+        experimentDAL = new ExperimentDAL();
 
         setTitle();
         questionAdapter = new QuestionList(this, question -> openCreatePostActivity(question));

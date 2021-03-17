@@ -116,8 +116,10 @@ public class QuestionList extends ArrayAdapter<Question> {
        View replyView = replyViews.get(r.getId());
        if (replyView == null){
             replyView = View.inflate(getContext(), R.layout.reply, expandedView);
+       } else {
+           replyView.setVisibility(View.VISIBLE);
+           return;
        }
-       replyView.setVisibility(View.VISIBLE);
        TextView replyBody = replyView.findViewById(R.id.reply_body);
        TextView replyPoster = replyView.findViewById(R.id.reply_poster);
 
