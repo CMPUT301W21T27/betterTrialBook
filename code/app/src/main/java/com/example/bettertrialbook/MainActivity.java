@@ -92,12 +92,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             if (description.toLowerCase().contains(newText.toLowerCase())) {
                                 // MinTrials hasn't done yet. Want to wait for further production and then decide.
                                 // GeoLocationRequired hasn't done yet. Want to wait for further production and then decide.
-                                String ownerId = you.getID();
-                                String id = doc.getId();
-                                String region = (String) doc.getData().get("Region");
+                                String ownerId = (String) doc.getData().get("Owner");
                                 String status = (String) doc.getData().get("Status");
-                                String trialType = (String) doc.getData().get("TrialType");
-                                trialInfoList.add(new ExperimentInfo(description, ownerId, status, id, trialType, false, 0, region));
+                                if ((ownerId != null && ownerId.equals(you.getID())) || (status != null && !status.equals("Unpublished"))) {
+                                    String id = doc.getId();
+                                    String region = (String) doc.getData().get("Region");
+                                    String trialType = (String) doc.getData().get("TrialType");
+                                    trialInfoList.add(new ExperimentInfo(description, ownerId, status, id, trialType, false, 0, region));
+                                }
                             }
                         }
                     } else {
@@ -185,7 +187,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String experimentType = trialInfoAdapter.getItem(position).getTrialType();
         String experimentStatus = trialInfoAdapter.getItem(position).getStatus();
         Boolean isOwner = ((trialInfoAdapter.getItem(position).getOwnerId()).equals(you.getID()));
-        Log.d("TEST", (trialInfoAdapter.getItem(position).getOwnerId()));
 
         Intent myIntent = new Intent(view.getContext(), ExperimentViewActivity.class);
         myIntent.putExtra("IsOwner", isOwner);
