@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Poster"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:layout_marginHorizontal="20dp"
             />
 
@@ -35,8 +35,27 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:text="0 Replies"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/q_expanded"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/q_body"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/post_reply"
+            />
     </LinearLayout>
 
 

@@ -31,6 +31,7 @@
     <string name="post_question">Post Question</string>
     <string name="title">Title</string>
     <string name="body">Body</string>
+    <string name="post_reply">Reply</string>
 
     <!--    General purpose strings-->
     <string name="submit">Submit</string>

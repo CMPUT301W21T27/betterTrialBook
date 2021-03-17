@@ -33,7 +33,7 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     User you;
-    UserDAL uDAL;
+    UserDAL uDAL = new UserDAL();
     private ArrayList<ExperimentInfo> trialInfoList;
     private ArrayAdapter<ExperimentInfo> trialInfoAdapter;
 
@@ -164,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // Checking if ID in Database, else adds it to database
         final String finalID = defaultIDValue;
-        uDAL = new UserDAL();
 
         // https://www.youtube.com/watch?v=0ofkvm97i0s - Callback
         uDAL.findUserByID(defaultIDValue, new UserDAL.FindUserByIDCallback() {
