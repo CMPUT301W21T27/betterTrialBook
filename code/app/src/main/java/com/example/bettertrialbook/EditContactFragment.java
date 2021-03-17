@@ -16,7 +16,19 @@ import androidx.fragment.app.DialogFragment;
 * Fragment for entering new contact info
 * */
 public class EditContactFragment extends DialogFragment {
+    private String email = "";
+    private String phone = "";
     private OnFragmentInteractionListener listener;
+
+    public EditContactFragment() {
+        super();
+    }
+
+    public EditContactFragment(String email, String phone) {
+        super();
+        this.email = email;
+        this.phone = phone;
+    };
 
     /* Ok pressed interface */
     public interface OnFragmentInteractionListener{
@@ -40,6 +52,9 @@ public class EditContactFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.edit_contact_fragment,null);
         EditText emailInput = view.findViewById(R.id.email_editText);
         EditText phoneInput = view.findViewById(R.id.phone_editText);
+
+        emailInput.setText(email);
+        phoneInput.setText(phone);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder

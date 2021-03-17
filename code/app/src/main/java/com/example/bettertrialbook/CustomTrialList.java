@@ -58,12 +58,15 @@ public class CustomTrialList extends ArrayAdapter<Trial> {
         if (trialType.equals(Extras.COUNT_TYPE)) {
             CountTrial countTrial = (CountTrial) trial;
             trialResult.setText(String.valueOf(countTrial.getCount()));
+
         } else if (trialType.equals(Extras.BINOMIAL_TYPE)) {
             BinomialTrial binomialTrial = (BinomialTrial) trial;
             trialResult.setText(binomialTrial.getPassCount() + " " + binomialTrial.getFailCount());
+
         } else if (trialType.equals(Extras.NONNEG_TYPE)) {
             NonNegTrial nonNegTrial = (NonNegTrial) trial;
             trialResult.setText(String.valueOf(nonNegTrial.getCount()));
+
         } else if (trialType.equals(Extras.MEASUREMENT_TYPE)) {
             MeasurementTrial measurementTrial = (MeasurementTrial) trial;
             trialResult.setText(String.valueOf(measurementTrial.getMeasurement()));

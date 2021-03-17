@@ -2,6 +2,7 @@ package com.example.bettertrialbook.dal;
 
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -175,7 +176,8 @@ public class ExperimentDAL {
      * @param trialAdapter   the adapter for the experiment view being displayed
      * @param experimentType the type of experiment currently selected
      */
-    public void addTrialListener(String experimentId, ArrayList<Trial> trialDataList, ArrayAdapter<Trial> trialAdapter, String experimentType) {
+    public void addTrialListener(String experimentId, ArrayList<Trial> trialDataList,
+                                 ArrayAdapter<Trial> trialAdapter, String experimentType, TextView totalTrialsText) {
         Log.d(TAG, experimentId);
         final DocumentReference docRef = collRef.document(experimentId);
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -228,6 +230,7 @@ public class ExperimentDAL {
                         }
                     }
                 }
+                totalTrialsText.setText("Total Trials: " + Integer.toString(trialAdapter.getCount()));
                 trialAdapter.notifyDataSetChanged();
             }
         });
