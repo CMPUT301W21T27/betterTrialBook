@@ -95,17 +95,12 @@ public class ExperimentAddActivity extends AppCompatActivity {
     }
 
     public void openExperimentViewActivity(ExperimentInfo experimentInfo) {
-        String experimentId = experimentInfo.getId();
-        String experimentType = experimentInfo.getTrialType();
-        String experimentStatus = experimentInfo.getStatus();
         Boolean isOwner = true;
 
         Intent myIntent = new Intent(ExperimentAddActivity.this, ExperimentViewActivity.class);
         myIntent.putExtra("IsOwner", isOwner);
         myIntent.putExtra("NewExperiment", true);
-        myIntent.putExtra("ExperimentId", experimentId);
-        myIntent.putExtra("ExperimentType", experimentType);
-        myIntent.putExtra("ExperimentStatus", experimentStatus);
+        myIntent.putExtra("ExperimentInfo", experimentInfo);
         startActivity(myIntent);
     }
 }
