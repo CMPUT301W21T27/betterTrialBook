@@ -1,9 +1,5 @@
 package com.example.bettertrialbook;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +7,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.User;
@@ -133,7 +133,9 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
 
     //Calls edit fragment
     public void userEditInfo(){
-        new EditContactFragment().show(getSupportFragmentManager(), "EDIT_EXP");
+        String email = user.getContact().getEmail();
+        String phone = user.getContact().getPhone();
+        new EditContactFragment(email, phone).show(getSupportFragmentManager(), "EDIT_EXP");
     }
 
     //Edit contact fragment results
