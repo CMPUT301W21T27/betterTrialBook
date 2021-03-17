@@ -53,8 +53,6 @@ public class ForumDAL {
     private List<Question> deserializeQuestions(QuerySnapshot querySnapshot) {
         // maps question id to corresponding question
         Map<String, Question> questionMap = new HashMap<>();
-        // maps question id to list of its replies
-        Map<String, ArrayList<Reply>> replyListMap = new HashMap<>();
         List<Reply> replies = new ArrayList<>();
 
         for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
@@ -68,7 +66,7 @@ public class ForumDAL {
                 questionMap.put(q.getId(), q);
             } else if (type.equals("reply")) {
                 Reply r = doc.toObject(Reply.class);
-                r.setId(r.getId());
+                r.setId(doc.getId());
                 replies.add(r);
             } else {
                 Log.d("ForumDAL", doc.toString());

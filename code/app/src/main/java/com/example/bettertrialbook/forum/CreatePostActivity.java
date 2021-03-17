@@ -40,10 +40,11 @@ public class CreatePostActivity extends AppCompatActivity {
         userId = userDAL.getDeviceUserId(this);
 
         // if a question is specified, this will create a reply
-        if (intent.hasExtra(Extras.QUESTION))
+        if (intent.hasExtra(Extras.QUESTION)) {
             originalQuestion = (Question) intent.getSerializableExtra(Extras.QUESTION);
             type = Reply.class;
             changeLayoutForReply();
+        }
     }
 
     /**
