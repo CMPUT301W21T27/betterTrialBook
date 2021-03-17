@@ -2,7 +2,7 @@ package com.example.bettertrialbook.models;
 
 public class ExperimentInfo implements Comparable<ExperimentInfo> {
     private String description;
-    // private User owner;  // class will be added later
+    private String ownerId;
     public String status;
     private String id;
     private String trialType;
@@ -27,9 +27,9 @@ public class ExperimentInfo implements Comparable<ExperimentInfo> {
      * @param region
      *  The region the experiment is taking place in
      */
-    public ExperimentInfo(String id, String description, String status, String trialType, boolean geoLocationRequired, int minTrials, String region) {
+    public ExperimentInfo(String description, String ownerId, String status, String id, String trialType, boolean geoLocationRequired, int minTrials, String region) {
         this.description = description;
-        // this.owner = owner;
+        this.ownerId = ownerId;
         this.status = status;
         this.id = id;
         this.trialType = trialType;
@@ -70,6 +70,15 @@ public class ExperimentInfo implements Comparable<ExperimentInfo> {
      */
     public String getStatus() {
         return status;
+    }
+
+    /**
+     * gets the ownerId of the experiment
+     * @return
+     *  the ownerId
+     */
+    public String getOwnerId() {
+        return ownerId;
     }
 
     /**

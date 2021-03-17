@@ -18,7 +18,10 @@
         <activity android:name=".forum.ForumActivity" />
         <activity android:name=".ProfileViewActivity" />
         <activity android:name=".ExperimentAddActivity" />
-        <activity android:name=".MainActivity">
+
+        <!-- https://stackoverflow.com/questions/4207880/android-how-do-i-prevent-the-soft-keyboard-from-pushing-my-view-up -->
+        <activity android:name=".MainActivity"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

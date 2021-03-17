@@ -17,6 +17,8 @@ import com.example.bettertrialbook.models.Trial;
 import java.util.ArrayList;
 
 public class ExperimentViewActivity extends AppCompatActivity {
+    Boolean newExperiment;
+    Boolean isOwner;
     String experimentId;
     String experimentType;
     String experimentStatus;
@@ -28,13 +30,21 @@ public class ExperimentViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_experiment_view);
 
         // get current experiment information from intent
+        isOwner = getIntent().getBooleanExtra("IsOwner", false);
+        newExperiment = getIntent().getBooleanExtra("NewExperiment", false);
         experimentId = getIntent().getStringExtra("ExperimentId");
         experimentType = getIntent().getStringExtra("ExperimentType");
         experimentStatus = getIntent().getStringExtra("ExperimentStatus");
 
+        // hides owner-function buttons if current user is not the owner
         Button unpublishButton = findViewById(R.id.unpublish_button);
-        if (experimentStatus.equals("Unpublished")) {
-            unpublishButton.setText("Publish");
+        if (!isOwner) {
+            unpublishButton.setVisibility(View.INVISIBLE);
+        } else {
+            // if already unpublished, sets button to allow re-publishing
+            if (experimentStatus.equals("Unpublished")) {
+                unpublishButton.setText("Publish");
+            }
         }
 
         unpublishButton.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +69,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
         trialList.setAdapter(trialAdapter);
         ExperimentDAL experimentDAL = new ExperimentDAL();
 
-        // create a documentsnapshot listener in the dal to update the list of trials
+        // create a document snapshot listener in the dal to update the list of trials
         experimentDAL.addTrialListener(experimentId, trialDataList, trialAdapter, experimentType);
 
         Button addTrialButton = findViewById(R.id.addTrial_button);
@@ -81,6 +91,11 @@ public class ExperimentViewActivity extends AppCompatActivity {
     // when back button pressed
     @Override
     public void onBackPressed() {
-        finish();
+        if (newExperiment) {
+            Intent myIntent = new Intent(this, MainActivity.class);
+            startActivity(myIntent);
+        } else {
+            finish();
+        }
     }
 }
