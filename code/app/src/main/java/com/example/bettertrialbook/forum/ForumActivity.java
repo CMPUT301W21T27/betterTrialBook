@@ -35,7 +35,7 @@ public class ForumActivity extends AppCompatActivity {
         forumDAL = new ForumDAL();
 
         setTitle();
-        questionAdapter = new QuestionList(this);
+        questionAdapter = new QuestionList(this, question -> openCreatePostActivity(question));
         ListView questionList = findViewById(R.id.question_list);
         questionList.setAdapter(questionAdapter);
 
@@ -50,8 +50,21 @@ public class ForumActivity extends AppCompatActivity {
     }
 
     public void openCreateQuestionActivity(View v) {
+        openCreatePostActivity(null);
+    }
+
+    /**
+     * Opens the CreatePost activity, sending the experiment id and question (if specified) as extras.
+     * If a question is specified, this activity will create a reply to the given question.
+     * Otherwise, a new question will be created.
+     *
+     * @param q If replying, the question this post will reply to
+     */
+    private void openCreatePostActivity(@Nullable Question q) {
         Intent intent = new Intent(this, CreatePostActivity.class);
         intent.putExtra(Extras.EXPERIMENT_ID, expId);
+        if (q != null)
+            intent.putExtra(Extras.QUESTION, q);
         startActivity(intent);
     }
 

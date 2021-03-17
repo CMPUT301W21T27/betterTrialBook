@@ -30,13 +30,14 @@ public class ForumDAL {
 
     /**
      * Adds the given post to Firestore and calls the onSuccess callback with it's new id.
-     * @param post A question or reply
+     *
+     * @param post      A question or reply
      * @param onSuccess Callback that gets passed the post's id
      * @throws IllegalArgumentException
      */
-    public void addPost(Post post, @Nullable Callback<String> onSuccess) throws IllegalArgumentException {
+    public void addPost(Post post, @Nullable Callback<String> onSuccess) {
         if (!post.validate()) {
-            throw new IllegalArgumentException("Post does not have all necessary fields set");
+            throw new IllegalArgumentException("Post does not have all necessary fields set. \n" + post.toString());
         }
         collRef.add(post).addOnSuccessListener(doc -> {
             String qId = doc.getId();
