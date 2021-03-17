@@ -2,7 +2,6 @@ package com.example.bettertrialbook;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -174,7 +173,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         }
     }
 
-    // when back button pressed
+    // when back button is pressed
     @Override
     public void onBackPressed() {
         if (newExperiment) {
