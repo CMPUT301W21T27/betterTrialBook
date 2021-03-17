@@ -9,6 +9,7 @@
         android:id="@+id/q_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:paddingVertical="10dp"
         android:text="Title"
         android:textSize="30sp"/>

@@ -9,7 +9,7 @@ public class Question extends Post {
     private String title;
     private List<Reply> replies;
     // Used by firestore during automatic serialization
-    private String type = "question";
+    protected String type = "question";
 
     public Question () {
         replies = new ArrayList<>();
@@ -25,6 +25,10 @@ public class Question extends Post {
 
     public List<Reply> getReplies() {
         return replies;
+    }
+
+    public String getType() {
+        return type;
     }
 
     @Override

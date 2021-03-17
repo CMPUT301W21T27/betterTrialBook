@@ -13,6 +13,10 @@ public class Reply extends Post{
         this.questionId = questionId;
     }
 
+    public String getType() {
+        return type;
+    }
+
     @Override
     public boolean validate() {
         if( !super.validate())

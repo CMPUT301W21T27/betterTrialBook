@@ -34,6 +34,7 @@ public class ForumActivity extends AppCompatActivity {
         collRef = Firestore.getInstance().collection("Questions");
         forumDAL = new ForumDAL();
 
+        setTitle();
         questionAdapter = new QuestionList(this);
         ListView questionList = findViewById(R.id.question_list);
         questionList.setAdapter(questionAdapter);

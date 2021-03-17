@@ -57,16 +57,21 @@ public class ForumDAL {
         List<Reply> replies = new ArrayList<>();
 
         for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
-            if (doc.get("type") == "question") {
+            if (doc.get("type") == null)
+                continue;
+
+            String type = doc.get("type").toString();
+            if (type.equals("question")) {
                 Question q = doc.toObject(Question.class);
                 q.setId(doc.getId());
                 questionMap.put(q.getId(), q);
-            } else if (doc.get("type") == "reply") {
+            } else if (type.equals("reply")) {
                 Reply r = doc.toObject(Reply.class);
                 r.setId(r.getId());
                 replies.add(r);
             } else {
                 Log.d("ForumDAL", doc.toString());
+                Log.d("ForumDAL", doc.get("type").toString());
             }
         }
         for (Reply r : replies) {
