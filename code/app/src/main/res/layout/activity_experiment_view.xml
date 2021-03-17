@@ -7,24 +7,44 @@
     tools:context=".ExperimentViewActivity">
 
     <TextView
-        android:id="@+id/region_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Region"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/description_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Description: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+    android:id="@+id/region_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="10dp"
+    android:text="Region: "
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/description_text" />
+
+    <TextView
+        android:id="@+id/ownerId_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
-        android:text="Description"
+        android:text="Owner ID:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/region_text" />
+
+    <TextView
+        android:id="@+id/trialNumber_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="Trial Number: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ownerId_text" />
 
     <TextView
         android:id="@+id/trialResult_text"
@@ -32,20 +52,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
-        android:text="Results: "
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description_text" />
+        android:text="Result:"
+        app:layout_constraintLeft_toRightOf="@+id/trialNumber_text"
+        app:layout_constraintTop_toBottomOf="@+id/ownerId_text" />
 
     <TextView
-        android:id="@+id/trialNumber_text"
+        android:id="@+id/totalTrials_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="84dp"
-        android:layout_marginTop="20dp"
-        android:text="Trial Number:"
+        android:layout_marginLeft="110dp"
+        android:layout_marginTop="12dp"
+        android:text="Total Trials:"
         app:layout_constraintLeft_toRightOf="@+id/trialResult_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description_text" />
+        app:layout_constraintTop_toBottomOf="@+id/end_button" />
 
     <Button
         android:id="@+id/unpublish_button"
@@ -58,6 +77,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/subscribe_button"
+        android:layout_width="140dp"
+        android:layout_height="42dp"
+        android:text="Subscribe"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
         android:id="@+id/end_button"
         android:layout_width="127dp"
         android:layout_height="42dp"
@@ -66,38 +95,54 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/unpublish_button" />
 
-    <Button
-        android:id="@+id/forum_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:onClick="openForum"
-        android:text="Open Forum"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/addTrial_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:text="Add Trial"
-        app:layout_constraintBottom_toTopOf="@+id/forum_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <ListView
         android:id="@+id/trial_listView"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/addTrial_button"
+        app:layout_constraintTop_toBottomOf="@+id/trialNumber_text"
+        app:layout_constraintBottom_toTopOf="@+id/stats_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/trialNumber_text" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/stats_button"
+        android:layout_width="127dp"
+        android:layout_height="42dp"
+        android:text="View Stats"
+        android:layout_marginLeft="32dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/createQR_button" />
+
+    <Button
+        android:id="@+id/forum_button"
+        android:layout_width="127dp"
+        android:layout_height="42dp"
+        android:text="Forum"
+        android:layout_marginRight="32dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/addTrial_button" />
+
+    <Button
+        android:id="@+id/createQR_button"
+        android:layout_width="127dp"
+        android:layout_height="42dp"
+        android:text="Create QR"
+        android:layout_marginLeft="32dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <Button
+        android:id="@+id/addTrial_button"
+        android:layout_width="127dp"
+        android:layout_height="42dp"
+        android:text="Add Trial"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

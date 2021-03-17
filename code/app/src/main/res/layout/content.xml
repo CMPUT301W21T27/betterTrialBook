@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="270dp"
+        android:layout_width="250dp"
         android:layout_height="98dp"
         android:layout_marginLeft="20dp"
         android:orientation="vertical"
@@ -23,10 +23,12 @@
             android:text="@string/description" />
 
         <TextView
-            android:id="@+id/ID_Text"
+            android:id="@+id/username_Text"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:text="@string/ID" />
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:textSize="20sp"
+            android:text="Owner: " />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,17 +36,9 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/Type_Display"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/type_display"
-                android:textSize="20sp" />
-
-            <TextView
                 android:id="@+id/TrialType_Text"
                 android:layout_width="199dp"
-                android:layout_height="match_parent"
+                android:layout_height="35dp"
                 android:layout_weight="1"
                 android:text="@string/trialType"
                 android:textSize="20sp" />
@@ -59,7 +53,7 @@
         android:layout_marginRight="10dp"
         android:gravity="center"
         android:text="@string/Status"
-        android:textSize="15sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/linearLayout"
