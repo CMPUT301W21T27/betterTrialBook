@@ -16,11 +16,13 @@
         android:textSize="30sp"
         android:text="Experiment Title" />
 
-    <ListView
+    <ExpandableListView
         android:id="@+id/question_list"
         android:layout_width="match_parent"
-        android:layout_height="600dp" />
-    
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
@@ -30,6 +32,5 @@
         android:clickable="true"
         android:onClick="openCreateQuestionActivity"
         app:srcCompat="@android:drawable/ic_input_add" />
-
 
 </LinearLayout>

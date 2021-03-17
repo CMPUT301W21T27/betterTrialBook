@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,7 +24,7 @@ import com.google.firebase.firestore.CollectionReference;
 
 public class ForumActivity extends AppCompatActivity {
     String expId;
-    ArrayAdapter<Question> questionAdapter;
+    ExpandableQuestionList questionAdapter;
     CollectionReference collRef;
     ForumDAL forumDAL;
     ExperimentDAL experimentDAL;
@@ -39,17 +40,18 @@ public class ForumActivity extends AppCompatActivity {
         experimentDAL = new ExperimentDAL();
 
         setTitle();
-        questionAdapter = new QuestionList(this, question -> openCreatePostActivity(question));
-        ListView questionList = findViewById(R.id.question_list);
-        questionList.setAdapter(questionAdapter);
+//        questionAdapter = new QuestionList(this, question -> openCreatePostActivity(question));
 
+        ExpandableListView questionList = findViewById(R.id.question_list);
+        questionList.setAdapter(questionAdapter);
+        questionAdapter = new ExpandableQuestionList(this, question -> openCreatePostActivity(question));
+        questionList.setAdapter(questionAdapter);
         setupSnapshotListener();
     }
 
     private void setupSnapshotListener() {
         forumDAL.subscribeToQuestions(expId, questions -> {
-            questionAdapter.clear();
-            questionAdapter.addAll(questions);
+            questionAdapter.setQuestions(questions);
         });
     }
 
