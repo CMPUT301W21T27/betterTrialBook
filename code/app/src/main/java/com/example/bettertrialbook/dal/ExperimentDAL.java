@@ -1,11 +1,13 @@
 package com.example.bettertrialbook.dal;
 
+import android.os.Build;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.models.BinomialTrial;
@@ -26,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.ListIterator;
 
 public class ExperimentDAL {
 
@@ -166,6 +169,89 @@ public class ExperimentDAL {
                         Log.d(TAG, "Data has been updated");
                     }
                 });
+    }
+
+    /**
+     * Deletes an experimenter's trials
+     *
+     * @param experimentId the id of the currently selected experiment
+     * @param experimentType        the trial to be added//////////////////////////////////
+     * @param experimenterId the blacklisted experimented
+     * @param blacklist    the trial's blacklist status////////////////////////////////////
+     */
+    public void modifyExperimentBlacklist(String experimentId, String experimentType, String experimenterId, Boolean blacklist) {
+        collRef.document(experimentId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onSuccess(DocumentSnapshot value) {
+                        if (value != null && value.exists()) {
+                            ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
+                            if (trials != null) {
+                                // trials.removeIf(t -> t.get("experimenterID").equals(experimenterId));
+                                ListIterator<HashMap<Object, Object>> iter = trials.listIterator();
+                                while(iter.hasNext()){
+                                    String temp = (String) iter.next().get("experimenterId");
+                                    Log.d("TEST","blacklist: "+ experimenterId);
+                                    if (temp != null) {
+                                        Log.d("TEST", "trial experimenter: "+temp);
+
+                                        if (temp.equals(experimenterId)) {
+                                            iter.remove();
+                                        }
+                                    }
+                                }
+                                /*for (HashMap<Object, Object> trial : trials) {
+                                    if (experimenterId.equals(trial.get("experimenterID"))) {
+                                        trials.remove(trial);
+
+                                    }
+                                }*/
+                            }
+                        }
+                        /*
+                        if (experimentType.equals(Extras.COUNT_TYPE)) {
+                            // kinda jank, from what I can tell, a hashmap is returned so need to access values through their keys
+
+
+                        } else if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
+
+                            ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
+                            if (trials != null) {
+                                for (HashMap<Object, Object> trial : trials) {
+                                    BinomialTrial binomialTrial = new BinomialTrial(Integer.parseInt(String.valueOf(trial.get("passCount"))),
+                                            Integer.parseInt(String.valueOf(trial.get("failCount"))),
+                                            String.valueOf(trial.get("trialID")),
+                                            String.valueOf(trial.get("experimenterID")));
+                                }
+                            }
+
+                        } else if (experimentType.equals(Extras.NONNEG_TYPE)) {
+
+                            ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
+                            if (trials != null) {
+                                for (HashMap<Object, Object> trial : trials) {
+                                    NonNegTrial nonNegTrial = new NonNegTrial(Integer.parseInt(String.valueOf(trial.get("count"))),
+                                            String.valueOf(trial.get("trialID")),
+                                            String.valueOf(trial.get("experimenterID")));
+                                }
+                            }
+
+                        } else {
+
+                            ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
+                            if (trials != null) {
+                                for (HashMap<Object, Object> trial : trials) {
+                                    MeasurementTrial measurementTrial = new MeasurementTrial(Double.parseDouble(String.valueOf(trial.get("measurement"))),
+                                            String.valueOf(trial.get("trialID")),
+                                            String.valueOf(trial.get("experimenterID")));
+                                }
+                            }
+                        }*/
+                    }
+                });
+
     }
 
     /**

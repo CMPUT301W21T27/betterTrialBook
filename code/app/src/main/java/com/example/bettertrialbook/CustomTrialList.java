@@ -10,11 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.BinomialTrial;
 import com.example.bettertrialbook.models.CountTrial;
@@ -24,16 +26,18 @@ import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.User;
 
 import java.util.ArrayList;
-
+//  implements ConfirmationFragment.OnFragmentInteractionListener
 public class CustomTrialList extends ArrayAdapter<Trial> {
 
     private final Context context;
     private final ArrayList<Trial> trials;
+    private String experimentId;
 
-    public CustomTrialList(Context context, ArrayList<Trial> trials) {
+    public CustomTrialList(Context context, ArrayList<Trial> trials, String experimentId) {
         super(context, 0, trials);
         this.trials = trials;
         this.context = context;
+        this.experimentId = experimentId;
     }
 
     @NonNull
@@ -88,6 +92,26 @@ public class CustomTrialList extends ArrayAdapter<Trial> {
             trialResult.setText(String.valueOf(measurementTrial.getMeasurement()));
         }
 
+        Button blacklistButton = view.findViewById(R.id.blacklist_button);
+        blacklistButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: COMPLETE modifyExperimentBlacklist Function and add in confirmation dialog
+                // confirmationDialog((String) blacklistButton.getText());
+                ExperimentDAL experimentDAL = new ExperimentDAL();
+                // experimentDAL.modifyExperimentBlacklist(experimentId, "", experimenterId, true);
+            }
+        });
+
         return view;
     }
+    /*
+    public void confirmationDialog(String tag) {
+        new ConfirmationFragment(tag).show(getSupportFragmentManager(), "BLOCK");
+    }
+
+    @Override
+    public void onOkPressedConfirm(String tag) {
+
+    }*/
 }

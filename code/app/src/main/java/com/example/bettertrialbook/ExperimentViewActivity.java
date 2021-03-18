@@ -141,7 +141,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         // set up the list of trials
         trialList = findViewById(R.id.trial_listView);
         trialDataList = new ArrayList<>();
-        trialAdapter = new CustomTrialList(this, trialDataList);
+        trialAdapter = new CustomTrialList(this, trialDataList, experimentId);
         trialList.setAdapter(trialAdapter);
         ExperimentDAL experimentDAL = new ExperimentDAL();
 
