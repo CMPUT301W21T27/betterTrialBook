@@ -12,9 +12,10 @@ public class NonNegTrial extends Trial implements Comparable<NonNegTrial> {
      * @param trialId
      *  the id of the trial
      */
-    public NonNegTrial(int count, String trialId) {
+    public NonNegTrial(int count, String trialId, String experimenterId) {
         this.count = count;
         setTrialID(trialId);
+        setExperimenterID(experimenterId);
     }
 
     /**

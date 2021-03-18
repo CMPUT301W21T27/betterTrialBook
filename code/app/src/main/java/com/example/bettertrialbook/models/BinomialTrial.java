@@ -15,10 +15,11 @@ public class BinomialTrial extends Trial implements Comparable<BinomialTrial> {
      * @param trialId
      *  the id of the trial
      */
-    public BinomialTrial(int passCount, int failCount, String trialId) {
+    public BinomialTrial(int passCount, int failCount, String trialId, String experimenterId) {
         this.passCount = passCount;
         this.failCount = failCount;
         setTrialID(trialId);
+        setExperimenterID(experimenterId);
     }
 
     /**

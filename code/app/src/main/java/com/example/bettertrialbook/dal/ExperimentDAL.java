@@ -191,7 +191,9 @@ public class ExperimentDAL {
                         ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
                         if (trials != null) {
                             for (HashMap<Object, Object> trial : trials) {
-                                CountTrial countTrial = new CountTrial(Integer.parseInt(String.valueOf(trial.get("count"))), String.valueOf(trial.get("trialID")));
+                                CountTrial countTrial = new CountTrial(Integer.parseInt(String.valueOf(trial.get("count"))),
+                                                        String.valueOf(trial.get("trialID")),
+                                                        String.valueOf(trial.get("experimenterID")));
                                 // Log.d(TAG, String.valueOf(trial.get("trialID")));
                                 // Log.d(TAG, String.valueOf(trial.get("count")));
                                 trialDataList.add(countTrial);
@@ -204,7 +206,9 @@ public class ExperimentDAL {
                         if (trials != null) {
                             for (HashMap<Object, Object> trial : trials) {
                                 BinomialTrial binomialTrial = new BinomialTrial(Integer.parseInt(String.valueOf(trial.get("passCount"))),
-                                        Integer.parseInt(String.valueOf(trial.get("failCount"))), String.valueOf(trial.get("trialID")));
+                                        Integer.parseInt(String.valueOf(trial.get("failCount"))),
+                                        String.valueOf(trial.get("trialID")),
+                                        String.valueOf(trial.get("experimenterID")));
                                 trialDataList.add(binomialTrial);
                             }
                         }
@@ -214,7 +218,9 @@ public class ExperimentDAL {
                         ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
                         if (trials != null) {
                             for (HashMap<Object, Object> trial : trials) {
-                                NonNegTrial nonNegTrial = new NonNegTrial(Integer.parseInt(String.valueOf(trial.get("count"))), String.valueOf(trial.get("trialID")));
+                                NonNegTrial nonNegTrial = new NonNegTrial(Integer.parseInt(String.valueOf(trial.get("count"))),
+                                        String.valueOf(trial.get("trialID")),
+                                        String.valueOf(trial.get("experimenterID")));
                                 trialDataList.add(nonNegTrial);
                             }
                         }
@@ -224,7 +230,9 @@ public class ExperimentDAL {
                         ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
                         if (trials != null) {
                             for (HashMap<Object, Object> trial : trials) {
-                                MeasurementTrial measurementTrial = new MeasurementTrial(Double.parseDouble(String.valueOf(trial.get("measurement"))), String.valueOf(trial.get("trialID")));
+                                MeasurementTrial measurementTrial = new MeasurementTrial(Double.parseDouble(String.valueOf(trial.get("measurement"))),
+                                        String.valueOf(trial.get("trialID")),
+                                        String.valueOf(trial.get("experimenterID")));
                                 trialDataList.add(measurementTrial);
                             }
                         }

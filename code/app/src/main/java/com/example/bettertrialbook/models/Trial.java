@@ -3,6 +3,7 @@ package com.example.bettertrialbook.models;
 public abstract class Trial {
     // private Geolocation geolocation;
     private String trialID;
+    private String experimenterID;
 
     /*
     public Geolocation getGeolocation() {
@@ -25,6 +26,19 @@ public abstract class Trial {
      */
     public void setTrialID(String trialID) {
         this.trialID = trialID;
+    }
+
+    public String getExperimenterID() {
+        return experimenterID;
+    }
+
+    /**
+     * sets the trial's experimenter id
+     * @param experimenterID
+     *  the string id for the experimenter
+     */
+    public void setExperimenterID(String experimenterID) {
+        this.experimenterID = experimenterID;
     }
 
     /**

@@ -12,9 +12,10 @@ public class MeasurementTrial extends Trial implements Comparable<MeasurementTri
      * @param trialId
      *  the id of the trial
      */
-    public MeasurementTrial(Double measurement, String trialId) {
+    public MeasurementTrial(Double measurement, String trialId, String experimenterId) {
         this.measurement = measurement;
         setTrialID(trialId);
+        setExperimenterID(experimenterId);
     }
 
     /**
