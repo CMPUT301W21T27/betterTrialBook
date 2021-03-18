@@ -1,20 +1,21 @@
 package com.example.bettertrialbook;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
+
 import com.example.bettertrialbook.dal.ExperimentDAL;
+import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.BinomialTrial;
 import com.example.bettertrialbook.models.CountTrial;
 import com.example.bettertrialbook.models.MeasurementTrial;
@@ -60,7 +61,12 @@ public class AddTrialDialogFragment extends DialogFragment {
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            CountTrial trial = new CountTrial(Integer.parseInt(String.valueOf(countEditText.getText())), UUID.randomUUID().toString());
+                            UserDAL userDAL = new UserDAL();
+                            Context context = view.getContext();
+                            String experimenterId = userDAL.getDeviceUserId(context);
+                            CountTrial trial = new CountTrial(Integer.parseInt(String.valueOf(countEditText.getText())),
+                                                                UUID.randomUUID().toString(),
+                                                                experimenterId);
                             ExperimentDAL experimentDAL = new ExperimentDAL();
                             // use the dal to add the trial to the db
                             experimentDAL.addTrial(experimentId, trial);
@@ -116,8 +122,13 @@ public class AddTrialDialogFragment extends DialogFragment {
                     .setNegativeButton("Cancel", null)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
+
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            BinomialTrial trial = new BinomialTrial(successes[0], failures[0], UUID.randomUUID().toString());
+                            UserDAL userDAL = new UserDAL();
+                            Context context = view.getContext();
+                            String experimenterId = userDAL.getDeviceUserId(context);
+                            BinomialTrial trial = new BinomialTrial(successes[0], failures[0],
+                                                    UUID.randomUUID().toString(), experimenterId);
                             ExperimentDAL experimentDAL = new ExperimentDAL();
                             experimentDAL.addTrial(experimentId, trial);
                         }
@@ -133,7 +144,12 @@ public class AddTrialDialogFragment extends DialogFragment {
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            NonNegTrial trial = new NonNegTrial(Integer.parseInt(String.valueOf(amountEditText.getText())), UUID.randomUUID().toString());
+                            UserDAL userDAL = new UserDAL();
+                            Context context = view.getContext();
+                            String experimenterId = userDAL.getDeviceUserId(context);
+                            NonNegTrial trial = new NonNegTrial(Integer.parseInt(String.valueOf(amountEditText.getText())),
+                                                        UUID.randomUUID().toString(),
+                                                        experimenterId);
                             ExperimentDAL experimentDAL = new ExperimentDAL();
                             experimentDAL.addTrial(experimentId, trial);
                         }
@@ -149,7 +165,12 @@ public class AddTrialDialogFragment extends DialogFragment {
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            MeasurementTrial trial = new MeasurementTrial(Double.parseDouble(String.valueOf(amountEditText.getText())), UUID.randomUUID().toString());
+                            UserDAL userDAL = new UserDAL();
+                            Context context = view.getContext();
+                            String experimenterId = userDAL.getDeviceUserId(context);
+                            MeasurementTrial trial = new MeasurementTrial(Double.parseDouble(String.valueOf(amountEditText.getText())),
+                                                        UUID.randomUUID().toString(),
+                                                        experimenterId);
                             ExperimentDAL experimentDAL = new ExperimentDAL();
                             experimentDAL.addTrial(experimentId, trial);
                         }

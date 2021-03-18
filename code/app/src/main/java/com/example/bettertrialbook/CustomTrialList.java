@@ -10,28 +10,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.bettertrialbook.dal.ExperimentDAL;
+import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.BinomialTrial;
 import com.example.bettertrialbook.models.CountTrial;
 import com.example.bettertrialbook.models.MeasurementTrial;
 import com.example.bettertrialbook.models.NonNegTrial;
 import com.example.bettertrialbook.models.Trial;
+import com.example.bettertrialbook.models.User;
 
 import java.util.ArrayList;
-
+//  implements ConfirmationFragment.OnFragmentInteractionListener
 public class CustomTrialList extends ArrayAdapter<Trial> {
 
     private final Context context;
     private final ArrayList<Trial> trials;
+    private String experimentId;
 
-    public CustomTrialList(Context context, ArrayList<Trial> trials) {
+    public CustomTrialList(Context context, ArrayList<Trial> trials, String experimentId) {
         super(context, 0, trials);
         this.trials = trials;
         this.context = context;
+        this.experimentId = experimentId;
     }
 
     @NonNull
@@ -46,13 +52,27 @@ public class CustomTrialList extends ArrayAdapter<Trial> {
 
         TextView trialNumber = view.findViewById(R.id.trialNumber_textView);
         TextView trialResult = view.findViewById(R.id.trialResult_textView);
+        TextView experimenterIdText = view.findViewById(R.id.trialExperimenter_textView);
 
         trialNumber.setText(String.valueOf(position + 1));
 
         Trial trial = trials.get(position);
         String trialType = trial.getTrialType();
+        String experimenterId = trial.getExperimenterID();
 
         Log.d("tag", "Trial type is: " + trialType);
+        if (experimenterId != null) {
+            // get experimenter username
+            UserDAL userDAL = new UserDAL();
+            userDAL.findUserByID(experimenterId, new UserDAL.FindUserByIDCallback() {
+                @Override
+                public void onCallback(User user) {
+                    if (user != null) {
+                        experimenterIdText.setText("Experimenter: " + user.getUsername());
+                    }
+                }
+            });
+        }
 
         // Need to set the result to a different format for each kind of trial type
         if (trialType.equals(Extras.COUNT_TYPE)) {
@@ -72,6 +92,26 @@ public class CustomTrialList extends ArrayAdapter<Trial> {
             trialResult.setText(String.valueOf(measurementTrial.getMeasurement()));
         }
 
+        Button blacklistButton = view.findViewById(R.id.blacklist_button);
+        blacklistButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: COMPLETE modifyExperimentBlacklist Function and add in confirmation dialog
+                // confirmationDialog((String) blacklistButton.getText());
+                ExperimentDAL experimentDAL = new ExperimentDAL();
+                // experimentDAL.modifyExperimentBlacklist(experimentId, "", experimenterId, true);
+            }
+        });
+
         return view;
     }
+    /*
+    public void confirmationDialog(String tag) {
+        new ConfirmationFragment(tag).show(getSupportFragmentManager(), "BLOCK");
+    }
+
+    @Override
+    public void onOkPressedConfirm(String tag) {
+
+    }*/
 }

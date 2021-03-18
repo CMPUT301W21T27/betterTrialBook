@@ -12,9 +12,10 @@ public class CountTrial extends Trial implements Comparable<CountTrial> {
      * @param trialId
      *  the id of the trial
      */
-    public CountTrial(int count, String trialId) {
+    public CountTrial(int count, String trialId, String experimenterId) {
         this.count = count;
         setTrialID(trialId);
+        setExperimenterID(experimenterId);
     }
 
     /**
