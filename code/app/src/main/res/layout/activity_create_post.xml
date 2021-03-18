@@ -47,14 +47,14 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:text="@string/title" />
+            android:hint="@string/title" />
 
         <EditText
             android:id="@+id/create_post_text"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_margin="10dp"
-            android:text="@string/body" />
+            android:hint="@string/body" />
 
         <LinearLayout
             android:layout_width="match_parent"
