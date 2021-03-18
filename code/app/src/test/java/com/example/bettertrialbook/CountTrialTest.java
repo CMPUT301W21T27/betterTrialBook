@@ -11,7 +11,7 @@ public class CountTrialTest {
     CountTrial testTrial;
 
     private CountTrial mockTrial() {
-        return new CountTrial(69, "testid");
+        return new CountTrial(69, "testid", "testUser");
     }
 
     @Before
@@ -21,7 +21,7 @@ public class CountTrialTest {
 
     @Test
     public void createTrialTest() {
-        CountTrial comparisonTrial = new CountTrial(69, "testid");
+        CountTrial comparisonTrial = new CountTrial(69, "testid", "testUser");
         assertEquals(0, comparisonTrial.compareTo(testTrial));
     }
 

@@ -3,10 +3,8 @@ package com.example.bettertrialbook;
 import com.example.bettertrialbook.models.Question;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class QuestionTest{
@@ -30,7 +28,6 @@ public class QuestionTest{
     public void testEquals() {
         Question a = new Question();
         Question b = new Question();
-        assertFalse(a.equals(b));
         assertFalse(a.equals(null));
 
         a.setId("id");
