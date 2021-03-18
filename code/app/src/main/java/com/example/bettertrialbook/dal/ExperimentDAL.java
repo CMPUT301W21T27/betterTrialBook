@@ -38,7 +38,7 @@ public class ExperimentDAL {
     CollectionReference collRef;
 
     public ExperimentDAL() {
-        db = FirebaseFirestore.getInstance();
+        db = Firestore.getInstance();
         collRef = db.collection("Experiments");
     }
 

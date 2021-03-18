@@ -27,6 +27,19 @@ public class Question extends Post {
         return replies;
     }
 
+    @Override
+    public String toString() {
+        return "Question{" +
+                "title='" + title + '\'' +
+                ", replies=" + replies +
+                ", type='" + type + '\'' +
+                ", text='" + text + '\'' +
+                ", posterId='" + posterId + '\'' +
+                ", id='" + id + '\'' +
+                ", experimentId='" + experimentId + '\'' +
+                '}';
+    }
+
     public String getType() {
         return type;
     }

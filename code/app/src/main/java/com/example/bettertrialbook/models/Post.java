@@ -5,10 +5,10 @@ import androidx.annotation.Nullable;
 import java.io.Serializable;
 
 public class Post implements Serializable {
-    private String text;
-    private String posterId;
-    private String id;
-    private String experimentId;
+    protected String text;
+    protected String posterId;
+    protected String id;
+    protected String experimentId;
 
     public void setText(String text) {
         this.text = text;

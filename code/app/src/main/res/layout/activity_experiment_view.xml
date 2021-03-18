@@ -120,7 +120,9 @@
         android:text="Forum"
         android:layout_marginRight="32dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/addTrial_button" />
+        app:layout_constraintBottom_toTopOf="@+id/addTrial_button"
+        android:onClick="openForum"
+        />
 
     <Button
         android:id="@+id/createQR_button"

@@ -30,13 +30,14 @@ public class ForumDAL {
 
     /**
      * Adds the given post to Firestore and calls the onSuccess callback with it's new id.
-     * @param post A question or reply
+     *
+     * @param post      A question or reply
      * @param onSuccess Callback that gets passed the post's id
      * @throws IllegalArgumentException
      */
-    public void addPost(Post post, @Nullable Callback<String> onSuccess) throws IllegalArgumentException {
+    public void addPost(Post post, @Nullable Callback<String> onSuccess) {
         if (!post.validate()) {
-            throw new IllegalArgumentException("Post does not have all necessary fields set");
+            throw new IllegalArgumentException("Post does not have all necessary fields set. \n" + post.toString());
         }
         collRef.add(post).addOnSuccessListener(doc -> {
             String qId = doc.getId();
@@ -52,8 +53,6 @@ public class ForumDAL {
     private List<Question> deserializeQuestions(QuerySnapshot querySnapshot) {
         // maps question id to corresponding question
         Map<String, Question> questionMap = new HashMap<>();
-        // maps question id to list of its replies
-        Map<String, ArrayList<Reply>> replyListMap = new HashMap<>();
         List<Reply> replies = new ArrayList<>();
 
         for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
@@ -67,7 +66,7 @@ public class ForumDAL {
                 questionMap.put(q.getId(), q);
             } else if (type.equals("reply")) {
                 Reply r = doc.toObject(Reply.class);
-                r.setId(r.getId());
+                r.setId(doc.getId());
                 replies.add(r);
             } else {
                 Log.d("ForumDAL", doc.toString());

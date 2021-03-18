@@ -70,7 +70,6 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         unpublishButton = findViewById(R.id.unpublish_button);
         endButton = findViewById(R.id.end_button);
         subscribeButton = findViewById(R.id.subscribe_button);
-        forumButton = findViewById(R.id.forum_button);
         addTrialButton = findViewById(R.id.addTrial_button);
         if (!isOwner) {
             unpublishButton.setVisibility(View.INVISIBLE);
@@ -119,14 +118,6 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
             @Override
             public void onClick(View v) {
                 confirmationDialog((String) endButton.getText());
-            }
-        });
-
-        forumButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), ForumActivity.class);
-                startActivity(myIntent);
             }
         });
 

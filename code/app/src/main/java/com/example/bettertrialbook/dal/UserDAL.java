@@ -159,12 +159,27 @@ public class UserDAL {
     }
 
     // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+
+    /**
+     * Retrieves this device's user id.
+     * This value will be persistent across sessions.
+     * @param context An android context object, such as an Activity
+     * @return
+     */
     public String getDeviceUserId(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences("uniqueID", Context.MODE_PRIVATE);
         return sharedPref.getString("uniqueID", null);
     }
 
+    /**
+     * Sets this device's user id.
+     * This value will be persistent across sessions
+     * @param context An android context object, such as an Activity
+     * @param uid
+     */
     public void setDeviceUserId(Context context, String uid) {
+        if (uid == null)
+            throw new NullPointerException("Cannot save a null user id");
         SharedPreferences sharedPref = context.getSharedPreferences("uniqueID", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("uniqueID", uid);
