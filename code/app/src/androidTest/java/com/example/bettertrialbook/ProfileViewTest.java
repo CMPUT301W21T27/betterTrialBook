@@ -29,6 +29,7 @@ import static org.junit.Assert.assertNotEquals;
  * Profile UI tests
  * Uses a firestore emulator
  * tests if users can view their profile and edit their contact info
+ * https://firebase.google.com/docs/emulator-suite/connect_and_prototype
  */
 public class ProfileViewTest {
 

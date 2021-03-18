@@ -30,6 +30,7 @@ import static org.junit.Assert.assertEquals;
  * Signup UI tests
  * Uses an firestore emulator
  * Tests if a user can access the signup screen and also signup
+ * https://firebase.google.com/docs/emulator-suite/connect_and_prototype
  */
 public class SignUpTest {
 
