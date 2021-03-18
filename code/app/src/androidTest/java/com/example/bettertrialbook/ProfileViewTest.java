@@ -25,6 +25,11 @@ import org.junit.rules.TestRule;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+/**
+ * Profile UI tests
+ * Uses a firestore emulator
+ * tests if users can view their profile and edit their contact info
+ */
 public class ProfileViewTest {
 
     private Solo solo;

@@ -26,10 +26,11 @@ import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 
-/* To run:
-* 1. Need to be using an ID that has not signed up yet
-* 2. If your ID is already signed up, delete your collection from the database before running
-* */
+/**
+ * Signup UI tests
+ * Uses an firestore emulator
+ * Tests if a user can access the signup screen and also signup
+ */
 public class SignUpTest {
 
     private Solo solo;
