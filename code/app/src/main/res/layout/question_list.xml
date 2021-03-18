@@ -38,29 +38,5 @@
             android:textSize="15sp" />
 
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/q_expanded"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/q_body"
-            android:layout_margin="20dp"
-            android:textSize="15sp"
-            />
-        <Button
-            android:id="@+id/post_reply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/post_reply"
-            />
-    </LinearLayout>
-
-
 </LinearLayout>
 
