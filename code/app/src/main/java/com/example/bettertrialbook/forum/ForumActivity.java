@@ -1,3 +1,7 @@
+/*
+Contains the ForumActivity which handles the Question and Answering functionality.
+ */
+
 package com.example.bettertrialbook.forum;
 
 import android.content.Intent;

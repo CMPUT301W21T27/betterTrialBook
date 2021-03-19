@@ -1,3 +1,7 @@
+/*
+UI testing for signing up
+ */
+
 package com.example.bettertrialbook;
 
 import android.util.Log;

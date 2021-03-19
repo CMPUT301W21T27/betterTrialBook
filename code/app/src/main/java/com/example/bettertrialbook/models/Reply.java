@@ -1,3 +1,7 @@
+/*
+A child class of Post used for answers in the forum
+ */
+
 package com.example.bettertrialbook.models;
 
 public class Reply extends Post {

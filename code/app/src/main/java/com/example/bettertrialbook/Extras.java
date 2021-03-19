@@ -1,3 +1,7 @@
+/*
+Key static variables that will be used throughout the project
+ */
+
 package com.example.bettertrialbook;
 
 public final class Extras {

@@ -1,3 +1,7 @@
+/*
+A DAL for handling any forum interactions with the database.
+ */
+
 package com.example.bettertrialbook.dal;
 
 import android.util.Log;

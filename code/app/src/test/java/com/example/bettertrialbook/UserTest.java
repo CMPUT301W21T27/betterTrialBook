@@ -1,3 +1,7 @@
+/*
+Unit testing for User functionality
+ */
+
 package com.example.bettertrialbook;
 
 import com.example.bettertrialbook.models.User;
