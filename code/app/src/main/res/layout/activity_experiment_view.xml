@@ -135,6 +135,16 @@
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <Button
+        android:id="@+id/scanQR_button"
+        android:layout_width="130dp"
+        android:layout_height="42dp"
+        android:text="Scan QR"
+        android:layout_marginLeft="32dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <Button
         android:id="@+id/addTrial_button"
         android:layout_width="127dp"
         android:layout_height="42dp"
