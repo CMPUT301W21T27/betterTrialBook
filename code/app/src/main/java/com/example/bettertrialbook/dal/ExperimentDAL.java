@@ -30,6 +30,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ListIterator;
 
+/*
+The ExperimentDAL handles all communication with the database regarding experiments and trials.
+Currently blacklisting has yet to be implemented.
+ */
+
 public class ExperimentDAL {
 
     final String TAG = "ExperimentDAL";

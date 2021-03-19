@@ -1,3 +1,10 @@
+/*
+The abstract Trial class is a parent class for the four kinds of trials.
+This holds the id of the trial and the experimenter, as well as contains
+an abstract method getTrialType() to be implemented by each child class.
+Currently geolocations and blacklisting for trials have yet to be implemented.
+ */
+
 package com.example.bettertrialbook.models;
 
 public abstract class Trial {

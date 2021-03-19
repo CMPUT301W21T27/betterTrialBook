@@ -1,3 +1,10 @@
+/*
+The Experiment class contains a list of trials and information contained in an ExperimentInfo
+class. This is used to encapsulate information regarding an experiment when retrieving data from
+the database.
+Subscribers and blacklisting has yet to be implemented.
+ */
+
 package com.example.bettertrialbook.models;
 
 import com.example.bettertrialbook.dal.ExperimentDAL;

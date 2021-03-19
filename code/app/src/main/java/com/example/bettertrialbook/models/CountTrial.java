@@ -1,3 +1,7 @@
+/*
+The CountTrial class extends the Trial class and represents trials with counts.
+ */
+
 package com.example.bettertrialbook.models;
 
 import com.example.bettertrialbook.Extras;

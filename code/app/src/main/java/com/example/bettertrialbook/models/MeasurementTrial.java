@@ -1,3 +1,8 @@
+/*
+The MeasurementTrial class extends the Trial class and represents measurement trials with
+values of the Double type.
+ */
+
 package com.example.bettertrialbook.models;
 
 import com.example.bettertrialbook.Extras;
