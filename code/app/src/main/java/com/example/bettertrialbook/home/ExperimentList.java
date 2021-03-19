@@ -3,7 +3,7 @@
     Current Version: V1
 */
 
-package com.example.bettertrialbook;
+package com.example.bettertrialbook.home;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,18 +15,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.ExperimentInfo;
 import com.example.bettertrialbook.models.User;
 
 import java.util.ArrayList;
 
-public class CustomList extends ArrayAdapter<ExperimentInfo> {
+public class ExperimentList extends ArrayAdapter<ExperimentInfo> {
 
     private Context context;
     private ArrayList<ExperimentInfo> trials;
 
-    public CustomList(Context context, ArrayList<ExperimentInfo> trials) {
+    public ExperimentList(Context context, ArrayList<ExperimentInfo> trials) {
         super(context, 0, trials);
         this.trials = trials;
         this.context = context;

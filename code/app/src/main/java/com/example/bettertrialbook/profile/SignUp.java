@@ -1,4 +1,4 @@
-package com.example.bettertrialbook;
+package com.example.bettertrialbook.profile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,15 +7,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.User;
 
-import java.util.HashMap;
-
-public class SignUp extends AppCompatActivity implements InvalidUsernameFragment.OnFragmentInteractionListener{
+public class SignUp extends AppCompatActivity implements InvalidUsernameFragment.OnFragmentInteractionListener {
 
     private String username;
     private String email;

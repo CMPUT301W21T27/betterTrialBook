@@ -1,4 +1,4 @@
-package com.example.bettertrialbook;
+package com.example.bettertrialbook.experiment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.bettertrialbook.Extras;
+import com.example.bettertrialbook.home.MainActivity;
+import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.forum.ForumActivity;

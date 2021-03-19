@@ -1,4 +1,4 @@
-package com.example.bettertrialbook;
+package com.example.bettertrialbook.experiment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.example.bettertrialbook.R;
 
 public class ConfirmationFragment extends DialogFragment {
     private String tag = "";

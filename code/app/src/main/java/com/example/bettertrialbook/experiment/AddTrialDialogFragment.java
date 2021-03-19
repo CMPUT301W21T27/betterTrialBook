@@ -1,4 +1,4 @@
-package com.example.bettertrialbook;
+package com.example.bettertrialbook.experiment;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.bettertrialbook.Extras;
+import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.BinomialTrial;

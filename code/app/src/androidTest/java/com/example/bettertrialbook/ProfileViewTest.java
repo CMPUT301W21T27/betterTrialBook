@@ -9,6 +9,9 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.example.bettertrialbook.dal.Firestore;
+import com.example.bettertrialbook.home.MainActivity;
+import com.example.bettertrialbook.profile.ProfileViewActivity;
+import com.example.bettertrialbook.profile.SignUp;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -62,7 +65,7 @@ public class ProfileViewTest {
         solo.assertCurrentActivity(activityMessage,MainActivity.class);
         solo.sleep(5000);   //wait for database access to finish
         solo.clickOnImage(1);
-        solo.assertCurrentActivity(activityMessage,ProfileViewActivity.class);
+        solo.assertCurrentActivity(activityMessage, ProfileViewActivity.class);
     }
 
     /**
@@ -293,7 +296,7 @@ public class ProfileViewTest {
 
         //Go to sign up screen
         solo.clickOnButton("Signup");
-        solo.assertCurrentActivity(activityMessage,SignUp.class);
+        solo.assertCurrentActivity(activityMessage, SignUp.class);
         solo.waitForText("Username:",1,2000);
 
         //Input taken username

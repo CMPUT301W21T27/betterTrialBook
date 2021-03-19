@@ -1,4 +1,4 @@
-package com.example.bettertrialbook;
+package com.example.bettertrialbook.experiment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.models.ExperimentInfo;
 

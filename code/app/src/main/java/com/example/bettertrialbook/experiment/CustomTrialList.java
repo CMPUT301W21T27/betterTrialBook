@@ -2,7 +2,7 @@
 Custom list for displaying trials in an experiment view
 */
 
-package com.example.bettertrialbook;
+package com.example.bettertrialbook.experiment;
 
 import android.content.Context;
 import android.util.Log;
@@ -16,6 +16,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.bettertrialbook.Extras;
+import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.BinomialTrial;

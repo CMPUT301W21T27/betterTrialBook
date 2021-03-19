@@ -3,21 +3,17 @@ package com.example.bettertrialbook.forum;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.bettertrialbook.ExperimentAddActivity;
 import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.dal.Firestore;
 import com.example.bettertrialbook.dal.ForumDAL;
-import com.example.bettertrialbook.models.Post;
 import com.example.bettertrialbook.models.Question;
 import com.google.firebase.firestore.CollectionReference;
 

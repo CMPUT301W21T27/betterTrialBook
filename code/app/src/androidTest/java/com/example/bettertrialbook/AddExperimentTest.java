@@ -5,6 +5,9 @@ import android.widget.EditText;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.bettertrialbook.experiment.ExperimentAddActivity;
+import com.example.bettertrialbook.experiment.ExperimentViewActivity;
+import com.example.bettertrialbook.home.MainActivity;
 import com.robotium.solo.Solo;
 
 import org.junit.After;

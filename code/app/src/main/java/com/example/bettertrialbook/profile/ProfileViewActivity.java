@@ -1,4 +1,4 @@
-package com.example.bettertrialbook;
+package com.example.bettertrialbook.profile;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.User;
 

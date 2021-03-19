@@ -2,11 +2,9 @@
     Initial Screen
     Current Version: V1.1
  */
-package com.example.bettertrialbook;
+package com.example.bettertrialbook.home;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,10 +17,14 @@ import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.dal.Firestore;
 import com.example.bettertrialbook.dal.UserDAL;
+import com.example.bettertrialbook.experiment.ExperimentAddActivity;
+import com.example.bettertrialbook.experiment.ExperimentViewActivity;
 import com.example.bettertrialbook.models.ExperimentInfo;
 import com.example.bettertrialbook.models.User;
+import com.example.bettertrialbook.profile.ProfileViewActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         ListView resultList = findViewById(R.id.Result_ListView);
 
         trialInfoList = new ArrayList<>();
-        trialInfoAdapter = new CustomList(this, trialInfoList);
+        trialInfoAdapter = new ExperimentList(this, trialInfoList);
         resultList.setAdapter(trialInfoAdapter);
         resultList.setOnItemClickListener(this);
 

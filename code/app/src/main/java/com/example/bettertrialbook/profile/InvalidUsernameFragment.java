@@ -1,4 +1,4 @@
-package com.example.bettertrialbook;
+package com.example.bettertrialbook.profile;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,6 +11,9 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.example.bettertrialbook.R;
+
 /*
 * Fragment called when either:
 *   No username entered
