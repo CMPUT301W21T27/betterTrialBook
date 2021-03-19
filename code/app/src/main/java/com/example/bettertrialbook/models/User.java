@@ -3,11 +3,11 @@ package com.example.bettertrialbook.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/*
-* User object
-* Used to display information in profile view
-* Used to access information when publishing an experiment
-* */
+
+/**
+ * User object
+ * Represents the app's Users with a username, ID, and contact info
+ */
 public class User implements Parcelable {
     private String ID;
     private String username;

@@ -16,6 +16,14 @@ import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.User;
 
+/*
+* Activity to view your profile
+* Has either a signup button or an edit contact button
+* Displays all your info, ID, username, contact info
+* Signup - starts signup activity
+* Edit - calls edit contact fragment
+* Applies your sign up or edit to the database
+* */
 public class ProfileViewActivity extends AppCompatActivity implements EditContactFragment.OnFragmentInteractionListener {
 
     private User user;
