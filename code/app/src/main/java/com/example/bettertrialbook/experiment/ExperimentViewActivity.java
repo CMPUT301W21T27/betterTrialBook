@@ -60,7 +60,7 @@ public class ExperimentViewActivity extends AppCompatActivity
         experimentType = experimentInfo.getTrialType();
 
         // Populates experiment page with relevant text
-        setting = findViewById(R.id.Setting);
+        setting = findViewById(R.id.setting);
         regionText = findViewById(R.id.region_text);
         descriptionText = findViewById(R.id.description_text);
         ownerIdText = findViewById(R.id.ownerId_text);
