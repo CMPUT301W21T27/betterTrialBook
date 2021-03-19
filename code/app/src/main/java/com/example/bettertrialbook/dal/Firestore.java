@@ -1,3 +1,7 @@
+/*
+Contains the Firestore class which is used to encapsulate Firestore instances
+ */
+
 package com.example.bettertrialbook.dal;
 
 import com.google.firebase.firestore.FirebaseFirestore;

@@ -1,3 +1,8 @@
+/*
+The ExperimentDAL handles all communication with the database regarding experiments and trials.
+Currently blacklisting has yet to be implemented.
+ */
+
 package com.example.bettertrialbook.dal;
 
 import android.content.Intent;
@@ -31,11 +36,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
-
-/*
-The ExperimentDAL handles all communication with the database regarding experiments and trials.
-Currently blacklisting has yet to be implemented.
- */
 
 public class ExperimentDAL {
 
