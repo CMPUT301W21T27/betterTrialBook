@@ -1,5 +1,6 @@
 package com.example.bettertrialbook.dal;
 
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -99,56 +100,6 @@ public class ExperimentDAL {
                 });
     }
 
-    /**
-     * Sets the status of the experiment with id: experimentId to be 'Unpublished'
-     * meaning it can only be viewed by the owner
-     * @param experimentId
-     *  the unique id of the experiment to be unpublished
-     *
-    public void unpublishExperiment(String experimentId) {
-    collRef
-    .document(experimentId)
-    .update("Status", "Unpublished")
-    .addOnFailureListener(new OnFailureListener() {
-    @Override public void onFailure(@NonNull Exception e) {
-    Log.d(TAG, "Data could not be updated" + e.toString());
-    }
-    })
-    .addOnSuccessListener(new OnSuccessListener<Void>() {
-    @Override public void onSuccess(Void aVoid) {
-    Log.d(TAG, "Data has been updated");
-    }
-    });
-    }
-
-    /
-     * Sets the status of the experiment with id: experimentId to be 'Active'
-     * meaning it can be viewed by all users
-     * @param experimentId
-     *  the unique id of the experiment to be published
-
-    public void publishExperiment(String experimentId) {
-    collRef
-    .document(experimentId)
-    .update("Status", "Active")
-    .addOnFailureListener(new OnFailureListener() {
-    @Override public void onFailure(@NonNull Exception e) {
-    Log.d(TAG, "Data could not be updated" + e.toString());
-    }
-    })
-    .addOnSuccessListener(new OnSuccessListener<Void>() {
-    @Override public void onSuccess(Void aVoid) {
-    Log.d(TAG, "Data has been updated");
-    }
-    });
-    }**/
-
-    /**
-     * Adds a trial to an array of trials for the currently selected experiment
-     *
-     * @param experimentId the id of the currently selected experiment
-     * @param trial        the trial to be added
-     */
     public void addTrial(String experimentId, Trial trial) {
         collRef
                 .document(experimentId)
@@ -255,19 +206,19 @@ public class ExperimentDAL {
      *
      * @param experimentId   the id of the currently selected experiment
      * @param experimentType the type of experiment currently selected
-     * @param callback Callback that will be executed with the
+     * @param callback       Callback that will be executed with the
      */
     public void addTrialListener(String experimentId, String experimentType, Callback<List<Trial>> callback) {
         Log.d(TAG, experimentId);
         final DocumentReference docRef = collRef.document(experimentId);
         docRef.addSnapshotListener((value, error) -> {
             List<Trial> trialList = new ArrayList<>();
-            if (value == null || value.exists()) {
+            if (value == null || !value.exists()) {
                 callback.execute(trialList);
                 return;
             }
             ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
-            if (trials == null){
+            if (trials == null) {
                 callback.execute(trialList);
                 return;
             }
@@ -281,17 +232,22 @@ public class ExperimentDAL {
 
     private Trial deserializeTrial(HashMap<Object, Object> data, String experimentType) {
         String trialId = data.get("trialID").toString();
-        String experimenterId = data.get("experimenterID").toString();
+        String experimenterId;
+        // some trials in firestore don't have an experiment id, this is just so our app doesn't crash
+        if (data.get("experimenterID") == null) {
+            Log.w("Trials", "Trial with id " + trialId + " has no experimenter id. Using default");
+            experimenterId = "1234";
+        } else experimenterId = data.get("experimenterID").toString();
         switch (experimentType) {
             case Extras.COUNT_TYPE:
-                int count = (int) data.get("count");
+                int count = ((Long) data.get("count")).intValue();
                 return new CountTrial(count, trialId, experimenterId);
             case Extras.BINOMIAL_TYPE:
-                int passCount = (int) data.get("passCount");
-                int failCount = (int) data.get("failCount");
+                int passCount = ((Long) data.get("passCount")).intValue();
+                int failCount = ((Long) data.get("failCount")).intValue();
                 return new BinomialTrial(passCount, failCount, trialId, experimenterId);
             case Extras.NONNEG_TYPE:
-                count = (int) data.get("count");
+                count = ((Long) data.get("count")).intValue();
                 return new NonNegTrial(count, trialId, experimenterId);
             case Extras.MEASUREMENT_TYPE:
                 double measurement = (double) data.get("measurement");
