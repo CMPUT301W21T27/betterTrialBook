@@ -30,6 +30,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ListIterator;
 
+/**
+ * Encapsulates access to Experiments and Trials in Firebase.
+ */
 public class ExperimentDAL {
 
     final String TAG = "ExperimentDAL";

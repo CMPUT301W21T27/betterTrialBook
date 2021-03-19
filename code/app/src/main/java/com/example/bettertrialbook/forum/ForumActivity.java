@@ -18,6 +18,10 @@ import com.example.bettertrialbook.models.Question;
 import com.google.firebase.firestore.CollectionReference;
 
 
+/**
+ * This activity displays the Forum for an experiment, listing questions and giving users the ability
+ * to add new ones.
+ */
 public class ForumActivity extends AppCompatActivity {
     String expId;
     ExpandableQuestionList questionAdapter;
