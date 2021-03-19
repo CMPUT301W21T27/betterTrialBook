@@ -27,7 +27,8 @@ import com.example.bettertrialbook.models.User;
 
 import java.util.ArrayList;
 
-public class ExperimentViewActivity extends AppCompatActivity implements ConfirmationFragment.OnFragmentInteractionListener {
+public class ExperimentViewActivity extends AppCompatActivity
+        implements ConfirmationFragment.OnFragmentInteractionListener {
     Boolean newExperiment;
     Boolean isOwner;
     String experimentId;
@@ -35,8 +36,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
     ExperimentInfo experimentInfo;
     final String TAG = "ExperimentViewActivity";
 
-
-    TextView regionText, descriptionText, ownerIdText, totalTrialsText;
+    public TextView regionText, descriptionText, ownerIdText, totalTrialsText;
     Button createQRButton, scanQRButton;
     Button unpublishButton, endButton, addTrialButton, forumButton, subscribeButton;
     ListView trialList;
@@ -90,16 +90,14 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
                 addTrialButton.setEnabled(false);
             }
 
-            /* once user subscribing condition set up
-            if () {
-                subscribeButton.setText("Unsubscribe");
-            }
-            */
+            /*
+             * once user subscribing condition set up if () {
+             * subscribeButton.setText("Unsubscribe"); }
+             */
 
         } else {
             subscribeButton.setVisibility(View.INVISIBLE);
             scanQRButton.setVisibility(View.INVISIBLE);
-
 
             // if already unpublished, sets button to allow re-publishing
             if (experimentInfo.getStatus().equals("Unpublish")) {
@@ -150,7 +148,12 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         ExperimentDAL experimentDAL = new ExperimentDAL();
 
         // create a document snapshot listener in the DAL to update the list of trials
-        experimentDAL.addTrialListener(experimentId, trialDataList, trialAdapter, experimentType, totalTrialsText);
+        experimentDAL.addTrialListener(experimentId, experimentType, trials -> {
+            trialDataList.clear();
+            trialDataList.addAll(trials);
+            totalTrialsText.setText("Total Trials: " + Integer.toString(trialAdapter.getCount()));
+            trialAdapter.notifyDataSetChanged();
+        });
 
     }
 
