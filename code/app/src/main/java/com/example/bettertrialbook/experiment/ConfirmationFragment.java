@@ -1,3 +1,7 @@
+/*
+    fragment to confirm an action
+    Generally finished
+*/
 package com.example.bettertrialbook.experiment;
 
 import android.app.AlertDialog;

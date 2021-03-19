@@ -1,6 +1,6 @@
 /*
     Initial Screen
-    Current Version: V1.1
+    TODO: Create QR Functionality
  */
 package com.example.bettertrialbook.home;
 
@@ -120,11 +120,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
     }
 
+    /*
+     * Calls the ProfileViewActivity Sends user object "you" to display their info
+     * Expects an updated "you" object as a return
+     *
+     */
     public void viewYourProfile(View view) {
-        /*
-         * Calls the ProfileViewActivity Sends user object "you" to display their info
-         * Expects an updated "you" object as a return
-         */
         Intent intent = new Intent(this, ProfileViewActivity.class);
         intent.putExtra("User", you);
         startActivityForResult(intent, 1);

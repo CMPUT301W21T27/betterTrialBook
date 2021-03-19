@@ -3,9 +3,10 @@ package com.example.bettertrialbook.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/*
-* The contact info of User objects
-* */
+
+/**
+ * Contact Info object, holds Phone and email of User object
+ */
 public class ContactInfo implements Parcelable {
     private String email;
     private String phone;
