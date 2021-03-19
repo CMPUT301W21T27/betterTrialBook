@@ -37,6 +37,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
 
 
     TextView regionText, descriptionText, ownerIdText, totalTrialsText;
+    Button createQRButton, scanQRButton;
     Button unpublishButton, endButton, addTrialButton, forumButton, subscribeButton;
     ListView trialList;
     ArrayList<Trial> trialDataList;
@@ -60,6 +61,8 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         descriptionText = findViewById(R.id.description_text);
         ownerIdText = findViewById(R.id.ownerId_text);
         totalTrialsText = findViewById(R.id.totalTrials_text);
+        createQRButton = findViewById(R.id.createQR_button);
+        scanQRButton = findViewById(R.id.scanQR_button);
 
         regionText.setText("Region: " + experimentInfo.getRegion());
         descriptionText.setText("Description: " + experimentInfo.getDescription());
@@ -81,7 +84,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         if (!isOwner) {
             unpublishButton.setVisibility(View.INVISIBLE);
             endButton.setVisibility(View.INVISIBLE);
-
+            createQRButton.setVisibility(View.INVISIBLE);
 
             if (experimentInfo.getStatus().equals("Closed")) {
                 addTrialButton.setEnabled(false);
@@ -95,6 +98,8 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
 
         } else {
             subscribeButton.setVisibility(View.INVISIBLE);
+            scanQRButton.setVisibility(View.INVISIBLE);
+
 
             // if already unpublished, sets button to allow re-publishing
             if (experimentInfo.getStatus().equals("Unpublish")) {

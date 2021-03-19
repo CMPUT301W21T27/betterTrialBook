@@ -7,6 +7,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+/*
+* If parcelable causes problems: https://stackoverflow.com/a/54873453
+* */
 public class UserTest {
 
     User test;

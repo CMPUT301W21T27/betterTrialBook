@@ -13,6 +13,12 @@ import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.User;
 
+/*
+* Sign up activity
+* Takes user input for username and contact info
+* Users must enter a unique username, contact info optional
+* Can cancel signup or confirm
+* */
 public class SignUp extends AppCompatActivity implements InvalidUsernameFragment.OnFragmentInteractionListener {
 
     private String username;
