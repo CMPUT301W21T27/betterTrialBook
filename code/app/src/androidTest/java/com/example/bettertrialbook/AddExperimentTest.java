@@ -1,3 +1,7 @@
+/*
+UI testing for adding experiments
+ */
+
 package com.example.bettertrialbook;
 
 import android.widget.EditText;

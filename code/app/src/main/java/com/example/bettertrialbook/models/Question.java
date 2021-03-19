@@ -1,3 +1,7 @@
+/*
+A child class of Post used for Questions in the forum
+ */
+
 package com.example.bettertrialbook.models;
 
 import java.util.ArrayList;

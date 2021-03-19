@@ -1,3 +1,7 @@
+/*
+Contains the Post class which is used in the Q&A forums
+ */
+
 package com.example.bettertrialbook.models;
 
 import androidx.annotation.Nullable;

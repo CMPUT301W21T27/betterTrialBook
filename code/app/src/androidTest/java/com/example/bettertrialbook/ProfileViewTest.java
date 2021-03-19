@@ -1,3 +1,7 @@
+/*
+UI testing for viewing a profile
+ */
+
 package com.example.bettertrialbook;
 
 import android.util.Log;
