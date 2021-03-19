@@ -78,6 +78,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
             unpublishButton.setVisibility(View.INVISIBLE);
             endButton.setVisibility(View.INVISIBLE);
 
+
             if (experimentInfo.getStatus().equals("Closed")) {
                 addTrialButton.setEnabled(false);
             }
@@ -135,7 +136,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         // set up the list of trials
         trialList = findViewById(R.id.trial_listView);
         trialDataList = new ArrayList<>();
-        trialAdapter = new CustomTrialList(this, trialDataList, experimentId);
+        trialAdapter = new CustomTrialList(this, trialDataList, experimentId, isOwner);
         trialList.setAdapter(trialAdapter);
         ExperimentDAL experimentDAL = new ExperimentDAL();
 

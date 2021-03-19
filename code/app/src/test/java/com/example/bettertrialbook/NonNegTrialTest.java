@@ -11,7 +11,7 @@ public class NonNegTrialTest {
     NonNegTrial testTrial;
 
     private NonNegTrial mockTrial() {
-        return new NonNegTrial(69, "testid");
+        return new NonNegTrial(69, "testid", "testUser");
     }
 
     @Before
@@ -21,7 +21,7 @@ public class NonNegTrialTest {
 
     @Test
     public void createTrialTest() {
-        NonNegTrial comparisonTrial = new NonNegTrial(69, "testid");
+        NonNegTrial comparisonTrial = new NonNegTrial(69, "testid", "testUser");
         assertEquals(0, comparisonTrial.compareTo(testTrial));
     }
 

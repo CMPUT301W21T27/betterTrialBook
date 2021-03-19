@@ -31,14 +31,16 @@ import java.util.ArrayList;
 //  implements ConfirmationFragment.OnFragmentInteractionListener
 public class CustomTrialList extends ArrayAdapter<Trial> {
 
+    private boolean isOwner;
     private final Context context;
     private final ArrayList<Trial> trials;
     private String experimentId;
 
-    public CustomTrialList(Context context, ArrayList<Trial> trials, String experimentId) {
+    public CustomTrialList(Context context, ArrayList<Trial> trials, String experimentId, Boolean isOwner) {
         super(context, 0, trials);
         this.trials = trials;
         this.context = context;
+        this.isOwner = isOwner;
         this.experimentId = experimentId;
     }
 
@@ -95,6 +97,12 @@ public class CustomTrialList extends ArrayAdapter<Trial> {
         }
 
         Button blacklistButton = view.findViewById(R.id.blacklist_button);
+        // Owner has the right to blacklist the experiment
+        // Experimenter has no right to blacklist the experiment
+        if (!isOwner) {
+            blacklistButton.setVisibility(View.INVISIBLE);
+        }
+
         blacklistButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

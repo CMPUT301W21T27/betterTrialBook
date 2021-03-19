@@ -11,7 +11,7 @@ public class BinomialTrialTest {
     BinomialTrial testTrial;
 
     private BinomialTrial mockTrial() {
-        return new BinomialTrial(6, 9, "testid");
+        return new BinomialTrial(6, 9, "testid", "testUser");
     }
 
     @Before
@@ -21,7 +21,7 @@ public class BinomialTrialTest {
 
     @Test
     public void createTrialTest() {
-        BinomialTrial comparisonTrial = new BinomialTrial(6, 9, "testid");
+        BinomialTrial comparisonTrial = new BinomialTrial(6, 9, "testid", "testUser");
         assertEquals(0, comparisonTrial.compareTo(testTrial));
     }
 

@@ -11,7 +11,7 @@ public class MeasurementTrialTest {
     MeasurementTrial testTrial;
 
     private MeasurementTrial mockTrial() {
-        return new MeasurementTrial(420.69, "testid");
+        return new MeasurementTrial(420.69, "testid", "testUser");
     }
 
     @Before
@@ -21,7 +21,7 @@ public class MeasurementTrialTest {
 
     @Test
     public void createTrialTest() {
-        MeasurementTrial comparisonTrial = new MeasurementTrial(420.69, "testid");
+        MeasurementTrial comparisonTrial = new MeasurementTrial(420.69, "testid", "testUser");
         assertEquals(0, comparisonTrial.compareTo(testTrial));
     }
 
