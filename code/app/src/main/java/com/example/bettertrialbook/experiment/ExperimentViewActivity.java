@@ -5,6 +5,7 @@
 package com.example.bettertrialbook.experiment;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -36,8 +37,8 @@ public class ExperimentViewActivity extends AppCompatActivity
     ExperimentInfo experimentInfo;
     final String TAG = "ExperimentViewActivity";
 
-    public TextView regionText, descriptionText, ownerIdText, totalTrialsText;
-    Button createQRButton, scanQRButton;
+    public TextView regionText, descriptionText, ownerIdText, totalTrialsText, setting;
+    Button createQRButton;
     Button unpublishButton, endButton, addTrialButton, forumButton, subscribeButton;
     ListView trialList;
     ArrayList<Trial> trialDataList;
@@ -57,14 +58,15 @@ public class ExperimentViewActivity extends AppCompatActivity
         experimentType = experimentInfo.getTrialType();
 
         // Populates experiment page with relevant text
+        setting = findViewById(R.id.Setting);
         regionText = findViewById(R.id.region_text);
         descriptionText = findViewById(R.id.description_text);
         ownerIdText = findViewById(R.id.ownerId_text);
         totalTrialsText = findViewById(R.id.totalTrials_text);
         createQRButton = findViewById(R.id.createQR_button);
-        scanQRButton = findViewById(R.id.scanQR_button);
 
         regionText.setText("Region: " + experimentInfo.getRegion());
+        setting.setPaintFlags(setting.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         descriptionText.setText("Description: " + experimentInfo.getDescription());
 
         // get owner name
@@ -84,7 +86,6 @@ public class ExperimentViewActivity extends AppCompatActivity
         if (!isOwner) {
             unpublishButton.setVisibility(View.INVISIBLE);
             endButton.setVisibility(View.INVISIBLE);
-            createQRButton.setVisibility(View.INVISIBLE);
 
             if (experimentInfo.getStatus().equals("Closed")) {
                 addTrialButton.setEnabled(false);
@@ -97,7 +98,6 @@ public class ExperimentViewActivity extends AppCompatActivity
 
         } else {
             subscribeButton.setVisibility(View.INVISIBLE);
-            scanQRButton.setVisibility(View.INVISIBLE);
 
             // if already unpublished, sets button to allow re-publishing
             if (experimentInfo.getStatus().equals("Unpublish")) {
