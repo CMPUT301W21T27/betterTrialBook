@@ -16,7 +16,7 @@ import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.User;
 
-/*
+/**
 * Activity to view your profile
 * Has either a signup button or an edit contact button
 * Displays all your info, ID, username, contact info

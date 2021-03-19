@@ -32,6 +32,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * The main activity hosts buttons to create new experiments, view your profile and search experiments.
+ * Limitations: We will aim to move the search logic out of this activity and into the ExperimentDAL
+ */
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     User you;
