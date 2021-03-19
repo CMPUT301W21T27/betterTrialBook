@@ -1,10 +1,13 @@
 /*
-    View experiment screen
+    Activity for viewing experiment details. Uses the ExperimentDAL to get the data
+    from the database. Uses the UserDAL to get the id of the user so that owner functions can
+    be hidden from non-owners.
     TODO: QR functionality, blacklist user's trials, geolocation, view other's profile, statistics
  */
 package com.example.bettertrialbook.experiment;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -27,7 +30,8 @@ import com.example.bettertrialbook.models.User;
 
 import java.util.ArrayList;
 
-public class ExperimentViewActivity extends AppCompatActivity implements ConfirmationFragment.OnFragmentInteractionListener {
+public class ExperimentViewActivity extends AppCompatActivity
+        implements ConfirmationFragment.OnFragmentInteractionListener {
     Boolean newExperiment;
     Boolean isOwner;
     String experimentId;
@@ -35,9 +39,8 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
     ExperimentInfo experimentInfo;
     final String TAG = "ExperimentViewActivity";
 
-
-    TextView regionText, descriptionText, ownerIdText, totalTrialsText;
-    Button createQRButton, scanQRButton;
+    public TextView regionText, descriptionText, ownerIdText, totalTrialsText, setting;
+    Button createQRButton;
     Button unpublishButton, endButton, addTrialButton, forumButton, subscribeButton;
     ListView trialList;
     ArrayList<Trial> trialDataList;
@@ -57,14 +60,15 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         experimentType = experimentInfo.getTrialType();
 
         // Populates experiment page with relevant text
+        setting = findViewById(R.id.Setting);
         regionText = findViewById(R.id.region_text);
         descriptionText = findViewById(R.id.description_text);
         ownerIdText = findViewById(R.id.ownerId_text);
         totalTrialsText = findViewById(R.id.totalTrials_text);
         createQRButton = findViewById(R.id.createQR_button);
-        scanQRButton = findViewById(R.id.scanQR_button);
 
         regionText.setText("Region: " + experimentInfo.getRegion());
+        setting.setPaintFlags(setting.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         descriptionText.setText("Description: " + experimentInfo.getDescription());
 
         // get owner name
@@ -84,22 +88,18 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         if (!isOwner) {
             unpublishButton.setVisibility(View.INVISIBLE);
             endButton.setVisibility(View.INVISIBLE);
-            createQRButton.setVisibility(View.INVISIBLE);
 
             if (experimentInfo.getStatus().equals("Closed")) {
                 addTrialButton.setEnabled(false);
             }
 
-            /* once user subscribing condition set up
-            if () {
-                subscribeButton.setText("Unsubscribe");
-            }
-            */
+            /*
+             * once user subscribing condition set up if () {
+             * subscribeButton.setText("Unsubscribe"); }
+             */
 
         } else {
             subscribeButton.setVisibility(View.INVISIBLE);
-            scanQRButton.setVisibility(View.INVISIBLE);
-
 
             // if already unpublished, sets button to allow re-publishing
             if (experimentInfo.getStatus().equals("Unpublish")) {
@@ -150,7 +150,12 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         ExperimentDAL experimentDAL = new ExperimentDAL();
 
         // create a document snapshot listener in the DAL to update the list of trials
-        experimentDAL.addTrialListener(experimentId, trialDataList, trialAdapter, experimentType, totalTrialsText);
+        experimentDAL.addTrialListener(experimentId, experimentType, trials -> {
+            trialDataList.clear();
+            trialDataList.addAll(trials);
+            totalTrialsText.setText("Total Trials: " + Integer.toString(trialAdapter.getCount()));
+            trialAdapter.notifyDataSetChanged();
+        });
 
     }
 

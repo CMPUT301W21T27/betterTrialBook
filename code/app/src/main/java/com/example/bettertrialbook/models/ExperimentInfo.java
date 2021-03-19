@@ -1,3 +1,8 @@
+/*
+The ExperimentInfo class contains important information about each experiment. This is used to
+pass and retrieve experiment information from the database.
+ */
+
 package com.example.bettertrialbook.models;
 
 import android.os.Parcel;

@@ -1,5 +1,6 @@
 package com.example.bettertrialbook.dal;
 
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -28,10 +29,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.ListIterator;
 
 /**
- * Encapsulates access to Experiments and Trials in Firebase.
+ * Encapsulates access to Experiments and Trials in Firebase. Currently
+ * blacklisting has yet to be implemented.
  */
 public class ExperimentDAL {
 
@@ -48,8 +51,10 @@ public class ExperimentDAL {
     /**
      * adds the experiment to the firestore database
      *
-     * @param experimentInfo the information regarding the experiment that needs to be added
-     * @param onCreate       a callback used after successfully adding the data to the database
+     * @param experimentInfo the information regarding the experiment that needs to
+     *                       be added
+     * @param onCreate       a callback used after successfully adding the data to
+     *                       the database
      */
     public void addExperiment(ExperimentInfo experimentInfo, @Nullable Callback<ExperimentInfo> onCreate) {
         HashMap<String, Object> data = new HashMap<>();
@@ -61,112 +66,47 @@ public class ExperimentDAL {
         data.put("GeoLocationRequired", experimentInfo.getGeoLocationRequired());
         data.put("TrialType", experimentInfo.getTrialType());
 
-        collRef
-                .add(data)
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data could not be added" + e.toString());
-                    }
-                })
-                .addOnSuccessListener(docRef -> {
-                    if (onCreate != null) {
-                        experimentInfo.setId(docRef.getId());
-                        onCreate.execute(experimentInfo);
-                    }
-                });
+        collRef.add(data).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Data could not be added" + e.toString());
+            }
+        }).addOnSuccessListener(docRef -> {
+            if (onCreate != null) {
+                experimentInfo.setId(docRef.getId());
+                onCreate.execute(experimentInfo);
+            }
+        });
     }
 
     /**
      * Update status of experiment
-     * @param experimentId
-     *  the unique id of the experiment to be updated
-     * @param status
-     * the new status of the experiment
+     *
+     * @param experimentId the unique id of the experiment to be updated
+     * @param status       the new status of the experiment
      */
     public void setExperimentStatus(String experimentId, String status) {
-        collRef
-                .document(experimentId)
-                .update("Status", status)
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data could not be updated" + e.toString());
-                    }
-                })
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Data has been updated");
-                    }
-                });
+        collRef.document(experimentId).update("Status", status).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Data could not be updated" + e.toString());
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Data has been updated");
+            }
+        });
     }
 
-    /**
-     * Sets the status of the experiment with id: experimentId to be 'Unpublished'
-     * meaning it can only be viewed by the owner
-     * @param experimentId
-     *  the unique id of the experiment to be unpublished
-     *
-    public void unpublishExperiment(String experimentId) {
-        collRef
-                .document(experimentId)
-                .update("Status", "Unpublished")
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data could not be updated" + e.toString());
-                    }
-                })
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Data has been updated");
-                    }
-                });
-    }
-
-    /
-     * Sets the status of the experiment with id: experimentId to be 'Active'
-     * meaning it can be viewed by all users
-     * @param experimentId
-     *  the unique id of the experiment to be published
-
-    public void publishExperiment(String experimentId) {
-        collRef
-                .document(experimentId)
-                .update("Status", "Active")
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data could not be updated" + e.toString());
-                    }
-                })
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Data has been updated");
-                    }
-                });
-    }**/
-
-    /**
-     * Adds a trial to an array of trials for the currently selected experiment
-     *
-     * @param experimentId the id of the currently selected experiment
-     * @param trial        the trial to be added
-     */
     public void addTrial(String experimentId, Trial trial) {
-        collRef
-                .document(experimentId)
-                .update("Trials", FieldValue.arrayUnion(trial))
+        collRef.document(experimentId).update("Trials", FieldValue.arrayUnion(trial))
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d(TAG, "Data could not be updated" + e.toString());
                     }
-                })
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                }).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Data has been updated");
@@ -177,159 +117,139 @@ public class ExperimentDAL {
     /**
      * Deletes an experimenter's trials
      *
-     * @param experimentId the id of the currently selected experiment
-     * @param experimentType        the trial to be added//////////////////////////////////
+     * @param experimentId   the id of the currently selected experiment
+     * @param experimentType the trial to be added//////////////////////////////////
      * @param experimenterId the blacklisted experimented
-     * @param blacklist    the trial's blacklist status////////////////////////////////////
+     * @param blacklist      the trial's blacklist
+     *                       status////////////////////////////////////
      */
-    public void modifyExperimentBlacklist(String experimentId, String experimentType, String experimenterId, Boolean blacklist) {
-        collRef.document(experimentId)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onSuccess(DocumentSnapshot value) {
-                        if (value != null && value.exists()) {
-                            ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
-                            if (trials != null) {
-                                // trials.removeIf(t -> t.get("experimenterID").equals(experimenterId));
-                                ListIterator<HashMap<Object, Object>> iter = trials.listIterator();
-                                while(iter.hasNext()){
-                                    String temp = (String) iter.next().get("experimenterId");
-                                    Log.d("TEST","blacklist: "+ experimenterId);
-                                    if (temp != null) {
-                                        Log.d("TEST", "trial experimenter: "+temp);
+    public void modifyExperimentBlacklist(String experimentId, String experimentType, String experimenterId,
+            Boolean blacklist) {
+        collRef.document(experimentId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onSuccess(DocumentSnapshot value) {
+                if (value != null && value.exists()) {
+                    ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData())
+                            .get("Trials");
+                    if (trials != null) {
+                        // trials.removeIf(t -> t.get("experimenterID").equals(experimenterId));
+                        ListIterator<HashMap<Object, Object>> iter = trials.listIterator();
+                        while (iter.hasNext()) {
+                            String temp = (String) iter.next().get("experimenterId");
+                            Log.d("TEST", "blacklist: " + experimenterId);
+                            if (temp != null) {
+                                Log.d("TEST", "trial experimenter: " + temp);
 
-                                        if (temp.equals(experimenterId)) {
-                                            iter.remove();
-                                        }
-                                    }
+                                if (temp.equals(experimenterId)) {
+                                    iter.remove();
                                 }
-                                /*for (HashMap<Object, Object> trial : trials) {
-                                    if (experimenterId.equals(trial.get("experimenterID"))) {
-                                        trials.remove(trial);
-
-                                    }
-                                }*/
                             }
                         }
                         /*
-                        if (experimentType.equals(Extras.COUNT_TYPE)) {
-                            // kinda jank, from what I can tell, a hashmap is returned so need to access values through their keys
-
-
-                        } else if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
-
-                            ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
-                            if (trials != null) {
-                                for (HashMap<Object, Object> trial : trials) {
-                                    BinomialTrial binomialTrial = new BinomialTrial(Integer.parseInt(String.valueOf(trial.get("passCount"))),
-                                            Integer.parseInt(String.valueOf(trial.get("failCount"))),
-                                            String.valueOf(trial.get("trialID")),
-                                            String.valueOf(trial.get("experimenterID")));
-                                }
-                            }
-
-                        } else if (experimentType.equals(Extras.NONNEG_TYPE)) {
-
-                            ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
-                            if (trials != null) {
-                                for (HashMap<Object, Object> trial : trials) {
-                                    NonNegTrial nonNegTrial = new NonNegTrial(Integer.parseInt(String.valueOf(trial.get("count"))),
-                                            String.valueOf(trial.get("trialID")),
-                                            String.valueOf(trial.get("experimenterID")));
-                                }
-                            }
-
-                        } else {
-
-                            ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
-                            if (trials != null) {
-                                for (HashMap<Object, Object> trial : trials) {
-                                    MeasurementTrial measurementTrial = new MeasurementTrial(Double.parseDouble(String.valueOf(trial.get("measurement"))),
-                                            String.valueOf(trial.get("trialID")),
-                                            String.valueOf(trial.get("experimenterID")));
-                                }
-                            }
-                        }*/
+                         * for (HashMap<Object, Object> trial : trials) { if
+                         * (experimenterId.equals(trial.get("experimenterID"))) { trials.remove(trial);
+                         * 
+                         * } }
+                         */
                     }
-                });
+                }
+                /*
+                 * if (experimentType.equals(Extras.COUNT_TYPE)) { // kinda jank, from what I
+                 * can tell, a hashmap is returned so need to access values through their keys
+                 * 
+                 * 
+                 * } else if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
+                 * 
+                 * ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object,
+                 * Object>>) (value.getData()).get("Trials"); if (trials != null) { for
+                 * (HashMap<Object, Object> trial : trials) { BinomialTrial binomialTrial = new
+                 * BinomialTrial(Integer.parseInt(String.valueOf(trial.get("passCount"))),
+                 * Integer.parseInt(String.valueOf(trial.get("failCount"))),
+                 * String.valueOf(trial.get("trialID")),
+                 * String.valueOf(trial.get("experimenterID"))); } }
+                 * 
+                 * } else if (experimentType.equals(Extras.NONNEG_TYPE)) {
+                 * 
+                 * ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object,
+                 * Object>>) (value.getData()).get("Trials"); if (trials != null) { for
+                 * (HashMap<Object, Object> trial : trials) { NonNegTrial nonNegTrial = new
+                 * NonNegTrial(Integer.parseInt(String.valueOf(trial.get("count"))),
+                 * String.valueOf(trial.get("trialID")),
+                 * String.valueOf(trial.get("experimenterID"))); } }
+                 * 
+                 * } else {
+                 * 
+                 * ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object,
+                 * Object>>) (value.getData()).get("Trials"); if (trials != null) { for
+                 * (HashMap<Object, Object> trial : trials) { MeasurementTrial measurementTrial
+                 * = new
+                 * MeasurementTrial(Double.parseDouble(String.valueOf(trial.get("measurement")))
+                 * , String.valueOf(trial.get("trialID")),
+                 * String.valueOf(trial.get("experimenterID"))); } } }
+                 */
+            }
+        });
 
     }
 
     /**
-     * Sets a documentsnapshot listener to update the list of trials for an experiment in real time
+     * Sets a documentsnapshot listener to update the list of trials for an
+     * experiment in real time
      *
      * @param experimentId   the id of the currently selected experiment
-     * @param trialDataList  the list of trials that the array adapter is displaying
-     * @param trialAdapter   the adapter for the experiment view being displayed
      * @param experimentType the type of experiment currently selected
+     * @param callback       Callback that will be executed with the
      */
-    public void addTrialListener(String experimentId, ArrayList<Trial> trialDataList,
-                                 ArrayAdapter<Trial> trialAdapter, String experimentType, TextView totalTrialsText) {
+    public void addTrialListener(String experimentId, String experimentType, Callback<List<Trial>> callback) {
         Log.d(TAG, experimentId);
         final DocumentReference docRef = collRef.document(experimentId);
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                trialDataList.clear();
-                // handle each of the four kinds of experiments
-                if (experimentType.equals(Extras.COUNT_TYPE)) {
-                    if (value != null && value.exists()) {
-                        // kinda jank, from what I can tell, a hashmap is returned so need to access values through their keys
-                        ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
-                        if (trials != null) {
-                            for (HashMap<Object, Object> trial : trials) {
-                                CountTrial countTrial = new CountTrial(Integer.parseInt(String.valueOf(trial.get("count"))),
-                                                        String.valueOf(trial.get("trialID")),
-                                                        String.valueOf(trial.get("experimenterID")));
-                                // Log.d(TAG, String.valueOf(trial.get("trialID")));
-                                // Log.d(TAG, String.valueOf(trial.get("count")));
-                                trialDataList.add(countTrial);
-                            }
-                        }
-                    }
-                } else if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
-                    if (value != null && value.exists()) {
-                        ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
-                        if (trials != null) {
-                            for (HashMap<Object, Object> trial : trials) {
-                                BinomialTrial binomialTrial = new BinomialTrial(Integer.parseInt(String.valueOf(trial.get("passCount"))),
-                                        Integer.parseInt(String.valueOf(trial.get("failCount"))),
-                                        String.valueOf(trial.get("trialID")),
-                                        String.valueOf(trial.get("experimenterID")));
-                                trialDataList.add(binomialTrial);
-                            }
-                        }
-                    }
-                } else if (experimentType.equals(Extras.NONNEG_TYPE)) {
-                    if (value != null && value.exists()) {
-                        ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
-                        if (trials != null) {
-                            for (HashMap<Object, Object> trial : trials) {
-                                NonNegTrial nonNegTrial = new NonNegTrial(Integer.parseInt(String.valueOf(trial.get("count"))),
-                                        String.valueOf(trial.get("trialID")),
-                                        String.valueOf(trial.get("experimenterID")));
-                                trialDataList.add(nonNegTrial);
-                            }
-                        }
-                    }
-                } else {
-                    if (value != null && value.exists()) {
-                        ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData()).get("Trials");
-                        if (trials != null) {
-                            for (HashMap<Object, Object> trial : trials) {
-                                MeasurementTrial measurementTrial = new MeasurementTrial(Double.parseDouble(String.valueOf(trial.get("measurement"))),
-                                        String.valueOf(trial.get("trialID")),
-                                        String.valueOf(trial.get("experimenterID")));
-                                trialDataList.add(measurementTrial);
-                            }
-                        }
-                    }
-                }
-                totalTrialsText.setText("Total Trials: " + Integer.toString(trialAdapter.getCount()));
-                trialAdapter.notifyDataSetChanged();
+        docRef.addSnapshotListener((value, error) -> {
+            List<Trial> trialList = new ArrayList<>();
+            if (value == null || !value.exists()) {
+                callback.execute(trialList);
+                return;
             }
+            ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData())
+                    .get("Trials");
+            if (trials == null) {
+                callback.execute(trialList);
+                return;
+            }
+
+            for (HashMap<Object, Object> trial : trials) {
+                trialList.add(deserializeTrial(trial, experimentType));
+            }
+            callback.execute(trialList);
         });
+    }
+
+    private Trial deserializeTrial(HashMap<Object, Object> data, String experimentType) {
+        String trialId = data.get("trialID").toString();
+        String experimenterId;
+        // some trials in firestore don't have an experiment id, this is just so our app
+        // doesn't crash
+        if (data.get("experimenterID") == null) {
+            Log.w("Trials", "Trial with id " + trialId + " has no experimenter id. Using default");
+            experimenterId = "1234";
+        } else
+            experimenterId = data.get("experimenterID").toString();
+        switch (experimentType) {
+        case Extras.COUNT_TYPE:
+            int count = ((Long) data.get("count")).intValue();
+            return new CountTrial(count, trialId, experimenterId);
+        case Extras.BINOMIAL_TYPE:
+            int passCount = ((Long) data.get("passCount")).intValue();
+            int failCount = ((Long) data.get("failCount")).intValue();
+            return new BinomialTrial(passCount, failCount, trialId, experimenterId);
+        case Extras.NONNEG_TYPE:
+            count = ((Long) data.get("count")).intValue();
+            return new NonNegTrial(count, trialId, experimenterId);
+        case Extras.MEASUREMENT_TYPE:
+            double measurement = (double) data.get("measurement");
+            return new MeasurementTrial(measurement, trialId, experimenterId);
+        default:
+            throw new IllegalArgumentException("Invalid experiment type");
+        }
     }
 }

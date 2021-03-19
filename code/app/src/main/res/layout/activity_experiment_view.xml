@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- UI for viewing the trials submitted for the experiment -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -97,12 +98,14 @@
 
     <ListView
         android:id="@+id/trial_listView"
-        android:layout_width="wrap_content"
-        android:layout_height="550dp"
-        app:layout_constraintTop_toBottomOf="@+id/trialNumber_text"
+        android:layout_width="414dp"
+        android:layout_height="458dp"
         app:layout_constraintBottom_toTopOf="@+id/stats_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trialNumber_text"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/stats_button"
@@ -134,15 +137,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <Button
-        android:id="@+id/scanQR_button"
-        android:layout_width="130dp"
-        android:layout_height="42dp"
-        android:text="Scan QR"
-        android:layout_marginLeft="32dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
 
     <Button
         android:id="@+id/addTrial_button"
@@ -153,6 +147,18 @@
         android:layout_marginBottom="16dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/Setting"
+        android:layout_width="113dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="12dp"
+        android:text="Setting"
+        android:textAlignment="textEnd"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trial_listView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
