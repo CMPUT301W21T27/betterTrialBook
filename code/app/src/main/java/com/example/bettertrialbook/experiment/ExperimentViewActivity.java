@@ -32,7 +32,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
     final String TAG = "ExperimentViewActivity";
 
 
-    TextView regionText, descriptionText, ownerIdText, totalTrialsText;
+    public TextView regionText, descriptionText, ownerIdText, totalTrialsText;
     Button unpublishButton, endButton, addTrialButton, forumButton, subscribeButton;
     ListView trialList;
     ArrayList<Trial> trialDataList;
@@ -141,9 +141,16 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         ExperimentDAL experimentDAL = new ExperimentDAL();
 
         // create a document snapshot listener in the DAL to update the list of trials
-        experimentDAL.addTrialListener(experimentId, trialDataList, trialAdapter, experimentType, totalTrialsText);
+        experimentDAL.addTrialListener(experimentId, experimentType, trials -> {
+            trialDataList.clear();
+            trialDataList.addAll(trials);
+            totalTrialsText.setText("Total Trials: " + Integer.toString(trialAdapter.getCount()));
+            trialAdapter.notifyDataSetChanged();
+        } );
 
     }
+
+
 
     public void openForum(View view) {
         Intent intent = new Intent(this, ForumActivity.class);
