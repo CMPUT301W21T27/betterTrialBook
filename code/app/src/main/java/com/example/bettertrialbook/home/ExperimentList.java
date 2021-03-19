@@ -1,6 +1,6 @@
 /*
-    The CustomList to display the search result is still in progress
-    Current Version: V1
+    A CustomList to display the search results
+    Generally finished
 */
 
 package com.example.bettertrialbook.home;

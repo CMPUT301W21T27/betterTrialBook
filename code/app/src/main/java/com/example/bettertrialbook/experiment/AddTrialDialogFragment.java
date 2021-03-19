@@ -1,3 +1,7 @@
+/*
+    fragment to add new trial to experiment
+    Generally finished
+*/
 package com.example.bettertrialbook.experiment;
 
 import android.app.Dialog;

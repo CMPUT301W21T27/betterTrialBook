@@ -1,5 +1,5 @@
 /*
-Custom list for displaying trials in an experiment view
+    A CustomList for displaying trials in an experiment view
 */
 
 package com.example.bettertrialbook.experiment;

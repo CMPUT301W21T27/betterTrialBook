@@ -1,3 +1,7 @@
+/*
+    View experiment screen
+    TODO: QR functionality, blacklist user's trials, geolocation, view other's profile, statistics
+ */
 package com.example.bettertrialbook.experiment;
 
 import android.content.Intent;

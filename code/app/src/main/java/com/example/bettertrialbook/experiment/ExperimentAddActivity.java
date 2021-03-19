@@ -1,3 +1,7 @@
+/*
+    Add new experiment screen
+    Generally finished
+ */
 package com.example.bettertrialbook.experiment;
 
 import android.content.Intent;
