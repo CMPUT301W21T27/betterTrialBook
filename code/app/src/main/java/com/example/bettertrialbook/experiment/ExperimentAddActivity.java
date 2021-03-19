@@ -1,6 +1,6 @@
 /*
-    Add new experiment screen
-    Generally finished
+    Activity for adding a new experiment. Uses the ExperimentDAL to write the new experiment
+    to the database.
  */
 package com.example.bettertrialbook.experiment;
 

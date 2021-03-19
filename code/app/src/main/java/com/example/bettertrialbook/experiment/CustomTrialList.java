@@ -1,5 +1,6 @@
 /*
     A CustomList for displaying trials in an experiment view
+    Blacklisting has yet to be implemented.
 */
 
 package com.example.bettertrialbook.experiment;

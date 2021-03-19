@@ -1,3 +1,7 @@
+/*
+The NonNegTrial class extends the Trial class and represents non-negative integer count trials.
+ */
+
 package com.example.bettertrialbook.models;
 
 import com.example.bettertrialbook.Extras;
