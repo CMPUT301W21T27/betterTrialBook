@@ -1,3 +1,7 @@
+/*
+Unit tests for the MeasurementTrial class
+ */
+
 package com.example.bettertrialbook;
 
 import com.example.bettertrialbook.models.MeasurementTrial;

@@ -1,3 +1,7 @@
+/*
+Unit tests for the BinomialTrial class
+ */
+
 package com.example.bettertrialbook;
 
 import com.example.bettertrialbook.models.BinomialTrial;

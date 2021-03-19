@@ -1,6 +1,6 @@
 /*
-    fragment to add new trial to experiment
-    Generally finished
+    Fragment for adding a new trial to an experiment. Uses the ExperimentDAL to
+    add the new trial to the database.
 */
 package com.example.bettertrialbook.experiment;
 

@@ -1,3 +1,7 @@
+/*
+The BinomialTrial class extends the Trial class and represents pass-fail trials.
+ */
+
 package com.example.bettertrialbook.models;
 
 import com.example.bettertrialbook.Extras;

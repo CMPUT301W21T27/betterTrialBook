@@ -1,5 +1,7 @@
 /*
-    View experiment screen
+    Activity for viewing experiment details. Uses the ExperimentDAL to get the data
+    from the database. Uses the UserDAL to get the id of the user so that owner functions can
+    be hidden from non-owners.
     TODO: QR functionality, blacklist user's trials, geolocation, view other's profile, statistics
  */
 package com.example.bettertrialbook.experiment;
