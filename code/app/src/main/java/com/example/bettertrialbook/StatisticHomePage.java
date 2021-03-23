@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 public class StatisticHomePage extends AppCompatActivity {
 
@@ -14,5 +16,12 @@ public class StatisticHomePage extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.ToolBar);
         setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_statistic, menu);
+        return true;
     }
 }
