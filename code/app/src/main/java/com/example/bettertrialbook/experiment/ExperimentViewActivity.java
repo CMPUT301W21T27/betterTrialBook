@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.bettertrialbook.Extras;
+import com.example.bettertrialbook.StatisticHomePage;
 import com.example.bettertrialbook.home.MainActivity;
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.dal.ExperimentDAL;
@@ -41,7 +42,7 @@ public class ExperimentViewActivity extends AppCompatActivity
 
     public TextView regionText, descriptionText, ownerIdText, totalTrialsText, setting;
     Button createQRButton;
-    Button unpublishButton, endButton, addTrialButton, forumButton, subscribeButton;
+    Button unpublishButton, endButton, addTrialButton, forumButton, subscribeButton, statButton;
     ListView trialList;
     ArrayList<Trial> trialDataList;
     ArrayAdapter<Trial> trialAdapter;
@@ -62,6 +63,7 @@ public class ExperimentViewActivity extends AppCompatActivity
         // Populates experiment page with relevant text
         setting = findViewById(R.id.setting);
         regionText = findViewById(R.id.region_text);
+        statButton = findViewById(R.id.stats_button);
         descriptionText = findViewById(R.id.description_text);
         ownerIdText = findViewById(R.id.ownerId_text);
         totalTrialsText = findViewById(R.id.totalTrials_text);
@@ -142,6 +144,14 @@ public class ExperimentViewActivity extends AppCompatActivity
             }
         });
 
+        statButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                statisticReport();
+            }
+        });
+
+
         // set up the list of trials
         trialList = findViewById(R.id.trial_listView);
         trialDataList = new ArrayList<>();
@@ -167,6 +177,11 @@ public class ExperimentViewActivity extends AppCompatActivity
 
     public void confirmationDialog(String tag) {
         new ConfirmationFragment(tag).show(getSupportFragmentManager(), "CONF");
+    }
+
+    public void statisticReport() {
+        Intent intent = new Intent(this, StatisticHomePage.class);
+        startActivity(intent);
     }
 
     // Action based on confirmation
