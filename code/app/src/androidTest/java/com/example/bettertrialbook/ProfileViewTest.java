@@ -299,7 +299,7 @@ public class ProfileViewTest {
         solo.assertCurrentActivity(activityMessage,ProfileViewActivity.class);
 
         //Go to sign up screen
-        solo.clickOnButton("Signup");
+        solo.clickOnButton("Register Profile");
         solo.assertCurrentActivity(activityMessage, SignUp.class);
         solo.waitForText("Username:",1,2000);
 

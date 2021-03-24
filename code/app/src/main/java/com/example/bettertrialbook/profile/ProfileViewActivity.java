@@ -92,7 +92,7 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
 
         String buttonName = button.getText().toString();
 
-        if(buttonName.equals("Signup")){
+        if(buttonName.equals("Register Profile")){
             userSignUp();
         }
         else{
