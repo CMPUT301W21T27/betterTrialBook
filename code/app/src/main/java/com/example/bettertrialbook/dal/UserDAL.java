@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.bettertrialbook.You;
 import com.example.bettertrialbook.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -113,6 +114,7 @@ public class UserDAL {
 
         collRef.document(id).update("username", username);
         editContactInfo(userToUpdate);
+        You.setUser(userToUpdate);
 
     }
 

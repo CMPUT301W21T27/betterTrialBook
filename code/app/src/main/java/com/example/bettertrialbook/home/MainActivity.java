@@ -18,6 +18,7 @@ import android.widget.SearchView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bettertrialbook.R;
+import com.example.bettertrialbook.You;
 import com.example.bettertrialbook.dal.Firestore;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.experiment.ExperimentAddActivity;
@@ -38,7 +39,6 @@ import java.util.UUID;
  */
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    User you;
     UserDAL uDAL = new UserDAL();
     private ArrayList<ExperimentInfo> trialInfoList;
     private ArrayAdapter<ExperimentInfo> trialInfoAdapter;
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                 // then decide.
                                 String ownerId = (String) doc.getData().get("Owner");
                                 String status = (String) doc.getData().get("Status");
-                                if ((ownerId != null && ownerId.equals(you.getID()))
+                                if ((ownerId != null && ownerId.equals(You.getUser().getID()))
                                         || (status != null && !status.equals("Unpublished"))) {
                                     String id = doc.getId();
                                     String region = (String) doc.getData().get("Region");
@@ -131,21 +131,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      */
     public void viewYourProfile(View view) {
         Intent intent = new Intent(this, ProfileViewActivity.class);
-        intent.putExtra("User", you);
-        startActivityForResult(intent, 1);
-    }
-
-    // Return from ProfileViewActivity
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        you = intent.getExtras().getParcelable("User"); // Accessing Parcelable Objects
-
+        intent.putExtra("User",You.getUser());
+        startActivity(intent);
     }
 
     public void createExperiment(View view) {
         Intent intent = new Intent(this, ExperimentAddActivity.class);
-        intent.putExtra("OwnerId", you.getID());
+        intent.putExtra("OwnerId", You.getUser().getID());
         startActivity(intent);
     }
 
@@ -178,10 +170,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public void onCallback(User user) {
                 // If no user found, create user
                 if (user == null) {
-                    you = uDAL.addUser(finalID);
+                    You.setUser(uDAL.addUser(finalID));
                 } else {
                     Log.d("TEST", "4. " + user.getID() + user.getUsername());
-                    you = user;
+                    You.setUser(user);
                 }
             }
         });
@@ -191,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        Boolean isOwner = ((trialInfoAdapter.getItem(position).getOwnerId()).equals(you.getID()));
+        Boolean isOwner = ((trialInfoAdapter.getItem(position).getOwnerId()).equals(You.getUser().getID()));
         ExperimentInfo experimentInfo = trialInfoAdapter.getItem(position);
 
         Intent myIntent = new Intent(view.getContext(), ExperimentViewActivity.class);
