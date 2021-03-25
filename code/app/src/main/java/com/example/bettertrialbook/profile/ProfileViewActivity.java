@@ -3,6 +3,7 @@ package com.example.bettertrialbook.profile;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bettertrialbook.R;
+import com.example.bettertrialbook.You;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.User;
 
@@ -26,28 +28,32 @@ import com.example.bettertrialbook.models.User;
 * */
 public class ProfileViewActivity extends AppCompatActivity implements EditContactFragment.OnFragmentInteractionListener {
 
-    private User user;
     private UserDAL uDAL = new UserDAL();
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_view);
-
-        //Get user to display
-        user =  getIntent().getParcelableExtra("User");
+        Button button = findViewById(R.id.button2);
 
         //Initialize back arrow button to return to main
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        user = getIntent().getParcelableExtra("User");
+        //If the user to display is You, allow Register and Edit button to display
+        if(You.getUser().getID().equals(user.getID())){
+            user = You.getUser();
+            button.setVisibility(View.VISIBLE);
+
+        //else, display the user with no option to edit their profile
+        }else{
+            button.setVisibility(View.INVISIBLE);
+        }
+
         //Display user information
         displayInformation();
-    }
-
-    public void setUser(User setTo){
-        //Displays all information in User object
-        user=setTo;
     }
 
     public void displayInformation(){
@@ -105,16 +111,11 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
         // Sends user object to sign up to update
         // Expects updated user object as return
         Intent intent = new Intent(this, SignUp.class);
-        intent.putExtra("User",user);
         startActivityForResult(intent,1);
 
     }
 
     public void endActivity(){
-        Intent intent = new Intent();
-        intent.putExtra("User",user);
-        setResult(Activity.RESULT_OK,intent);
-
         this.finish();
     }
 
@@ -123,8 +124,7 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-        User user = intent.getExtras().getParcelable("User");   //Accessing Parcelable Objects
-
+        user = You.getUser();
         // Check if user has a username, else sign up was canceled
         if(user.getUsername().equals("")){
             return;
@@ -134,9 +134,7 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
         Button button = (Button) findViewById(R.id.button2);
         button.setText("Edit Contact Info");
 
-        // Set user to edited user object
         // Display updated information
-        setUser(user);
         displayInformation();
     }
 

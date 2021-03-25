@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.bettertrialbook.R;
+import com.example.bettertrialbook.You;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.User;
 
@@ -24,7 +25,6 @@ public class SignUp extends AppCompatActivity implements InvalidUsernameFragment
     private String username;
     private String email;
     private String phone;
-    private User user;
     UserDAL uDAL = new UserDAL();
 
 
@@ -32,10 +32,6 @@ public class SignUp extends AppCompatActivity implements InvalidUsernameFragment
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up_information);
-
-        Intent intent = getIntent();
-        user = intent.getParcelableExtra("User");
-
     }
 
     public void cancelPressed(View view){
@@ -71,10 +67,10 @@ public class SignUp extends AppCompatActivity implements InvalidUsernameFragment
                         String message ="Username Unavailable";
                         new InvalidUsernameFragment(message).show(getSupportFragmentManager(), "ERROR_EXP");
                     }else{
-                        user.setUsername(username);
-                        user.setContact(email,phone);
+                        You.getUser().setUsername(username);
+                        You.getUser().setContact(email,phone);
 
-                        uDAL.editUser(user);    //apply changes to database
+                        uDAL.editUser(You.getUser());    //apply changes to database
                         endActivity();
                     }
                 }
@@ -84,10 +80,7 @@ public class SignUp extends AppCompatActivity implements InvalidUsernameFragment
 
     public void endActivity(){
         //Ends the activity
-        //returns updated user object
-        Intent intent = new Intent();
-        intent.putExtra("User",user);
-        setResult(Activity.RESULT_OK,intent);
+        setResult(Activity.RESULT_OK,getIntent());
         finish();
     }
 
