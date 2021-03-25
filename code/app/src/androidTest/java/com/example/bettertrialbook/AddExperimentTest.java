@@ -41,6 +41,7 @@ public class AddExperimentTest {
     @Test
     public void start() {
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+        solo.sleep(5000);
         solo.clickOnButton("Create");
 
         // Check to make sure that the class switched
@@ -54,6 +55,7 @@ public class AddExperimentTest {
     @Test
     public void cancelButton() {
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+        solo.sleep(5000);
         solo.clickOnButton("Create");
 
         // Check to make sure that the class switched
@@ -71,6 +73,7 @@ public class AddExperimentTest {
     @Test
     public void publishFail() {
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+        solo.sleep(5000);
         solo.clickOnButton("Create");
 
         // Check to make sure that the class switched
@@ -89,6 +92,7 @@ public class AddExperimentTest {
     @Test
     public void enterData() {
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+        solo.sleep(5000);
         solo.clickOnButton("Create");
 
         // Check to make sure that the class switched
