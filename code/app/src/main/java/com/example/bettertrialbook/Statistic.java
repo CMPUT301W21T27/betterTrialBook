@@ -120,28 +120,9 @@ public class Statistic {
      */
     public double Median(ArrayList<Trial> trials, String experimentType) {
         double median;
-        ArrayList<Double> dataList = new ArrayList<>();     // Temporary ArrayList used to Sort the data
+        ArrayList<Double> dataList;             // Temporary ArrayList used to Sort the data
 
-        for (Trial trial: trials) {
-            if (experimentType.equals(Extras.COUNT_TYPE)) {
-                CountTrial countTrial = (CountTrial) trial;
-                dataList.add((double) countTrial.getCount());
-            }
-            if (experimentType.equals(Extras.NONNEG_TYPE)) {
-                NonNegTrial nonNegTrial = (NonNegTrial) trial;
-                dataList.add((double) nonNegTrial.getCount());
-            }
-            if (experimentType.equals(Extras.MEASUREMENT_TYPE)) {
-                MeasurementTrial measurementTrial = (MeasurementTrial) trial;
-                dataList.add(measurementTrial.getMeasurement());
-            }
-            if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
-                BinomialTrial binomialTrial = (BinomialTrial) trial;
-                // "TO-DO" Add the mean calculation method to binomial;
-            }
-        }
-
-        Collections.sort(dataList);
+        dataList = SortedArrayList(trials, experimentType);
 
         if (trials.size() != 0) {
             // For Odd Count Data Set
@@ -174,8 +155,64 @@ public class Statistic {
         double firstQuartile;
         double thirdQuartile;
         double[] quartiles = new double[2];
-        ArrayList<Double> dataList = new ArrayList<>();     // Temporary ArrayList used to Sort the data
+        ArrayList<Double> dataList;             // Temporary ArrayList used to Sort the data
 
+        dataList = SortedArrayList(trials, experimentType);
+
+        if (trials.size() != 0) {
+            if (trials.size() % 2 == 1) {
+                medianIndex = trials.size() / 2 - 1;        // For Odd Count Data Set
+            } else {
+                medianIndex = trials.size() / 2;            // For Even Count Data Set
+            }
+            firstQuartile = firstQuartile(dataList, medianIndex);
+            thirdQuartile = thirdQuartile(dataList, medianIndex);
+            quartiles[0] = firstQuartile;
+            quartiles[1] = thirdQuartile;
+        }
+
+        return quartiles;
+    }
+
+    //  ----------------------------Helper Methods Below-----------------------------------------
+    // Calculate the value of the 1st Quartile
+    public double firstQuartile (ArrayList<Double> dataList, int medianIndex) {
+        double quartile = 0;
+        ArrayList<Double> quartileDataSet = new ArrayList<>();
+
+        for (int i = 0; i < medianIndex; i++) {
+            quartileDataSet.add(dataList.get(i));
+        }
+
+        quartile = ((quartileDataSet.get(quartileDataSet.size() / 2) + quartileDataSet.get(quartileDataSet.size() / 2 - 1)) / 2);
+
+        return quartile;
+    }
+
+    // Calculate the value of the 3rd Quartile
+    public double thirdQuartile (ArrayList<Double> dataList, int medianIndex) {
+        double quartile = 0;
+        ArrayList<Double> quartileDataSet = new ArrayList<>();
+
+        if (dataList.size() % 2 == 1) {
+            for (int i = medianIndex + 1; i < dataList.size(); i++) {
+                quartileDataSet.add(dataList.get(i));
+            }
+        }
+        else {
+            for (int i = medianIndex; i < dataList.size(); i++) {
+                quartileDataSet.add(dataList.get(i));
+            }
+        }
+
+        quartile = ((quartileDataSet.get(quartileDataSet.size() / 2) + quartileDataSet.get(quartileDataSet.size() / 2 - 1)) / 2);
+
+        return quartile;
+    }
+
+    // Sorted the data of the experiment in ascending order
+    public ArrayList<Double> SortedArrayList (ArrayList<Trial> trials, String experimentType) {
+        ArrayList<Double> dataList = new ArrayList<>();
         for (Trial trial: trials) {
             if (experimentType.equals(Extras.COUNT_TYPE)) {
                 CountTrial countTrial = (CountTrial) trial;
@@ -197,52 +234,6 @@ public class Statistic {
 
         Collections.sort(dataList);
 
-        if (trials.size() != 0) {
-            if (trials.size() % 2 == 1) {
-                medianIndex = trials.size() / 2 - 1;        // For Odd Count Data Set
-            } else {
-                medianIndex = trials.size() / 2;            // For Even Count Data Set
-            }
-            firstQuartile = firstQuartile(dataList, medianIndex);
-            thirdQuartile = thirdQuartile(dataList, medianIndex);
-            quartiles[0] = firstQuartile;
-            quartiles[1] = thirdQuartile;
-        }
-
-        return quartiles;
-    }
-
-    //  ----------------------------Helper Methods Below-----------------------------------------
-    public double firstQuartile (ArrayList<Double> dataList, int medianIndex) {
-        double quartile = 0;
-        ArrayList<Double> quartileDataSet = new ArrayList<>();
-
-        for (int i = 0; i < medianIndex; i++) {
-            quartileDataSet.add(dataList.get(i));
-        }
-
-        quartile = ((quartileDataSet.get(quartileDataSet.size() / 2) + quartileDataSet.get(quartileDataSet.size() / 2 - 1)) / 2);
-
-        return quartile;
-    }
-
-    public double thirdQuartile (ArrayList<Double> dataList, int medianIndex) {
-        double quartile = 0;
-        ArrayList<Double> quartileDataSet = new ArrayList<>();
-
-        if (dataList.size() % 2 == 1) {
-            for (int i = medianIndex + 1; i < dataList.size(); i++) {
-                quartileDataSet.add(dataList.get(i));
-            }
-        }
-        else {
-            for (int i = medianIndex; i < dataList.size(); i++) {
-                quartileDataSet.add(dataList.get(i));
-            }
-        }
-
-        quartile = ((quartileDataSet.get(quartileDataSet.size() / 2) + quartileDataSet.get(quartileDataSet.size() / 2 - 1)) / 2);
-
-        return quartile;
+        return dataList;
     }
 }
