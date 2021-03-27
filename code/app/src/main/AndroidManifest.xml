@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BetterTrialBook">
         <activity
+            android:name=".Histogram"
+            android:label="@string/title_activity_statisitc_information"
+            android:theme="@style/Theme.BetterTrialBook.NoActionBar" />
+        <activity
             android:name=".StatisticHomePage"
             android:label="@string/title_activity_statistic_home_page"
             android:theme="@style/Theme.BetterTrialBook.NoActionBar" />

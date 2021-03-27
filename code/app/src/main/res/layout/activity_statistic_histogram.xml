@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Histogram">
+
+    <include
+        android:id="@+id/ToolBar"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Mean_Display"
+        android:layout_width="wrap_content"
+        android:layout_height="39dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="128dp"
+        android:text="Mean:"
+        android:textAlignment="textEnd"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/StdDev_Display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="32dp"
+        android:text="Std Dev:"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/Median_Display"
+        android:layout_width="wrap_content"
+        android:layout_height="39dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginBottom="80dp"
+        android:text="Median:"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/Mean_Result"
+        android:layout_width="wrap_content"
+        android:layout_height="39dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="129dp"
+        android:textSize="29sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Mean_Display" />
+
+    <TextView
+        android:id="@+id/Quartile_Display"
+        android:layout_width="wrap_content"
+        android:layout_height="39dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="132dp"
+        android:text="Quartile"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/ThirdQuartile_Display"
+        android:layout_width="wrap_content"
+        android:layout_height="39dp"
+        android:layout_marginEnd="132dp"
+        android:layout_marginBottom="32dp"
+        android:text="3rd:"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/FirstQuartile_Display"
+        android:layout_width="wrap_content"
+        android:layout_height="39dp"
+        android:layout_marginEnd="132dp"
+        android:layout_marginBottom="82dp"
+        android:text="1st:"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/FirstQuartile_Result"
+        android:layout_width="wrap_content"
+        android:layout_height="39dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="82dp"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/FirstQuartile_Display" />
+
+    <TextView
+        android:id="@+id/ThirdQuartile_Result"
+        android:layout_width="wrap_content"
+        android:layout_height="39dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="32dp"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ThirdQuartile_Display" />
+
+    <TextView
+        android:id="@+id/Median_Result"
+        android:layout_width="wrap_content"
+        android:layout_height="39dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="81dp"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Median_Display" />
+
+    <TextView
+        android:id="@+id/StdDev_Result"
+        android:layout_width="wrap_content"
+        android:layout_height="39dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="32dp"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/StdDev_Display" />
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@id/Histogram"
+        android:layout_width="416dp"
+        android:layout_height="476dp"
+        android:layout_marginTop="68dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

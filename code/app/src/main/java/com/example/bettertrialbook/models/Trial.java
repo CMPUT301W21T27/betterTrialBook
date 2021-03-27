@@ -7,7 +7,9 @@ Currently geolocations and blacklisting for trials have yet to be implemented.
 
 package com.example.bettertrialbook.models;
 
-public abstract class Trial {
+import java.io.Serializable;
+
+public abstract class Trial implements Serializable {
     // private Geolocation geolocation;
     private String trialID;
     private String experimenterID;

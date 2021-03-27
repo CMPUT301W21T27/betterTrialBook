@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">betterTrialBook</string>
-    <string name="title_activity_statistic_home_page">StatisticHomePage</string>
+    <string name="title_activity_statisitc_information">Statistic Information</string>
+    <string name="title_activity_statistic_home_page">Statistic</string>
     <string name="title_activity_experiment_view">ExperimentViewActivity</string>
     <string name="first_fragment_label">First Fragment</string>
 
