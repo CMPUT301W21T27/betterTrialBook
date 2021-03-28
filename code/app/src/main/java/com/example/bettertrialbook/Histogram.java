@@ -3,7 +3,6 @@ package com.example.bettertrialbook;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 
-
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,18 +25,20 @@ public class Histogram extends AppCompatActivity {
         double stdDev = intent.getDoubleExtra("StdDev", 0.00);
         double[] quartiles = intent.getDoubleArrayExtra("Quartile");
 
-
         TextView meanResult = findViewById(R.id.Mean_Result);
         TextView medianResult = findViewById(R.id.Median_Result);
         TextView stdDevResult = findViewById(R.id.StdDev_Result);
         TextView quartile1Result = findViewById(R.id.FirstQuartile_Result);
         TextView quartile3Result = findViewById(R.id.ThirdQuartile_Result);
 
+        // Display the Statistic Information to the User
         meanResult.setText(String.valueOf(mean));
         medianResult.setText(String.valueOf(median));
         stdDevResult.setText(String.valueOf(stdDev));
         quartile1Result.setText(String.valueOf(quartiles[0]));
         quartile3Result.setText(String.valueOf(quartiles[1]));
+
+        // TO-DO:   Plot the histogram
     }
 
     @Override

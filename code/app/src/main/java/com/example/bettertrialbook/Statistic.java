@@ -32,30 +32,35 @@ public class Statistic {
     public double Mean(ArrayList<Trial> trials, String experimentType) {
         double mean;
         double sum = 0;
+        double size = 0;
         double value = 0;
 
         for (Trial trial: trials) {
             if (experimentType.equals(Extras.COUNT_TYPE)) {
                 CountTrial countTrial = (CountTrial) trial;
                 value = countTrial.getCount();
+                size += 1;
             }
             if (experimentType.equals(Extras.NONNEG_TYPE)) {
                 NonNegTrial nonNegTrial = (NonNegTrial) trial;
                 value = nonNegTrial.getCount();
+                size += 1;
             }
             if (experimentType.equals(Extras.MEASUREMENT_TYPE)) {
                 MeasurementTrial measurementTrial = (MeasurementTrial) trial;
                 value = measurementTrial.getMeasurement();
+                size += 1;
             }
             if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
                 BinomialTrial binomialTrial = (BinomialTrial) trial;
-                // "TO-DO" Add the mean calculation method to binomial;
+                value = binomialTrial.getPassCount();
+                size += (binomialTrial.getPassCount() + binomialTrial.getFailCount());
             }
             sum += value;
         }
 
         if (trials.size() != 0) {
-            mean = Double.parseDouble(df.format(sum / trials.size()));
+            mean = Double.parseDouble(df.format(sum / size));
         } else {
             mean = 0;
         }
@@ -78,30 +83,36 @@ public class Statistic {
     public double StdDev(ArrayList<Trial> trials, String experimentType, double mean) {
         double stdDev;
         double sum = 0;
+        double size = 0;
         double value = 0;               // Used to store the immediate value
 
         for (Trial trial: trials) {
             if (experimentType.equals(Extras.COUNT_TYPE)) {
                 CountTrial countTrial = (CountTrial) trial;
                 value = Math.pow((countTrial.getCount() - mean), 2);
+                size += 1;
             }
             if (experimentType.equals(Extras.NONNEG_TYPE)) {
                 NonNegTrial nonNegTrial = (NonNegTrial) trial;
                 value = Math.pow((nonNegTrial.getCount() - mean), 2);
+                size += 1;
             }
             if (experimentType.equals(Extras.MEASUREMENT_TYPE)) {
                 MeasurementTrial measurementTrial = (MeasurementTrial) trial;
                 value = Math.pow((measurementTrial.getMeasurement() - mean), 2);
+                size += 1;
             }
             if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
                 BinomialTrial binomialTrial = (BinomialTrial) trial;
-                // "TO-DO" Add the mean calculation method to binomial;
+                value = binomialTrial.getPassCount() * Math.pow((1 - mean), 2);
+                value += binomialTrial.getFailCount() * Math.pow((0 - mean), 2);
+                size += binomialTrial.getPassCount() + binomialTrial.getFailCount();
             }
             sum += value;
         }
-
+        
         if (trials.size() != 0) {
-            stdDev = Double.parseDouble(df.format(Math.sqrt(sum / trials.size())));
+            stdDev = Double.parseDouble(df.format(Math.sqrt(sum / size)));
         } else {
             stdDev = 0;
         }
@@ -127,7 +138,7 @@ public class Statistic {
         if (trials.size() != 0) {
             // For Odd Count Data Set
             if (dataList.size() % 2 == 1) {
-                median = Double.parseDouble(df.format(dataList.get(dataList.size() / 2 - 1)));
+                median = Double.parseDouble(df.format(dataList.get(dataList.size() / 2)));
             }
             // For Even Count Data Set
             else {
@@ -149,6 +160,7 @@ public class Statistic {
      * The type of the experiment (Count / Measurement / Non-Negative / Binomial)
      * @return
      * A List which contains the First Quartile Value and the Third Quartile Value
+     * quartile[0] = first quartile value ; quartile[1] = third quartile value
      */
     public double[] Quartiles(ArrayList<Trial> trials, String experimentType) {
         int medianIndex;
@@ -160,11 +172,9 @@ public class Statistic {
         dataList = SortedArrayList(trials, experimentType);
 
         if (trials.size() != 0) {
-            if (trials.size() % 2 == 1) {
-                medianIndex = trials.size() / 2 - 1;        // For Odd Count Data Set
-            } else {
-                medianIndex = trials.size() / 2;            // For Even Count Data Set
-            }
+            // For Odd DataSet , Median Index is the exact Medina Index
+            // For Even DataSet, Median Index is the upper index
+            medianIndex = trials.size() / 2 ;
             firstQuartile = firstQuartile(dataList, medianIndex);
             thirdQuartile = thirdQuartile(dataList, medianIndex);
             quartiles[0] = firstQuartile;
@@ -184,7 +194,12 @@ public class Statistic {
             quartileDataSet.add(dataList.get(i));
         }
 
-        quartile = ((quartileDataSet.get(quartileDataSet.size() / 2) + quartileDataSet.get(quartileDataSet.size() / 2 - 1)) / 2);
+        if (quartileDataSet.size() % 2 == 0) {
+            quartile = ((quartileDataSet.get(quartileDataSet.size() / 2) + quartileDataSet.get(quartileDataSet.size() / 2 - 1)) / 2);
+        }
+        else {
+            quartile = ((quartileDataSet.get(quartileDataSet.size() / 2)));
+        }
 
         return quartile;
     }
@@ -205,7 +220,12 @@ public class Statistic {
             }
         }
 
-        quartile = ((quartileDataSet.get(quartileDataSet.size() / 2) + quartileDataSet.get(quartileDataSet.size() / 2 - 1)) / 2);
+        if (quartileDataSet.size() % 2 == 0) {
+            quartile = ((quartileDataSet.get(quartileDataSet.size() / 2) + quartileDataSet.get(quartileDataSet.size() / 2 - 1)) / 2);
+        }
+        else {
+            quartile = ((quartileDataSet.get(quartileDataSet.size() / 2)));
+        }
 
         return quartile;
     }
@@ -228,7 +248,14 @@ public class Statistic {
             }
             if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
                 BinomialTrial binomialTrial = (BinomialTrial) trial;
-                // "TO-DO" Add the mean calculation method to binomial;
+                // Add the Successful trials
+                for (int i = 0; i < binomialTrial.getFailCount(); i++) {
+                    dataList.add(0.0);
+                }
+                // Add the Fail trials
+                for (int j = 0; j < binomialTrial.getPassCount(); j++) {
+                    dataList.add(1.0);
+                }
             }
         }
 
