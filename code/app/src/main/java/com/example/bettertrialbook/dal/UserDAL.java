@@ -9,14 +9,18 @@ import androidx.annotation.NonNull;
 import com.example.bettertrialbook.You;
 import com.example.bettertrialbook.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /*
 * Data Access Layer
@@ -83,6 +87,14 @@ public class UserDAL {
 
     public interface UsernameTakenCallback {
         void onCallback(boolean isNotTaken);
+    }
+
+    public interface GetSubscribedCallback {
+        void onCallback(List<String> subscribed);
+    }
+
+    public interface IsSubscribedCallback {
+        void onCallback(Boolean isSubscribed);
     }
 
     /**
@@ -188,4 +200,87 @@ public class UserDAL {
         editor.apply();
     }
 
+    public void getSubscribed(String userId, GetSubscribedCallback callback) {
+        final List<String>[] subscribed = new List[]{new ArrayList<String>()};
+        collRef.document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        Log.d(TAG, "Document has been loaded");
+                        subscribed[0] = (List<String>) document.get("subscribed");
+
+                    } else {
+                        Log.d(TAG, "No such document exists");
+                    }
+
+                } else {
+                    Log.d(TAG, "Document could not be loaded");
+                }
+                callback.onCallback(subscribed[0]);
+            }
+        });
+    }
+
+    public void subscribeExperiment(String experimentId, String userId) {
+        collRef.document(userId).update("subscribed", FieldValue.arrayUnion(experimentId))
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data could not be updated" + e.toString());
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Data has been updated");
+            }
+        });
+    }
+
+    public void unsubscribeExperiment(String experimentId, String userId) {
+        collRef.document(userId).update("subscribed", FieldValue.arrayRemove(experimentId))
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data could not be updated" + e.toString());
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Data has been updated");
+            }
+        });
+    }
+
+    public void isSubscribed(String experimentId, String userId, IsSubscribedCallback callback) {
+        collRef.document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                boolean isSubscribed = false;
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        Log.d(TAG, "Document has been loaded");
+                        List<String> subscribed = (List<String>) document.get("subscribed");
+                        if (subscribed != null) {
+                            for (int i = 0; i < subscribed.size(); i++) {
+                                if (subscribed.get(i).equals(experimentId)) {
+                                    isSubscribed = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                    } else {
+                        Log.d(TAG, "No such document exists");
+                    }
+
+                } else {
+                    Log.d(TAG, "Document could not be loaded");
+                }
+                callback.onCallback(isSubscribed);
+            }
+        });
+    }
 }

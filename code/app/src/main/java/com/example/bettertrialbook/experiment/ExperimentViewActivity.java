@@ -79,7 +79,13 @@ public class ExperimentViewActivity extends AppCompatActivity
         userDAL.findUserByID(experimentInfo.getOwnerId(), new UserDAL.FindUserByIDCallback() {
             @Override
             public void onCallback(User user) {
-                ownerIdText.setText("Owner: " + user.getUsername());
+                if (user != null) {
+                    if (!user.getUsername().equals("")) {
+                        ownerIdText.setText("Owner: " + user.getUsername());
+                    } else {
+                        ownerIdText.setText("Owner: " + user.getID().substring(0, 8));
+                    }
+                }
             }
         });
 
@@ -96,10 +102,14 @@ public class ExperimentViewActivity extends AppCompatActivity
                 addTrialButton.setEnabled(false);
             }
 
-            /*
-             * once user subscribing condition set up if () {
-             * subscribeButton.setText("Unsubscribe"); }
-             */
+            userDAL.isSubscribed(experimentId, You.getUser().getID(), new UserDAL.IsSubscribedCallback() {
+                @Override
+                public void onCallback(Boolean isSubscribed) {
+                    if (isSubscribed) {
+                        subscribeButton.setText("Unsubscribe");
+                    }
+                }
+            });
 
         } else {
             subscribeButton.setVisibility(View.INVISIBLE);
@@ -201,12 +211,13 @@ public class ExperimentViewActivity extends AppCompatActivity
 
         } else if (tag.equals("Subscribe to")) {
             subscribeButton.setText(("Unsubscribe"));
-            // change user subscription status
+            UserDAL userDAL = new UserDAL();
+            userDAL.subscribeExperiment(experimentId, You.getUser().getID());
 
         } else if (tag.equals("Unsubscribe from")) {
             subscribeButton.setText(("Subscribe"));
-            // change user subscription status
-
+            UserDAL userDAL = new UserDAL();
+            userDAL.unsubscribeExperiment(experimentId, You.getUser().getID());
         }
     }
 
@@ -217,6 +228,7 @@ public class ExperimentViewActivity extends AppCompatActivity
             Intent myIntent = new Intent(this, MainActivity.class);
             startActivity(myIntent);
         } else {
+            setResult(0);
             finish();
         }
     }

@@ -3,6 +3,8 @@ package com.example.bettertrialbook.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 
 /**
  * User object
@@ -12,6 +14,7 @@ public class User implements Parcelable {
     private String ID;
     private String username;
     private ContactInfo contact;
+    private List<String> subscribed;
 
     /**
      * Constructs a User object with an ID, and other fields as empty strings
@@ -32,7 +35,7 @@ public class User implements Parcelable {
     }
 
     /**
-     * Retruns the username of the user object
+     * Returns the username of the user object
      * @return - returns Username of user
      */
     public String getUsername() {
@@ -61,6 +64,32 @@ public class User implements Parcelable {
      */
     public ContactInfo getContact() {
         return contact;
+    }
+
+    /**
+     * Returns list of experiment IDs user is subscribed to
+     * @return - Returns list of subscribed experiment IDs
+     */
+    public List<String> getSubscribedExperiments() {
+        return subscribed;
+    }
+
+    // don't need these two functions below most likely
+    /**
+     * Adds experiment ID to list of subscribed experiments
+     * @param - Experiment to subscribe to
+     */
+    public void subscribeExperiment(String experimentID) {
+        subscribed.add(experimentID);
+    }
+
+    /**
+     * Removes experiment ID from list of subscribed experiments
+     * @param experimentID - Experiment to unsubscribe from
+     * @return - boolean to indicate success or failure
+     */
+    public boolean unsubscribeExperiment(String experimentID) {
+        return subscribed.remove(experimentID);
     }
 
 

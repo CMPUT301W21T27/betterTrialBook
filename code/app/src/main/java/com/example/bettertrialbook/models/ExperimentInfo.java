@@ -20,12 +20,14 @@ public class ExperimentInfo implements Comparable<ExperimentInfo>, Parcelable {
 
     /**
      * Creates an ExperimentInfo object with the following parameters
-     * @param id
-     *  The unique id of the experiment
      * @param description
      *  A description of the experiment
+     * @param ownerId
+     *  The  id of the experiment's owner
      * @param status
      *  Either 'Active', 'Unpublished', or 'Ended'
+     * @param id
+     *  The unique id of the experiment
      * @param trialType
      *  The kind of trials required for the experiment (Binomial, Count-based, Measurement, Non-negative integer)
      * @param geoLocationRequired
