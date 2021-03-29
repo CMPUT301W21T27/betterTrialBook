@@ -5,11 +5,8 @@ Currently blacklisting has yet to be implemented.
 
 package com.example.bettertrialbook.dal;
 
-import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,15 +19,15 @@ import com.example.bettertrialbook.models.ExperimentInfo;
 import com.example.bettertrialbook.models.MeasurementTrial;
 import com.example.bettertrialbook.models.NonNegTrial;
 import com.example.bettertrialbook.models.Trial;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +48,51 @@ public class ExperimentDAL {
     public ExperimentDAL() {
         db = Firestore.getInstance();
         collRef = db.collection("Experiments");
+    }
+
+    // Interfaces for callbacks
+    public interface FindExperimentByIDCallback {
+        void onCallback(ExperimentInfo experimentInfo);
+    }
+
+    /**
+     * Searches database for given ID Returns user object if found, or null if not
+     * found
+     *
+     * @param id       - Id to search for
+     * @param callback - return method for firestore queries
+     */
+    public void findExperimentByID(String id, FindExperimentByIDCallback callback) {
+        collRef.document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    ExperimentInfo experimentInfo;
+                    if (document.exists()) {
+                        // experiment found
+                        String description = document.getString("Description");
+                        String status = document.getString("Status");
+                        String ownerId = document.getString("Owner");
+                        String trialType = document.getString("TrialType");
+                        Boolean geoLocation = document.getBoolean("GeoLocationRequired");
+                        int minTrials = document.getLong("MinTrials").intValue();
+                        String region = document.getString("Region");
+                        experimentInfo = new ExperimentInfo(description, ownerId, status, id,
+                                trialType, geoLocation, minTrials, region);
+
+                    } else {
+                        // User not found, return null
+                        Log.d("TEST", "Experiment does not exist");
+                        experimentInfo = null;
+                    }
+                    callback.onCallback(experimentInfo);
+                } else {
+                    // Error occurred
+                    Log.d("TEST", "Failed with:", task.getException());
+                }
+            }
+        });
     }
 
     /**

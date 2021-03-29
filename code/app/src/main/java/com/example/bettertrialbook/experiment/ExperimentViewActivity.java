@@ -9,6 +9,7 @@ package com.example.bettertrialbook.experiment;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.bettertrialbook.You;
 import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.StatisticHomePage;
 import com.example.bettertrialbook.home.MainActivity;
@@ -28,6 +30,7 @@ import com.example.bettertrialbook.forum.ForumActivity;
 import com.example.bettertrialbook.models.ExperimentInfo;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.User;
+import com.example.bettertrialbook.profile.ProfileViewActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -79,7 +82,13 @@ public class ExperimentViewActivity extends AppCompatActivity
         userDAL.findUserByID(experimentInfo.getOwnerId(), new UserDAL.FindUserByIDCallback() {
             @Override
             public void onCallback(User user) {
-                ownerIdText.setText("Owner: " + user.getUsername());
+                if (user != null) {
+                    if (!user.getUsername().equals("")) {
+                        ownerIdText.setText("Owner: " + user.getUsername());
+                    } else {
+                        ownerIdText.setText("Owner: " + user.getID().substring(0, 8));
+                    }
+                }
             }
         });
 
@@ -96,10 +105,14 @@ public class ExperimentViewActivity extends AppCompatActivity
                 addTrialButton.setEnabled(false);
             }
 
-            /*
-             * once user subscribing condition set up if () {
-             * subscribeButton.setText("Unsubscribe"); }
-             */
+            userDAL.isSubscribed(experimentId, You.getUser().getID(), new UserDAL.IsSubscribedCallback() {
+                @Override
+                public void onCallback(Boolean isSubscribed) {
+                    if (isSubscribed) {
+                        subscribeButton.setText("Unsubscribe");
+                    }
+                }
+            });
 
         } else {
             subscribeButton.setVisibility(View.INVISIBLE);
@@ -218,12 +231,13 @@ public class ExperimentViewActivity extends AppCompatActivity
 
         } else if (tag.equals("Subscribe to")) {
             subscribeButton.setText(("Unsubscribe"));
-            // change user subscription status
+            UserDAL userDAL = new UserDAL();
+            userDAL.subscribeExperiment(experimentId, You.getUser().getID());
 
         } else if (tag.equals("Unsubscribe from")) {
             subscribeButton.setText(("Subscribe"));
-            // change user subscription status
-
+            UserDAL userDAL = new UserDAL();
+            userDAL.unsubscribeExperiment(experimentId, You.getUser().getID());
         }
     }
 
@@ -234,7 +248,35 @@ public class ExperimentViewActivity extends AppCompatActivity
             Intent myIntent = new Intent(this, MainActivity.class);
             startActivity(myIntent);
         } else {
+            setResult(0);
             finish();
+        }
+    }
+
+
+    /**
+     * @param view - When clicking a username from experiment view, open up their profile
+     */
+    public void viewProfile(View view){
+        Intent intent;
+        intent = new Intent(this, ProfileViewActivity.class);
+
+        //Are 'You' the owner, send in 'You' object
+        if(isOwner){
+            intent.putExtra("User",You.getUser());
+            startActivity(intent);
+
+        //Else, create a user object from the owner's ID and send it in to activity
+        }else {
+            UserDAL uDAL = new UserDAL();
+            uDAL.findUserByID(experimentInfo.getOwnerId(), new UserDAL.FindUserByIDCallback() {
+                @Override
+                public void onCallback(User user) {
+                    Log.d("TEST", "User Found:" + user.getID() + user.getUsername());
+                    intent.putExtra("User", user);
+                    startActivity(intent);
+                }
+            });
         }
     }
 }

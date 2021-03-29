@@ -77,7 +77,7 @@ public class SignUpTest {
     @Test
     public void start(){
         //See if signup starts
-        solo.clickOnButton("Signup");
+        solo.clickOnButton("Register Profile");
         solo.assertCurrentActivity(activityMessage, SignUp.class);
         solo.waitForText("Username:",1,2000);
 
@@ -93,7 +93,7 @@ public class SignUpTest {
     @Test
     public void cancelPressed(){
         //Go to sign up screen
-        solo.clickOnButton("Signup");
+        solo.clickOnButton("Register Profile");
         solo.assertCurrentActivity(activityMessage,SignUp.class);
         solo.waitForText("Username:",1,2000);
 
@@ -108,7 +108,7 @@ public class SignUpTest {
     @Test
     public void emptyUsernameTest(){
         //Go to sign up screen
-        solo.clickOnButton("Signup");
+        solo.clickOnButton("Register Profile");
         solo.assertCurrentActivity(activityMessage,SignUp.class);
         solo.waitForText("Username:",1,2000);
 
@@ -138,7 +138,7 @@ public class SignUpTest {
 
 
         //Go to sign up screen
-        solo.clickOnButton("Signup");
+        solo.clickOnButton("Register Profile");
         solo.assertCurrentActivity(activityMessage,SignUp.class);
         solo.waitForText("Username:",1,2000);
 
@@ -161,7 +161,7 @@ public class SignUpTest {
     @Test
     public void signUpDisplayedTest(){
         //Go to sign up screen
-        solo.clickOnButton("Signup");
+        solo.clickOnButton("Register Profile");
         solo.assertCurrentActivity(activityMessage,SignUp.class);
         solo.waitForText("Username:",1,2000);
 
@@ -196,7 +196,7 @@ public class SignUpTest {
     @Test
     public void signUpDatabaseTest(){
         //Go to sign up screen
-        solo.clickOnButton("Signup");
+        solo.clickOnButton("Register Profile");
         solo.assertCurrentActivity(activityMessage,SignUp.class);
         solo.waitForText("Username:",1,2000);
 

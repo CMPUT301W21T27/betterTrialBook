@@ -52,7 +52,13 @@ public class ExperimentList extends ArrayAdapter<ExperimentInfo> {
 
         description.setText(experiment.getDescription());
         trialType.setText("Type: " + experiment.getTrialType());
-        status.setText(experiment.getStatus());
+        if (experiment.getStatus().equals("Unpublish")) {
+            status.setText(experiment.getStatus()+"ed");
+
+        } else {
+            status.setText(experiment.getStatus());
+        }
+
 
         // get owner name
         if (experiment.getOwnerId() != null) {
@@ -61,12 +67,14 @@ public class ExperimentList extends ArrayAdapter<ExperimentInfo> {
                 @Override
                 public void onCallback(User user) {
                     if (user != null) {
-                        if (user.getUsername() != null) {
+                        if (!user.getUsername().equals("")) {
                             ownerName.setText("Owner: " + user.getUsername());
 
                         } else {
-                            ownerName.setText("Owner: " + experiment.getOwnerId());
+                            ownerName.setText("Owner: " + user.getID().substring(0, 8));
                         }
+                    } else {
+                        ownerName.setText("Owner: " + experiment.getOwnerId().substring(0, 8));
                     }
                 }
             });
