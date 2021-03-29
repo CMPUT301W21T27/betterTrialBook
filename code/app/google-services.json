@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "152321943636",
-    "project_id": "lab5-30771",
-    "storage_bucket": "lab5-30771.appspot.com"
+    "project_number": "749605390822",
+    "project_id": "bettertrialbook-8ce4c",
+    "storage_bucket": "bettertrialbook-8ce4c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:152321943636:android:432aea59189e593c7525c1",
+        "mobilesdk_app_id": "1:749605390822:android:9f8249ab6d820d15c0ee27",
         "android_client_info": {
-          "package_name": "com.example.simpleparadox.listycity"
+          "package_name": "com.example.bettertrialbook"
         }
       },
       "oauth_client": [
         {
-          "client_id": "152321943636-5vvgaahp40jvhpamcf1f157qmp5rvmno.apps.googleusercontent.com",
+          "client_id": "749605390822-pnslf4ig9fkt5au7v5arbco9mog14kgb.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCUXZtC9qRK6FIxzE8EqxNpmGG8rt2Jy70"
+          "current_key": "AIzaSyCrNYB4B9j5N9chIIRikZvr_HQ40NWBcMU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "152321943636-5vvgaahp40jvhpamcf1f157qmp5rvmno.apps.googleusercontent.com",
+              "client_id": "749605390822-pnslf4ig9fkt5au7v5arbco9mog14kgb.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

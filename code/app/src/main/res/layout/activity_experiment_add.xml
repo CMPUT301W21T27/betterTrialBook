@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- UI for adding a new experiment -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ExperimentAddActivity">
+    tools:context=".experiment.ExperimentAddActivity">
 
 
     <TextView
@@ -20,12 +21,24 @@
 
     </TextView>
 
+
+    <Spinner
+        android:id="@+id/type_Spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="72dp"
+        app:layout_constraintStart_toEndOf="@+id/type_Text"
+        app:layout_constraintTop_toBottomOf="@+id/newExperiment_Text">
+
+    </Spinner>
+
     <TextView
         android:id="@+id/type_Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="72dp"
         android:text="Type: "
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,24 +46,47 @@
 
     </TextView>
 
-    <Spinner
-        android:id="@+id/type_Spinner"
+    <TextView
+        android:id="@+id/region_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintStart_toEndOf="@+id/type_Text"
-        app:layout_constraintTop_toBottomOf="@+id/newExperiment_Text">
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="48dp"
+        android:text="Region: "
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mintrials_Text" />
 
-    </Spinner>
+    <EditText
+        android:id="@+id/region_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/region_text"
+        app:layout_constraintTop_toBottomOf="@+id/mintrials_editText" />
 
+    <EditText
+        android:id="@+id/mintrials_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="22dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintStart_toEndOf="@+id/mintrials_Text"
+        app:layout_constraintTop_toBottomOf="@+id/description_editText">
+
+    </EditText>
 
     <TextView
         android:id="@+id/description_Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="56dp"
         android:text="Description: "
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,67 +98,20 @@
         android:id="@+id/description_editText"
         android:layout_width="237dp"
         android:layout_height="47dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="40dp"
         android:inputType="textMultiLine"
         app:layout_constraintStart_toEndOf="@+id/description_Text"
         app:layout_constraintTop_toBottomOf="@+id/type_Spinner">
 
     </EditText>
 
-
-    <TextView
-        android:id="@+id/mintrials_Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:text="Min. Trials: "
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description_Text">
-
-    </TextView>
-
-
-    <EditText
-        android:id="@+id/mintrials_editText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:inputType="number"
-        app:layout_constraintStart_toEndOf="@+id/mintrials_Text"
-        app:layout_constraintTop_toBottomOf="@+id/description_editText">
-
-    </EditText>
-
-    <TextView
-        android:id="@+id/region_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:text="Region: "
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mintrials_Text" />
-
-    <EditText
-        android:id="@+id/region_editText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toEndOf="@+id/region_text"
-        app:layout_constraintTop_toBottomOf="@+id/mintrials_editText" />
-
     <TextView
         android:id="@+id/geolocation_Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="56dp"
         android:text="Geo-Location Required: "
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -134,22 +123,36 @@
         android:id="@+id/geolocation_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="38dp"
         android:text="No"
         app:layout_constraintStart_toEndOf="@+id/geolocation_Text"
         app:layout_constraintTop_toBottomOf="@+id/region_editText">
 
     </Button>
 
+    <TextView
+        android:id="@+id/mintrials_Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="44dp"
+        android:text="Min. Trials: "
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/description_Text">
+
+    </TextView>
+
     <Button
         android:id="@+id/cancel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/publish_button"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="Cancel">
+        app:layout_constraintStart_toStartOf="parent">
 
     </Button>
 
@@ -158,10 +161,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="117dp"
+        android:layout_marginBottom="32dp"
+        android:text="Publish"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cancel_button"
-        android:text="Publish">
+        app:layout_constraintStart_toEndOf="@+id/cancel_button">
 
     </Button>
 
