@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -150,6 +151,13 @@ public class ExperimentViewActivity extends AppCompatActivity
         trialDataList = new ArrayList<>();
         trialAdapter = new CustomTrialList(this, trialDataList, experimentId, isOwner);
         trialList.setAdapter(trialAdapter);
+        trialList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(ExperimentViewActivity.this, GeolocationActivity.class);
+                startActivity(intent);
+            }
+        });
         ExperimentDAL experimentDAL = new ExperimentDAL();
 
         // create a document snapshot listener in the DAL to update the list of trials
@@ -159,6 +167,8 @@ public class ExperimentViewActivity extends AppCompatActivity
             totalTrialsText.setText("Total Trials: " + Integer.toString(trialAdapter.getCount()));
             trialAdapter.notifyDataSetChanged();
         });
+
+
 
     }
 

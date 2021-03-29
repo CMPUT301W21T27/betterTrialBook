@@ -38,4 +38,5 @@
         <item>Non-Negative Integer</item>
         <item>Measurement</item>
     </string-array>
+    <string name="title_activity_geolocation">Map</string>
 </resources>
