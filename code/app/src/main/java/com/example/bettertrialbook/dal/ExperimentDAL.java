@@ -72,13 +72,14 @@ public class ExperimentDAL {
                     if (document.exists()) {
                         // experiment found
                         String description = document.getString("Description");
-                        String status = document.getString("Status");
+                        String publishStatus = document.getString("PublishStatus");
+                        String activeStatus = document.getString("ActiveStatus");
                         String ownerId = document.getString("Owner");
                         String trialType = document.getString("TrialType");
                         Boolean geoLocation = document.getBoolean("GeoLocationRequired");
                         int minTrials = document.getLong("MinTrials").intValue();
                         String region = document.getString("Region");
-                        experimentInfo = new ExperimentInfo(description, ownerId, status, id,
+                        experimentInfo = new ExperimentInfo(description, ownerId, publishStatus, activeStatus, id,
                                 trialType, geoLocation, minTrials, region);
 
                     } else {
@@ -109,7 +110,8 @@ public class ExperimentDAL {
         data.put("Owner", experimentInfo.getOwnerId());
         data.put("Region", experimentInfo.getRegion());
         data.put("MinTrials", experimentInfo.getMinTrials());
-        data.put("Status", experimentInfo.getStatus());
+        data.put("PublishStatus", experimentInfo.getPublishStatus());
+        data.put("ActiveStatus", experimentInfo.getActiveStatus());
         data.put("GeoLocationRequired", experimentInfo.getGeoLocationRequired());
         data.put("TrialType", experimentInfo.getTrialType());
 
@@ -132,8 +134,8 @@ public class ExperimentDAL {
      * @param experimentId the unique id of the experiment to be updated
      * @param status       the new status of the experiment
      */
-    public void setExperimentStatus(String experimentId, String status) {
-        collRef.document(experimentId).update("Status", status).addOnFailureListener(new OnFailureListener() {
+    public void setExperimentStatus(String experimentId, String status, String newStatus) {
+        collRef.document(experimentId).update(status, newStatus).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d(TAG, "Data could not be updated" + e.toString());

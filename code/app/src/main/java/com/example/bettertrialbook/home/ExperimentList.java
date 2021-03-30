@@ -52,11 +52,14 @@ public class ExperimentList extends ArrayAdapter<ExperimentInfo> {
 
         description.setText(experiment.getDescription());
         trialType.setText("Type: " + experiment.getTrialType());
-        if (experiment.getStatus().equals("Unpublish")) {
-            status.setText(experiment.getStatus()+"ed");
 
-        } else {
-            status.setText(experiment.getStatus());
+        String pStatus = experiment.getPublishStatus();
+        String aStatus = experiment.getActiveStatus();
+        if (pStatus != null && pStatus.equals("Unpublish")) {
+            status.setText(pStatus+"ed");
+
+        } else if (aStatus != null) {
+            status.setText(aStatus);
         }
 
 

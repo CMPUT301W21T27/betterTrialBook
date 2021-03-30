@@ -73,7 +73,13 @@ public class CustomTrialList extends ArrayAdapter<Trial> {
                 @Override
                 public void onCallback(User user) {
                     if (user != null) {
-                        experimenterIdText.setText("Experimenter: " + user.getUsername());
+                        if (!user.getUsername().equals("")) {
+                            experimenterIdText.setText("Experimenter: " + user.getUsername());
+                        } else {
+                            experimenterIdText.setText("Experimenter: " + user.getID().substring(0, 8));
+                        }
+                    } else {
+                        experimenterIdText.setText("Experimenter: " + experimenterId.substring(0, 8));
                     }
                 }
             });
