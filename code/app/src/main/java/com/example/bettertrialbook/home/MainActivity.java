@@ -97,7 +97,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             experimentDAL.findExperimentByID(subscribed.get(i), new ExperimentDAL.FindExperimentByIDCallback() {
                                 @Override
                                 public void onCallback(ExperimentInfo experimentInfo) {
-                                    if (experimentInfo != null) {
+                                    if (experimentInfo != null &&
+                                            (experimentInfo.getPublishStatus().equals("Publish") ||
+                                                    experimentInfo.getOwnerId().equals(You.getUser().getID()))) {
                                         trialInfoList.add(experimentInfo);
                                         trialInfoAdapter.notifyDataSetChanged();
                                     }
@@ -162,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                         String publishStatus = (String) doc.getData().get("PublishStatus");
                                         String activeStatus = (String) doc.getData().get("ActiveStatus");
                                         if ((ownerId != null && ownerId.equals(You.getUser().getID()))
-                                                || (publishStatus != null && !publishStatus.equals("Unpublished"))) {
+                                                || (publishStatus != null && !publishStatus.equals("Unpublish"))) {
                                             String id = doc.getId();
                                             String description = (String) doc.getData().get("Description");
                                             String region = (String) doc.getData().get("Region");
@@ -283,8 +285,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                     experimentDAL.findExperimentByID(subscribed.get(i), new ExperimentDAL.FindExperimentByIDCallback() {
                                         @Override
                                         public void onCallback(ExperimentInfo experimentInfo) {
-                                            trialInfoList.add(experimentInfo);
-                                            trialInfoAdapter.notifyDataSetChanged();
+                                            if (experimentInfo != null &&
+                                                    (experimentInfo.getPublishStatus().equals("Publish") ||
+                                                            experimentInfo.getOwnerId().equals(You.getUser().getID()))) {
+                                                trialInfoList.add(experimentInfo);
+                                                trialInfoAdapter.notifyDataSetChanged();
+                                            }
                                         }
                                     });
                                 }
