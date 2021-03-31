@@ -91,15 +91,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             uDAL.getSubscribed(userId, new UserDAL.GetSubscribedCallback() {
                 @Override
                 public void onCallback(List<String> subscribed) {
-                    for (int i = 0; i < subscribed.size(); i++) {
-                        ExperimentDAL experimentDAL = new ExperimentDAL();
-                        experimentDAL.findExperimentByID(subscribed.get(i), new ExperimentDAL.FindExperimentByIDCallback() {
-                            @Override
-                            public void onCallback(ExperimentInfo experimentInfo) {
-                                trialInfoList.add(experimentInfo);
-                                trialInfoAdapter.notifyDataSetChanged();
-                            }
-                        });
+                    if (subscribed != null) {
+                        for (int i = 0; i < subscribed.size(); i++) {
+                            ExperimentDAL experimentDAL = new ExperimentDAL();
+                            experimentDAL.findExperimentByID(subscribed.get(i), new ExperimentDAL.FindExperimentByIDCallback() {
+                                @Override
+                                public void onCallback(ExperimentInfo experimentInfo) {
+                                    if (experimentInfo != null &&
+                                            (experimentInfo.getPublishStatus().equals("Publish") ||
+                                                    experimentInfo.getOwnerId().equals(You.getUser().getID()))) {
+                                        trialInfoList.add(experimentInfo);
+                                        trialInfoAdapter.notifyDataSetChanged();
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
             });
@@ -128,14 +134,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                 // GeoLocationRequired hasn't done yet. Want to wait for further production and
                                 // then decide.
                                 String ownerId = (String) doc.getData().get("Owner");
-                                String status = (String) doc.getData().get("Status");
+                                String publishStatus = (String) doc.getData().get("PublishStatus");
+                                String activeStatus = (String) doc.getData().get("ActiveStatus");
                                 if ((ownerId != null && ownerId.equals(You.getUser().getID()))
-                                        || (status != null && !status.equals("Unpublished"))) {
+                                        || (publishStatus != null && !publishStatus.equals("Unpublish"))) {
                                     String id = doc.getId();
                                     String region = (String) doc.getData().get("Region");
                                     String trialType = (String) doc.getData().get("TrialType");
-                                    trialInfoList.add(new ExperimentInfo(description, ownerId, status, id, trialType,
-                                            false, 0, region));
+                                    trialInfoList.add(new ExperimentInfo(description, ownerId, publishStatus, activeStatus,
+                                            id, trialType, false, 0, region));
                                 }
                             }
                         }
@@ -154,15 +161,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                         // then decide.
                                         Log.d("TEST2", String.valueOf(experimentId));
                                         String ownerId = (String) doc.getData().get("Owner");
-                                        String status = (String) doc.getData().get("Status");
+                                        String publishStatus = (String) doc.getData().get("PublishStatus");
+                                        String activeStatus = (String) doc.getData().get("ActiveStatus");
                                         if ((ownerId != null && ownerId.equals(You.getUser().getID()))
-                                                || (status != null && !status.equals("Unpublished"))) {
+                                                || (publishStatus != null && !publishStatus.equals("Unpublish"))) {
                                             String id = doc.getId();
                                             String description = (String) doc.getData().get("Description");
                                             String region = (String) doc.getData().get("Region");
                                             String trialType = (String) doc.getData().get("TrialType");
-                                            trialInfoList.add(new ExperimentInfo(description, ownerId, status, id, trialType,
-                                                    false, 0, region));
+                                            trialInfoList.add(new ExperimentInfo(description, ownerId, publishStatus, activeStatus,
+                                                    id, trialType, false, 0, region));
                                         }
 
                                         trialInfoAdapter.notifyDataSetChanged();
@@ -267,15 +275,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 uDAL.getSubscribed(userId, new UserDAL.GetSubscribedCallback() {
                     @Override
                     public void onCallback(List<String> subscribed) {
-                        for (int i = 0; i < subscribed.size(); i++) {
-                            ExperimentDAL experimentDAL = new ExperimentDAL();
-                            experimentDAL.findExperimentByID(subscribed.get(i), new ExperimentDAL.FindExperimentByIDCallback() {
-                                @Override
-                                public void onCallback(ExperimentInfo experimentInfo) {
-                                    trialInfoList.add(experimentInfo);
-                                    trialInfoAdapter.notifyDataSetChanged();
+                        Log.d("TEST2", String.valueOf(subscribed));
+                        if (subscribed != null) {
+                            if (subscribed.size() == 0) {
+                                trialInfoAdapter.notifyDataSetChanged();
+                            } else {
+                                for (int i = 0; i < subscribed.size(); i++) {
+                                    ExperimentDAL experimentDAL = new ExperimentDAL();
+                                    experimentDAL.findExperimentByID(subscribed.get(i), new ExperimentDAL.FindExperimentByIDCallback() {
+                                        @Override
+                                        public void onCallback(ExperimentInfo experimentInfo) {
+                                            if (experimentInfo != null &&
+                                                    (experimentInfo.getPublishStatus().equals("Publish") ||
+                                                            experimentInfo.getOwnerId().equals(You.getUser().getID()))) {
+                                                trialInfoList.add(experimentInfo);
+                                                trialInfoAdapter.notifyDataSetChanged();
+                                            }
+                                        }
+                                    });
                                 }
-                            });
+                            }
                         }
                     }
                 });
