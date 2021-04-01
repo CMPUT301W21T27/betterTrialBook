@@ -24,34 +24,32 @@ public class Statistic {
      * Calculate the overall mean of the experiment depends on the experiment Type
      * @param trials
      * The trial data for the experiment
-     * @param experimentType
-     * The type of the experiment (Count / Measurement / Non-Negative / Binomial)
      * @return
      * The mean of the experiment
      */
-    public double Mean(ArrayList<Trial> trials, String experimentType) {
+    public double Mean(ArrayList<Trial> trials) {
         double mean;
         double sum = 0;
         double size = 0;
         double value = 0;
 
         for (Trial trial: trials) {
-            if (experimentType.equals(Extras.COUNT_TYPE)) {
+            if (trial.getTrialType().equals(Extras.COUNT_TYPE)) {
                 CountTrial countTrial = (CountTrial) trial;
                 value = countTrial.getCount();
                 size += 1;
             }
-            if (experimentType.equals(Extras.NONNEG_TYPE)) {
+            if (trial.getTrialType().equals(Extras.NONNEG_TYPE)) {
                 NonNegTrial nonNegTrial = (NonNegTrial) trial;
                 value = nonNegTrial.getCount();
                 size += 1;
             }
-            if (experimentType.equals(Extras.MEASUREMENT_TYPE)) {
+            if (trial.getTrialType().equals(Extras.MEASUREMENT_TYPE)) {
                 MeasurementTrial measurementTrial = (MeasurementTrial) trial;
                 value = measurementTrial.getMeasurement();
                 size += 1;
             }
-            if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
+            if (trial.getTrialType().equals(Extras.BINOMIAL_TYPE)) {
                 BinomialTrial binomialTrial = (BinomialTrial) trial;
                 value = binomialTrial.getPassCount();
                 size += (binomialTrial.getPassCount() + binomialTrial.getFailCount());
@@ -68,41 +66,38 @@ public class Statistic {
         return mean;
     }
 
-
     /**
      * Calculate the standard deviation of the experiment depending on the experiment Type
      * @param trials
      * The trial data for the experiment
-     * @param experimentType
-     * The type of the experiment (Count / Measurement / Non-Negative / Binomial)
      * @param mean
      * The mean of the experiment, which can be obtained using method Mean
      * @return
      * The standard deviation of the experiment
      */
-    public double StdDev(ArrayList<Trial> trials, String experimentType, double mean) {
+    public double StdDev(ArrayList<Trial> trials, double mean) {
         double stdDev;
         double sum = 0;
         double size = 0;
         double value = 0;               // Used to store the immediate value
 
         for (Trial trial: trials) {
-            if (experimentType.equals(Extras.COUNT_TYPE)) {
+            if (trial.getTrialType().equals(Extras.COUNT_TYPE)) {
                 CountTrial countTrial = (CountTrial) trial;
                 value = Math.pow((countTrial.getCount() - mean), 2);
                 size += 1;
             }
-            if (experimentType.equals(Extras.NONNEG_TYPE)) {
+            if (trial.getTrialType().equals(Extras.NONNEG_TYPE)) {
                 NonNegTrial nonNegTrial = (NonNegTrial) trial;
                 value = Math.pow((nonNegTrial.getCount() - mean), 2);
                 size += 1;
             }
-            if (experimentType.equals(Extras.MEASUREMENT_TYPE)) {
+            if (trial.getTrialType().equals(Extras.MEASUREMENT_TYPE)) {
                 MeasurementTrial measurementTrial = (MeasurementTrial) trial;
                 value = Math.pow((measurementTrial.getMeasurement() - mean), 2);
                 size += 1;
             }
-            if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
+            if (trial.getTrialType().equals(Extras.BINOMIAL_TYPE)) {
                 BinomialTrial binomialTrial = (BinomialTrial) trial;
                 value = binomialTrial.getPassCount() * Math.pow((1 - mean), 2);
                 value += binomialTrial.getFailCount() * Math.pow((0 - mean), 2);
@@ -124,18 +119,16 @@ public class Statistic {
      * Find the Median in the sorted Data set for the experiment
      * @param trials
      * The trial data for the experiment
-     * @param experimentType
-     * The type of the experiment (Count / Measurement / Non-Negative / Binomial)
      * @return
      * The median of the experiment's data
      */
-    public double Median(ArrayList<Trial> trials, String experimentType) {
+    public double Median(ArrayList<Trial> trials) {
         double median;
         ArrayList<Double> dataList;             // Temporary ArrayList used to Sort the data
 
-        dataList = SortedArrayList(trials, experimentType);
-
-        if (trials.size() != 0) {
+        if (trials.size() > 0) {
+            String experimentType = trials.get(0).getTrialType();
+            dataList = SortedArrayList(trials, experimentType);
             // For Odd Count Data Set
             if (dataList.size() % 2 == 1) {
                 median = Double.parseDouble(df.format(dataList.get(dataList.size() / 2)));
@@ -156,29 +149,30 @@ public class Statistic {
      * Find the 1st Quartile and the 3rd Quartile of the experiment
      * @param trials
      * The trial data for the experiment
-     * @param experimentType
-     * The type of the experiment (Count / Measurement / Non-Negative / Binomial)
      * @return
      * A List which contains the First Quartile Value and the Third Quartile Value
      * quartile[0] = first quartile value ; quartile[1] = third quartile value
      */
-    public double[] Quartiles(ArrayList<Trial> trials, String experimentType) {
+    public double[] Quartiles(ArrayList<Trial> trials ) {
         int medianIndex;
         double firstQuartile;
         double thirdQuartile;
         double[] quartiles = new double[2];
         ArrayList<Double> dataList;             // Temporary ArrayList used to Sort the data
 
-        dataList = SortedArrayList(trials, experimentType);
-
-        if (trials.size() != 0) {
+        if (trials.size() > 0) {
+            String experimentType = trials.get(0).getTrialType();
+            dataList = SortedArrayList(trials, experimentType);
             // For Odd DataSet , Median Index is the exact Medina Index
             // For Even DataSet, Median Index is the upper index
-            medianIndex = trials.size() / 2 ;
+            medianIndex = dataList.size() / 2 ;
             firstQuartile = firstQuartile(dataList, medianIndex);
             thirdQuartile = thirdQuartile(dataList, medianIndex);
-            quartiles[0] = firstQuartile;
-            quartiles[1] = thirdQuartile;
+            quartiles[0] = Double.parseDouble(df.format(firstQuartile));
+            quartiles[1] = Double.parseDouble(df.format(thirdQuartile));
+        } else {
+            quartiles[0] = 0.0;
+            quartiles[1] = 0.0;
         }
 
         return quartiles;

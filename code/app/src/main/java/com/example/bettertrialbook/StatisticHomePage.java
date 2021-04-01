@@ -52,10 +52,10 @@ public class StatisticHomePage extends AppCompatActivity {
         switch(item.getItemId()) {
             case R.id.Histogram:
                 Intent intent = new Intent(this, Histogram.class);
-                intent.putExtra("Mean", statistic.Mean(trialDataList, trialType));
-                intent.putExtra("Median", statistic.Median(trialDataList, trialType));
-                intent.putExtra("StdDev", statistic.StdDev(trialDataList, trialType, statistic.Mean(trialDataList, trialType)));
-                intent.putExtra("Quartile", statistic.Quartiles(trialDataList, trialType));
+                intent.putExtra("Mean", statistic.Mean(trialDataList));
+                intent.putExtra("Median", statistic.Median(trialDataList));
+                intent.putExtra("StdDev", statistic.StdDev(trialDataList, statistic.Mean(trialDataList)));
+                intent.putExtra("Quartile", statistic.Quartiles(trialDataList));
                 startActivity(intent);
                 return true;
             case R.id.ExperimentOverView:
