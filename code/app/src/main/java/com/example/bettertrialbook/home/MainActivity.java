@@ -1,5 +1,4 @@
 /*
-    Initial Screen
     TODO: Create QR Functionality
  */
 package com.example.bettertrialbook.home;
@@ -7,15 +6,19 @@ package com.example.bettertrialbook.home;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.You;
@@ -29,7 +32,6 @@ import com.example.bettertrialbook.models.User;
 import com.example.bettertrialbook.profile.ProfileViewActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +39,10 @@ import java.util.UUID;
 
 /**
  * The main activity hosts buttons to create new experiments, view your profile and search experiments.
- * Limitations: We will aim to move the search logic out of this activity and into the ExperimentDAL
  */
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+
+
 
     UserDAL uDAL = new UserDAL();
     private ArrayList<ExperimentInfo> trialInfoList;
@@ -52,11 +55,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button scanQR = findViewById(R.id.ScanQR_Button); // Button to go to the scan QR page
-        Button create = findViewById(R.id.CreateQR_Button); // Button to go to the create Experiment
+        Toolbar toolbar = findViewById(R.id.ToolBar);
+        Button create = findViewById(R.id.CreateQR_Button);
+        Spinner itemSpinner = findViewById(R.id.ItemSpinner);
+        Spinner trialSpinner = findViewById(R.id.TrialSpinner);
         SearchView searchItem = findViewById(R.id.SearchItem);
-        ImageView profilePic = findViewById(R.id.ProfilePicture); // Used to go to the profile page
         ListView resultList = findViewById(R.id.Result_ListView);
+        // For Targeting User or Description
+        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this,
+                R.array.SearchTarget, android.R.layout.simple_spinner_item);
+        // For Targeting the experiment's type
+        // No effect at the moment
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
+                R.array.TrialTarget, android.R.layout.simple_spinner_item);
+
+        setSupportActionBar(toolbar);
+
+        itemSpinner.setAdapter(adapter1);
+        itemSpinner.setSelection(1);
+        trialSpinner.setAdapter(adapter2);
+        trialSpinner.setSelection(0);
+
 
         userId = generateID();
 
@@ -64,14 +83,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         trialInfoAdapter = new ExperimentList(this, trialInfoList);
         resultList.setAdapter(trialInfoAdapter);
         resultList.setOnItemClickListener(this);
-
-        // Go to the Profile View Screen
-        profilePic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewYourProfile(v);
-            }
-        });
 
         // Go to Create Experiment Screen
         create.setOnClickListener(new View.OnClickListener() {
@@ -81,123 +92,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
-        // Search the Result
+        // Search the Result by QueryTextChange
         FirebaseFirestore db;
         db = Firestore.getInstance();
         CollectionReference reference = db.collection("Experiments");
 
-        // initial display of all subscribed experiments
-        if (userId != null) {
-            uDAL.getSubscribed(userId, new UserDAL.GetSubscribedCallback() {
-                @Override
-                public void onCallback(List<String> subscribed) {
-                    if (subscribed != null) {
-                        for (int i = 0; i < subscribed.size(); i++) {
-                            ExperimentDAL experimentDAL = new ExperimentDAL();
-                            experimentDAL.findExperimentByID(subscribed.get(i), new ExperimentDAL.FindExperimentByIDCallback() {
-                                @Override
-                                public void onCallback(ExperimentInfo experimentInfo) {
-                                    if (experimentInfo != null &&
-                                            (experimentInfo.getPublishStatus().equals("Publish") ||
-                                                    experimentInfo.getOwnerId().equals(You.getUser().getID()))) {
-                                        trialInfoList.add(experimentInfo);
-                                        trialInfoAdapter.notifyDataSetChanged();
-                                    }
-                                }
-                            });
-                        }
-                    }
-                }
-            });
-        }
-
         searchItem.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // Empty Body: May add-on new features
+                // Empty Body
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                neverSearched = false;
-                reference.addSnapshotListener((queryDocumentSnapshots, error) -> {
-                    trialInfoList.clear();
-                    if (newText.length() > 0) {
-                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                            // Only search for the key words in the description
-                            // Further search method will be refined after
-                            String description = (String) doc.getData().get("Description");
-                            if (description.toLowerCase().contains(newText.toLowerCase())) {
-                                // MinTrials hasn't done yet. Want to wait for further production and then
-                                // decide.
-                                // GeoLocationRequired hasn't done yet. Want to wait for further production and
-                                // then decide.
-                                String ownerId = (String) doc.getData().get("Owner");
-                                String publishStatus = (String) doc.getData().get("PublishStatus");
-                                String activeStatus = (String) doc.getData().get("ActiveStatus");
-                                if ((ownerId != null && ownerId.equals(You.getUser().getID()))
-                                        || (publishStatus != null && !publishStatus.equals("Unpublish"))) {
-                                    String id = doc.getId();
-                                    String region = (String) doc.getData().get("Region");
-                                    String trialType = (String) doc.getData().get("TrialType");
-                                    trialInfoList.add(new ExperimentInfo(description, ownerId, publishStatus, activeStatus,
-                                            id, trialType, false, 0, region));
-                                }
-                            }
-                        }
-
-                    } else if (newText.length() == 0) {
-                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                            String experimentId = (String) doc.getId();
-
-                            uDAL.isSubscribed(experimentId, You.getUser().getID(), new UserDAL.IsSubscribedCallback() {
-                                @Override
-                                public void onCallback(Boolean isSubscribed) {
-                                    if (isSubscribed) {
-                                        // MinTrials hasn't done yet. Want to wait for further production and then
-                                        // decide.
-                                        // GeoLocationRequired hasn't done yet. Want to wait for further production and
-                                        // then decide.
-                                        Log.d("TEST2", String.valueOf(experimentId));
-                                        String ownerId = (String) doc.getData().get("Owner");
-                                        String publishStatus = (String) doc.getData().get("PublishStatus");
-                                        String activeStatus = (String) doc.getData().get("ActiveStatus");
-                                        if ((ownerId != null && ownerId.equals(You.getUser().getID()))
-                                                || (publishStatus != null && !publishStatus.equals("Unpublish"))) {
-                                            String id = doc.getId();
-                                            String description = (String) doc.getData().get("Description");
-                                            String region = (String) doc.getData().get("Region");
-                                            String trialType = (String) doc.getData().get("TrialType");
-                                            trialInfoList.add(new ExperimentInfo(description, ownerId, publishStatus, activeStatus,
-                                                    id, trialType, false, 0, region));
-                                        }
-
-                                        trialInfoAdapter.notifyDataSetChanged();
-                                    }
-                                }
-                            });
-                        }
-
-                    } else {
-                        trialInfoList.clear();
-                    }
-                    trialInfoAdapter.notifyDataSetChanged();
-                });
+                ExperimentDAL experimentDAL = new ExperimentDAL();
+                if (itemSpinner.getSelectedItem().toString().equalsIgnoreCase("Description")) {
+                    experimentDAL.searchByDescription(trialInfoList, trialInfoAdapter, newText);
+                }
+                else if (itemSpinner.getSelectedItem().toString().equalsIgnoreCase("User")) {
+                    experimentDAL.searchByUser(trialInfoList, trialInfoAdapter, newText);
+                }
                 return false;
             }
         });
-    }
-
-    /*
-     * Calls the ProfileViewActivity Sends user object "you" to display their info
-     * Expects an updated "you" object as a return
-     *
-     */
-    public void viewYourProfile(View view) {
-        Intent intent = new Intent(this, ProfileViewActivity.class);
-        intent.putExtra("User",You.getUser());
-        startActivity(intent);
     }
 
     public void createExperiment(View view) {
@@ -299,6 +217,39 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     }
                 });
             }
+        }
+    }
+// -----------------------------------------Used For ToolBar----------------------------------------
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            /*
+             * Calls the ProfileViewActivity Sends user object "you" to display their info
+             * Expects an updated "you" object as a return
+             */
+            case R.id.Profile:
+                Intent intent1 = new Intent(this, ProfileViewActivity.class);
+                intent1.putExtra("User",You.getUser());
+                startActivity(intent1);
+                return true;
+            /*
+             * Display what the user has subscribed
+             */
+            case R.id.Subscription:
+                Intent intent2 = new Intent(this, SubscriptionActivity.class);
+                intent2.putExtra("UserID", userId);
+                intent2.putExtra("Boolean", neverSearched);
+                startActivity(intent2);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

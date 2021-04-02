@@ -21,8 +21,6 @@ import java.util.ArrayList;
  *  4) Coin Flip
  */
 public class StatisticHomePage extends AppCompatActivity {
-
-    private String trialType;
     private ArrayList<Trial> trialDataList;
     private Statistic statistic = new Statistic();
 
@@ -33,7 +31,6 @@ public class StatisticHomePage extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = getIntent().getExtras();
 
-        trialType = intent.getStringExtra("TrialType");
         trialDataList = (ArrayList<Trial>) bundle.getSerializable("Trials");
         Toolbar toolbar = findViewById(R.id.ToolBar);
 
