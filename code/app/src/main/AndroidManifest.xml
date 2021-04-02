@@ -13,12 +13,8 @@
             android:name=".home.SubscriptionActivity"
             android:label="@string/subscription_screen"/>
         <activity
-            android:name=".Histogram"
+            android:name=".statistic.Histogram"
             android:label="@string/title_activity_statisitc_information"
-            android:theme="@style/Theme.BetterTrialBook.NoActionBar" />
-        <activity
-            android:name=".StatisticHomePage"
-            android:label="@string/title_activity_statistic_home_page"
             android:theme="@style/Theme.BetterTrialBook.NoActionBar" />
         <activity android:name=".forum.CreatePostActivity" />
         <activity android:name=".profile.SignUp" />

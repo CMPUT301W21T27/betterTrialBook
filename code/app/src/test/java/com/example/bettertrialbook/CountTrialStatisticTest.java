@@ -5,6 +5,7 @@ package com.example.bettertrialbook;
 
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.CountTrial;
+import com.example.bettertrialbook.statistic.Statistic;
 
 import org.junit.Test;
 import org.junit.Before;

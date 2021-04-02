@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Histogram">
+    tools:context=".statistic.Histogram">
 
     <include
         android:id="@+id/ToolBar"
@@ -131,7 +131,7 @@
         app:layout_constraintStart_toEndOf="@+id/StdDev_Display" />
 
     <com.github.mikephil.charting.charts.BarChart
-        android:id="@id/Histogram"
+        android:id="@+id/Graph"
         android:layout_width="416dp"
         android:layout_height="476dp"
         android:layout_marginTop="68dp"

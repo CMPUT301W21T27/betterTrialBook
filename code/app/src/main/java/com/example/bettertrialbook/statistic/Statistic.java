@@ -1,5 +1,6 @@
-package com.example.bettertrialbook;
+package com.example.bettertrialbook.statistic;
 
+import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.CountTrial;
 import com.example.bettertrialbook.models.NonNegTrial;
