@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">betterTrialBook</string>
-    <string name="main_home_screen">BetterTrial Book</string>
-    <string name="subscription_screen">Subscription</string>
     <string name="title_activity_statisitc_information">Statistic Information</string>
     <string name="title_activity_statistic_home_page">Statistic</string>
     <string name="title_activity_experiment_view">ExperimentViewActivity</string>
@@ -41,16 +39,5 @@
         <item>Binomial</item>
         <item>Non-Negative Integer</item>
         <item>Measurement</item>
-    </string-array>
-    <string-array name="SearchTarget">
-        <item>User</item>
-        <item>Description</item>
-    </string-array>
-    <string-array name="TrialTarget">
-        <item>ALL</item>
-        <item>Count Based</item>
-        <item>Non-Negative Based</item>
-        <item>Measurement Based</item>
-        <item>Binomial Based</item>
     </string-array>
 </resources>

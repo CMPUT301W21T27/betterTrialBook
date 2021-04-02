@@ -10,9 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BetterTrialBook">
         <activity
-            android:name=".home.SubscriptionActivity"
-            android:label="@string/subscription_screen"/>
-        <activity
             android:name=".Histogram"
             android:label="@string/title_activity_statisitc_information"
             android:theme="@style/Theme.BetterTrialBook.NoActionBar" />
@@ -31,8 +28,6 @@
         <activity android:name=".experiment.ExperimentAddActivity" /> <!-- https://stackoverflow.com/questions/4207880/android-how-do-i-prevent-the-soft-keyboard-from-pushing-my-view-up -->
         <activity
             android:name=".home.MainActivity"
-            android:label="@string/main_home_screen"
-            android:theme="@style/Theme.BetterTrialBook.NoActionBar"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

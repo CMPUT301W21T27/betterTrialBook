@@ -7,14 +7,12 @@ package com.example.bettertrialbook.dal;
 
 import android.os.Build;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.example.bettertrialbook.Extras;
-import com.example.bettertrialbook.You;
 import com.example.bettertrialbook.models.BinomialTrial;
 import com.example.bettertrialbook.models.CountTrial;
 import com.example.bettertrialbook.models.ExperimentInfo;
@@ -30,7 +28,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -276,86 +273,6 @@ public class ExperimentDAL {
         });
     }
 
-    /**
-     * Searching the experiment using keywords matching the description
-     * @param trialInfoList
-     * An Array of ExperimentInfo represents the previous searched result
-     * @param trialInfoAdapter
-     * A Screen Adapter used for displaying the experiment
-     * @param newText
-     * The text that the user typed in the Search Bar in the Home Screen (Main Activity)
-     */
-    public void searchByDescription(ArrayList<ExperimentInfo> trialInfoList, ArrayAdapter<ExperimentInfo> trialInfoAdapter, String newText) {
-        collRef.addSnapshotListener((queryDocumentSnapshots, error) -> {
-           trialInfoList.clear();
-           if (newText.length() > 0) {
-               for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                   // Only search for the key words in the description
-                   // Further search method will be refined after
-                   String description = (String) doc.getData().get("Description");
-                   if (description.toLowerCase().contains(newText.toLowerCase())) {
-                       // MinTrials hasn't done yet. Want to wait for further production and then
-                       // decide.
-                       // GeoLocationRequired hasn't done yet. Want to wait for further production and
-                       // then decide.
-                       String ownerId = (String) doc.getData().get("Owner");
-                       String publishStatus = (String) doc.getData().get("PublishStatus");
-                       String activeStatus = (String) doc.getData().get("ActiveStatus");
-                       if ((ownerId != null && ownerId.equals(You.getUser().getID()))
-                               || (publishStatus != null && !publishStatus.equals("Unpublish"))) {
-                           String id = doc.getId();
-                           String region = (String) doc.getData().get("Region");
-                           String trialType = (String) doc.getData().get("TrialType");
-                           trialInfoList.add(new ExperimentInfo(description, ownerId, publishStatus, activeStatus,
-                                   id, trialType, false, 0, region));
-                       }
-                   }
-               }
-           } else {
-               trialInfoList.clear();
-           }
-            trialInfoAdapter.notifyDataSetChanged();
-        });
-    }
-
-    // This method has to be refined
-    /*
-     * Right now this method search the user based on their document name on the fireBase
-     * It doesn't search based on the username in the User document as register is not part of the requirement
-     */
-    public void searchByUser(ArrayList<ExperimentInfo> trialInfoList, ArrayAdapter<ExperimentInfo> trialInfoAdapter, String newText) {
-        collRef.addSnapshotListener((queryDocumentSnapshots, error) -> {
-            trialInfoList.clear();
-            if (newText.length() > 0) {
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    // Only search for the key words in the description
-                    // Further search method will be refined after
-                    String ownerId = (String) doc.getData().get("Owner");
-                    if (ownerId.substring(0,7).toLowerCase().contains(newText.toLowerCase())) {
-                        // MinTrials hasn't done yet. Want to wait for further production and then
-                        // decide.
-                        // GeoLocationRequired hasn't done yet. Want to wait for further production and
-                        // then decide.
-                        String description = (String) doc.getData().get("Description");
-                        String publishStatus = (String) doc.getData().get("PublishStatus");
-                        String activeStatus = (String) doc.getData().get("ActiveStatus");
-                        if ((ownerId != null && ownerId.equals(You.getUser().getID()))
-                                || (publishStatus != null && !publishStatus.equals("Unpublish"))) {
-                            String id = doc.getId();
-                            String region = (String) doc.getData().get("Region");
-                            String trialType = (String) doc.getData().get("TrialType");
-                            trialInfoList.add(new ExperimentInfo(description, ownerId, publishStatus, activeStatus,
-                                    id, trialType, false, 0, region));
-                        }
-                    }
-                }
-            } else {
-                trialInfoList.clear();
-            }
-            trialInfoAdapter.notifyDataSetChanged();
-        });
-    }
-
     private Trial deserializeTrial(HashMap<Object, Object> data, String experimentType) {
         String trialId = data.get("trialID").toString();
         String experimenterId;
@@ -384,6 +301,4 @@ public class ExperimentDAL {
             throw new IllegalArgumentException("Invalid experiment type");
         }
     }
-
-
 }

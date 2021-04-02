@@ -83,8 +83,8 @@ public class ExperimentAddActivity extends AppCompatActivity {
                     ExperimentInfo experimentInfo = new ExperimentInfo(
                             descriptionEdit.getText().toString(),
                             ownerId,
-                            "Publish",
                             "Active",
+                            "Publish",
                             "",
                             typeSpinner.getSelectedItem().toString(),
                             geoLocation,
