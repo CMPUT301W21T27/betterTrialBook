@@ -4,6 +4,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
@@ -13,15 +14,19 @@ import android.view.MenuInflater;
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.models.Trial;
 import com.github.mikephil.charting.charts.BarChart;
+
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Histogram extends AppCompatActivity {
-    private ArrayList<Trial> trialDataList;
-    private Statistic statistic = new Statistic();
+    private final Statistic statistic = new Statistic();
+    private final HistogramInfo histogramInfo = new HistogramInfo();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +38,8 @@ public class Histogram extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
 
-        trialDataList = (ArrayList<Trial>) bundle.getSerializable("Trials");
+        ArrayList<Trial> trialDataList = (ArrayList<Trial>) bundle.getSerializable("Trials");
+        ArrayList<Double> dataList = statistic.experimentData(trialDataList);
 
         BarChart barChart = findViewById(R.id.Graph);
         TextView meanResult = findViewById(R.id.Mean_Result);
@@ -55,31 +61,37 @@ public class Histogram extends AppCompatActivity {
         quartile1Result.setText(String.valueOf(quartiles[0]));
         quartile3Result.setText(String.valueOf(quartiles[1]));
 
-        // TO-DO:   Plot the histogram
-        showBarChart(barChart);
-    }
+        // Plot the Histogram
+        ArrayList<Integer> binFrequency = histogramInfo.collectFrequency(dataList);
+        ArrayList<String> labels = histogramInfo.getLabels(dataList);
 
-    public void showBarChart(BarChart barChart) {
-        String title = "Title";
-        ArrayList<Double> valueList = new ArrayList<Double>();
-        ArrayList<BarEntry> entries = new ArrayList<>();
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setDrawGridLines(false);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(15f);
 
-        //input data
-        for(int i = 0; i < 6; i++){
-            valueList.add(i * 100.1);
+        YAxis rightAxis = barChart.getAxisRight();
+        rightAxis.setEnabled(false);
+
+        YAxis leftAxis = barChart.getAxisLeft();
+        leftAxis.setTextSize(15f);
+        leftAxis.setLabelCount(5, true);
+        leftAxis.setAxisMinValue(0);
+        leftAxis.setAxisMaxValue(4);
+
+        barChart.setDescription("");
+
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        for (int i = 0; i < binFrequency.size(); i++) {
+            barEntries.add(new BarEntry(binFrequency.get(i), i));
         }
+        BarDataSet barDataSet = new BarDataSet(barEntries, "Frequency");
 
-        //fit the data into a bar
-        for (int i = 0; i < valueList.size(); i++) {
-            BarEntry barEntry = new BarEntry(i, valueList.get(i).floatValue());
-            entries.add(barEntry);
-        }
+        BarData theData = new BarData(labels, barDataSet);
+        barChart.setData(theData);
 
-        BarDataSet barDataSet = new BarDataSet(entries, title);
 
-        BarData data = new BarData(barDataSet);
-        barChart.setData(data);
-        barChart.invalidate();
+        barChart.setScaleEnabled(true);
     }
 
     @Override

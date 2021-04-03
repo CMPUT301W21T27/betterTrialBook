@@ -50,7 +50,26 @@ public class BinominalTrialStatisticTest {
     }
 
     @Test
-    public void BinomialgMeanTest() {
+    public void getTheDataTest() {
+        int frequencyOfOne = 0;
+        int frequencyOfZero = 0;
+        ArrayList<Double> data = statistic.experimentData(binomialEvenTrials);
+
+        for (double value : data) {
+            if (value == 1) {
+                frequencyOfOne += 1;
+            }
+            else {
+                frequencyOfZero += 1;
+            }
+        }
+
+        assertEquals(5, frequencyOfOne);
+        assertEquals(9, frequencyOfZero);
+    }
+
+    @Test
+    public void binomialgMeanTest() {
         double meanForOdd;
         double meanForEven;
         double meanForEmpty;
@@ -65,7 +84,7 @@ public class BinominalTrialStatisticTest {
     }
 
     @Test
-    public void BinomialMedianTest() {
+    public void binomialMedianTest() {
         double medianForOdd;
         double medianForEven;
         double medianForEmpty;
@@ -81,7 +100,7 @@ public class BinominalTrialStatisticTest {
     }
 
     @Test
-    public void BinomialStdDevTest() {
+    public void binomialStdDevTest() {
         double stdDevForOdd;
         double stdDevForEven;
         double stdDevForEmpty;
@@ -96,7 +115,7 @@ public class BinominalTrialStatisticTest {
     }
 
     @Test
-    public void BinomialQuartileTest() {
+    public void binomialQuartileTest() {
         double[] quartileForOdd;
         double[] quartileForEven;
         double[] quartileForEmpty;

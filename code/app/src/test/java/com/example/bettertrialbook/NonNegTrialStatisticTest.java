@@ -3,6 +3,7 @@
  */
 package com.example.bettertrialbook;
 
+import com.example.bettertrialbook.models.MeasurementTrial;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.NonNegTrial;
 import com.example.bettertrialbook.statistic.Statistic;
@@ -53,7 +54,17 @@ public class NonNegTrialStatisticTest {
     }
 
     @Test
-    public void NonNegMeanTest() {
+    public void getTheDataTest() {
+        ArrayList<Double> dataList = statistic.experimentData(nonNegOddTrials);
+
+        for (int i = 0; i < nonNegOddTrials.size(); i++) {
+            NonNegTrial trial = (NonNegTrial) nonNegOddTrials.get(i);
+            assertEquals(trial.getCount(), dataList.get(i).intValue());
+        }
+    }
+
+    @Test
+    public void nonNegMeanTest() {
         double meanForOdd;
         double meanForEven;
         double meanForEmpty;
@@ -68,7 +79,7 @@ public class NonNegTrialStatisticTest {
     }
 
     @Test
-    public void NonNegMedianTest() {
+    public void nonNegMedianTest() {
         double medianForOdd;
         double medianForEven;
         double medianForEmpty;
@@ -84,7 +95,7 @@ public class NonNegTrialStatisticTest {
     }
 
     @Test
-    public void NonNegStdDevTest() {
+    public void nonNegStdDevTest() {
         double stdDevForOdd;
         double stdDevForEven;
         double stdDevForEmpty;
@@ -99,7 +110,7 @@ public class NonNegTrialStatisticTest {
     }
 
     @Test
-    public void NonNegQuartileTest() {
+    public void nonNegQuartileTest() {
         double[] quartileForOdd;
         double[] quartileForEven;
         double[] quartileForEmpty;

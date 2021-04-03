@@ -55,7 +55,17 @@ public class CountTrialStatisticTest {
     }
 
     @Test
-    public void CountMeanTest() {
+    public void getTheDataTest() {
+        ArrayList<Double> data = statistic.experimentData(countOddTrials);
+
+        for (int i = 0; i < countOddTrials.size(); i++) {
+            CountTrial trial = (CountTrial) countOddTrials.get(i);
+            assertEquals(trial.getCount(), data.get(i).intValue());
+        }
+    }
+
+    @Test
+    public void countMeanTest() {
         double meanForOdd;
         double meanForEven;
         double meanForEmpty;
@@ -70,7 +80,7 @@ public class CountTrialStatisticTest {
     }
 
     @Test
-    public void CountMedianTest() {
+    public void countMedianTest() {
         double medianForOdd;
         double medianForEven;
         double medianForEmpty;
@@ -86,7 +96,7 @@ public class CountTrialStatisticTest {
     }
 
     @Test
-    public void CountStdDevTest() {
+    public void countStdDevTest() {
         double stdDevForOdd;
         double stdDevForEven;
         double stdDevForEmpty;
@@ -101,7 +111,7 @@ public class CountTrialStatisticTest {
     }
 
     @Test
-    public void CountQuartileTest() {
+    public void countQuartileTest() {
         double[] quartileForOdd;
         double[] quartileForEven;
         double[] quartileForEmpty;

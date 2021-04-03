@@ -22,6 +22,46 @@ public class Statistic {
     public Statistic() { }
 
     /**
+     *
+     * @param trials
+     * The trial data for the experiment
+     * @return
+     * Return a sorted arrayList of data from each trial
+     */
+    public ArrayList<Double> experimentData(ArrayList<Trial> trials) {
+        ArrayList<Double> data = new ArrayList<>();
+
+        if (trials.size() > 0) {
+            for (Trial trial : trials) {
+                if (trial.getTrialType().equals(Extras.COUNT_TYPE)) {
+                    CountTrial countTrial = (CountTrial) trial;
+                    data.add((double) countTrial.getCount());
+                }
+                if (trial.getTrialType().equals(Extras.NONNEG_TYPE)) {
+                    NonNegTrial nonNegTrial = (NonNegTrial) trial;
+                    data.add((double) nonNegTrial.getCount());
+                }
+                if (trial.getTrialType().equals(Extras.BINOMIAL_TYPE)) {
+                    BinomialTrial binomialTrial = (BinomialTrial) trial;
+                    for (int i = 0; i < binomialTrial.getPassCount(); i++) {
+                        data.add(1.0);
+                    }
+                    for (int j = 0; j < binomialTrial.getFailCount(); j++) {
+                        data.add(0.0);
+                    }
+                }
+                if (trial.getTrialType().equals(Extras.MEASUREMENT_TYPE)) {
+                    MeasurementTrial measurementTrial = (MeasurementTrial) trial;
+                    data.add(measurementTrial.getMeasurement());
+                }
+            }
+            Collections.sort(data);
+        }
+
+        return data;
+    }
+
+    /**
      * Calculate the overall mean of the experiment depends on the experiment Type
      * @param trials
      * The trial data for the experiment

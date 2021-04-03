@@ -53,7 +53,17 @@ public class MeasurementTrialStatisticTest {
     }
 
     @Test
-    public void MeasurementMeanTest() {
+    public void getTheDataTest() {
+        ArrayList<Double> dataList = statistic.experimentData(mmOddTrials);
+
+        for (int i = 0; i < mmOddTrials.size(); i++) {
+            MeasurementTrial trial = (MeasurementTrial) mmOddTrials.get(i);
+            assertEquals(trial.getMeasurement(), dataList.get(i));
+        }
+    }
+
+    @Test
+    public void measurementMeanTest() {
         double meanForOdd;
         double meanForEven;
         double meanForEmpty;
@@ -68,7 +78,7 @@ public class MeasurementTrialStatisticTest {
     }
 
     @Test
-    public void MeasurementMedianTest() {
+    public void measurementMedianTest() {
         double medianForOdd;
         double medianForEven;
         double medianForEmpty;
@@ -84,7 +94,7 @@ public class MeasurementTrialStatisticTest {
     }
 
     @Test
-    public void MeasurementStdDevTest() {
+    public void measurementStdDevTest() {
         double stdDevForOdd;
         double stdDevForEven;
         double stdDevForEmpty;
@@ -99,7 +109,7 @@ public class MeasurementTrialStatisticTest {
     }
 
     @Test
-    public void MeasurementQuartileTest() {
+    public void measurementQuartileTest() {
         double[] quartileForOdd;
         double[] quartileForEven;
         double[] quartileForEmpty;
