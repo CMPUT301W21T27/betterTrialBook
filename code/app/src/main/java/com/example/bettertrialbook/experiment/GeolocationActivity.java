@@ -8,6 +8,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -15,13 +17,17 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.bettertrialbook.R;
+import com.example.bettertrialbook.models.ExperimentInfo;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback;
@@ -31,11 +37,44 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
     private static final int REQUEST_CODE_ASK_PERMISSIONS = 1;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
+    Button cancelButton, selectButton;
+    Marker marker = null;
+
+    Boolean isTrialOwner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_geolocation);
+
+        // Fetch extra info
+        isTrialOwner = getIntent().getBooleanExtra("IsTrialOwner", false);
+
+        // Button setup
+        cancelButton = findViewById(R.id.mapCancel_button);
+        selectButton = findViewById(R.id.mapSelect_button);
+
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        if (isTrialOwner) {
+            selectButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+        }
+        else {
+            selectButton.setAlpha(.5f);
+        }
+
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -133,5 +172,21 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
                         }
                     }
                 });
+        if (isTrialOwner) {
+            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng point) {
+                    if (marker != null) {
+                        marker.remove();
+                    }
+
+                    if (point != null) {
+                        marker = mMap.addMarker(new MarkerOptions().position(point).title("Marker in Selected Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                    } else {
+                        Log.d("Geolocation", "null selected location");
+                    }
+                }
+            });
+        }
     }
 }

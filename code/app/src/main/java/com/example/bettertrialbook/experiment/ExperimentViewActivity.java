@@ -40,6 +40,7 @@ public class ExperimentViewActivity extends AppCompatActivity
     Boolean isOwner;
     String experimentId;
     String experimentType;
+    String ownerId;
     ExperimentInfo experimentInfo;
     final String TAG = "ExperimentViewActivity";
 
@@ -59,6 +60,7 @@ public class ExperimentViewActivity extends AppCompatActivity
         isOwner = getIntent().getBooleanExtra("IsOwner", false);
         newExperiment = getIntent().getBooleanExtra("NewExperiment", false);
         experimentInfo = getIntent().getExtras().getParcelable("ExperimentInfo");
+        ownerId = getIntent().getStringExtra("OwnerId");
 
         experimentId = experimentInfo.getId();
         experimentType = experimentInfo.getTrialType();
@@ -154,7 +156,12 @@ public class ExperimentViewActivity extends AppCompatActivity
         trialList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Trial trial = trialDataList.get(position);
+                String experimenterId = trial.getExperimenterID();
+                boolean isTrialOwner = experimenterId.equals(ownerId);
+
                 Intent intent = new Intent(ExperimentViewActivity.this, GeolocationActivity.class);
+                intent.putExtra("IsTrialOwner", isTrialOwner);
                 startActivity(intent);
             }
         });

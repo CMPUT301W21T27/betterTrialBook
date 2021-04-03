@@ -190,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         myIntent.putExtra("IsOwner", isOwner);
         myIntent.putExtra("NewExperiment", false);
         myIntent.putExtra("ExperimentInfo", experimentInfo);
+        myIntent.putExtra("OwnerId", You.getUser().getID());
         startActivity(myIntent);
     }
 }
