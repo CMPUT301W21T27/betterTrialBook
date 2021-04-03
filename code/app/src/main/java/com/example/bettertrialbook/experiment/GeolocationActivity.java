@@ -2,7 +2,9 @@ package com.example.bettertrialbook.experiment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -18,6 +20,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.models.ExperimentInfo;
+import com.example.bettertrialbook.models.Geolocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,6 +34,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class GeolocationActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -41,6 +46,7 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
     Marker marker = null;
 
     Boolean isTrialOwner;
+    Geolocation geolocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +54,8 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
         setContentView(R.layout.activity_geolocation);
 
         // Fetch extra info
-        isTrialOwner = getIntent().getBooleanExtra("IsTrialOwner", false);
+        isTrialOwner = getIntent().getBooleanExtra("IsTrialOwner", true);
+        geolocation = getIntent().getParcelableExtra("geolocation");
 
         // Button setup
         cancelButton = findViewById(R.id.mapCancel_button);
@@ -164,6 +171,8 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
                     @Override
                     public void onSuccess(Location location) {
                         if (location != null) {
+                            geolocation.setLocation(location);
+                            sendLocation(geolocation);
                             LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
                             mMap.addMarker(new MarkerOptions().position(currentLocation).title("Marker in Your Location"));
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
@@ -182,11 +191,27 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
 
                     if (point != null) {
                         marker = mMap.addMarker(new MarkerOptions().position(point).title("Marker in Selected Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        Location newLocation = new Location("");
+                        newLocation.setLatitude(point.latitude);
+                        newLocation.setLongitude(point.longitude);
+                        geolocation.setLocation(newLocation);
+                        sendLocation(geolocation);
+                        Log.d("Geolocation", String.valueOf(geolocation.getLocation().getLatitude()));
+                        Log.d("Geolocation", String.valueOf(geolocation.getLocation().getLongitude()));
+                        Log.d("Geolocation", "selected location");
                     } else {
                         Log.d("Geolocation", "null selected location");
                     }
                 }
             });
         }
+    }
+
+    public void sendLocation(Geolocation geolocation) {
+        Log.d("geolocation", "sent location");
+        Intent intent = new Intent();
+        intent.putExtra("geolocation", geolocation);
+
+        setResult(Activity.RESULT_OK, intent);
     }
 }

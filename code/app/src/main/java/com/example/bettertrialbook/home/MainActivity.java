@@ -109,8 +109,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                     String id = doc.getId();
                                     String region = (String) doc.getData().get("Region");
                                     String trialType = (String) doc.getData().get("TrialType");
+                                    boolean geoLocationRequired = (boolean) doc.getData().get("GeoLocationRequired");
                                     trialInfoList.add(new ExperimentInfo(description, ownerId, status, id, trialType,
-                                            false, 0, region));
+                                            geoLocationRequired, 0, region));
                                 }
                             }
                         }
@@ -185,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         Boolean isOwner = ((trialInfoAdapter.getItem(position).getOwnerId()).equals(You.getUser().getID()));
         ExperimentInfo experimentInfo = trialInfoAdapter.getItem(position);
+        Log.d("view", String.valueOf(experimentInfo.getGeoLocationRequired()));
 
         Intent myIntent = new Intent(view.getContext(), ExperimentViewActivity.class);
         myIntent.putExtra("IsOwner", isOwner);
