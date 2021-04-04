@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.dal.ExperimentDAL;
+import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.ExperimentInfo;
 
 
@@ -83,6 +84,7 @@ public class ExperimentAddActivity extends AppCompatActivity {
                             descriptionEdit.getText().toString(),
                             ownerId,
                             "Active",
+                            "Publish",
                             "",
                             typeSpinner.getSelectedItem().toString(),
                             geoLocation,
@@ -100,6 +102,9 @@ public class ExperimentAddActivity extends AppCompatActivity {
     }
 
     public void openExperimentViewActivity(ExperimentInfo experimentInfo) {
+        UserDAL userDAL = new UserDAL();
+        userDAL.subscribeExperiment(experimentInfo.getId(), experimentInfo.getOwnerId());
+
         Boolean isOwner = true;
 
         Intent myIntent = new Intent(ExperimentAddActivity.this, ExperimentViewActivity.class);

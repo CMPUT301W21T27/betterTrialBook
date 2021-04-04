@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.You;
+import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.dal.Firestore;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.experiment.ExperimentAddActivity;
@@ -31,6 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     UserDAL uDAL = new UserDAL();
     private ArrayList<ExperimentInfo> trialInfoList;
     private ArrayAdapter<ExperimentInfo> trialInfoAdapter;
+    Boolean neverSearched = true;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +58,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         ImageView profilePic = findViewById(R.id.ProfilePicture); // Used to go to the profile page
         ListView resultList = findViewById(R.id.Result_ListView);
 
+        userId = generateID();
+
         trialInfoList = new ArrayList<>();
         trialInfoAdapter = new ExperimentList(this, trialInfoList);
         resultList.setAdapter(trialInfoAdapter);
         resultList.setOnItemClickListener(this);
-
-        generateID();
 
         // Go to the Profile View Screen
         profilePic.setOnClickListener(new View.OnClickListener() {
@@ -77,10 +81,36 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
-        // Search the Result (Will Refine)
+        // Search the Result
         FirebaseFirestore db;
         db = Firestore.getInstance();
         CollectionReference reference = db.collection("Experiments");
+
+        // initial display of all subscribed experiments
+        if (userId != null) {
+            uDAL.getSubscribed(userId, new UserDAL.GetSubscribedCallback() {
+                @Override
+                public void onCallback(List<String> subscribed) {
+                    if (subscribed != null) {
+                        for (int i = 0; i < subscribed.size(); i++) {
+                            ExperimentDAL experimentDAL = new ExperimentDAL();
+                            experimentDAL.findExperimentByID(subscribed.get(i), new ExperimentDAL.FindExperimentByIDCallback() {
+                                @Override
+                                public void onCallback(ExperimentInfo experimentInfo) {
+                                    if (experimentInfo != null &&
+                                            (experimentInfo.getPublishStatus().equals("Publish") ||
+                                                    experimentInfo.getOwnerId().equals(You.getUser().getID()))) {
+                                        trialInfoList.add(experimentInfo);
+                                        trialInfoAdapter.notifyDataSetChanged();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
         searchItem.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -90,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                neverSearched = false;
                 reference.addSnapshotListener((queryDocumentSnapshots, error) -> {
                     trialInfoList.clear();
                     if (newText.length() > 0) {
@@ -103,18 +134,52 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                 // GeoLocationRequired hasn't done yet. Want to wait for further production and
                                 // then decide.
                                 String ownerId = (String) doc.getData().get("Owner");
-                                String status = (String) doc.getData().get("Status");
+                                String publishStatus = (String) doc.getData().get("PublishStatus");
+                                String activeStatus = (String) doc.getData().get("ActiveStatus");
                                 if ((ownerId != null && ownerId.equals(You.getUser().getID()))
-                                        || (status != null && !status.equals("Unpublished"))) {
+                                        || (publishStatus != null && !publishStatus.equals("Unpublish"))) {
                                     String id = doc.getId();
                                     String region = (String) doc.getData().get("Region");
                                     String trialType = (String) doc.getData().get("TrialType");
                                     boolean geoLocationRequired = (boolean) doc.getData().get("GeoLocationRequired");
-                                    trialInfoList.add(new ExperimentInfo(description, ownerId, status, id, trialType,
-                                            geoLocationRequired, 0, region));
+                                    trialInfoList.add(new ExperimentInfo(description, ownerId, publishStatus, activeStatus,
+                                            id, trialType, geoLocationRequired, 0, region));
                                 }
                             }
                         }
+
+                    } else if (newText.length() == 0) {
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            String experimentId = (String) doc.getId();
+
+                            uDAL.isSubscribed(experimentId, You.getUser().getID(), new UserDAL.IsSubscribedCallback() {
+                                @Override
+                                public void onCallback(Boolean isSubscribed) {
+                                    if (isSubscribed) {
+                                        // MinTrials hasn't done yet. Want to wait for further production and then
+                                        // decide.
+                                        // GeoLocationRequired hasn't done yet. Want to wait for further production and
+                                        // then decide.
+                                        Log.d("TEST2", String.valueOf(experimentId));
+                                        String ownerId = (String) doc.getData().get("Owner");
+                                        String publishStatus = (String) doc.getData().get("PublishStatus");
+                                        String activeStatus = (String) doc.getData().get("ActiveStatus");
+                                        if ((ownerId != null && ownerId.equals(You.getUser().getID()))
+                                                || (publishStatus != null && !publishStatus.equals("Unpublish"))) {
+                                            String id = doc.getId();
+                                            String description = (String) doc.getData().get("Description");
+                                            String region = (String) doc.getData().get("Region");
+                                            String trialType = (String) doc.getData().get("TrialType");
+                                            trialInfoList.add(new ExperimentInfo(description, ownerId, publishStatus, activeStatus,
+                                                    id, trialType, false, 0, region));
+                                        }
+
+                                        trialInfoAdapter.notifyDataSetChanged();
+                                    }
+                                }
+                            });
+                        }
+
                     } else {
                         trialInfoList.clear();
                     }
@@ -142,12 +207,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         startActivity(intent);
     }
 
-    public void generateID() {
+    public String generateID() {
         /*
          * Generates a unique ID per user Checks if ID is in database Adds ID to DB if
          * it's not Creates user object "you" to represent you
          */
-
+        String userId = "";
         // Generating ID
         String defaultIDValue = uDAL.getDeviceUserId(this);
         if (defaultIDValue == null) {
@@ -159,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             defaultIDValue = uID;
 
         } else {
-            Log.d("TEST", "1. " + defaultIDValue);
+            userId = defaultIDValue;
         }
 
         // Checking if ID in Database, else adds it to database
@@ -178,21 +243,63 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
             }
         });
+
+        return userId;
     }
 
     // Goes to experiment's page if clicked
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
         Boolean isOwner = ((trialInfoAdapter.getItem(position).getOwnerId()).equals(You.getUser().getID()));
-        ExperimentInfo experimentInfo = trialInfoAdapter.getItem(position);
-        Log.d("view", String.valueOf(experimentInfo.getGeoLocationRequired()));
+        String experimentId = trialInfoAdapter.getItem(position).getId();
 
-        Intent myIntent = new Intent(view.getContext(), ExperimentViewActivity.class);
-        myIntent.putExtra("IsOwner", isOwner);
-        myIntent.putExtra("NewExperiment", false);
-        myIntent.putExtra("ExperimentInfo", experimentInfo);
-        myIntent.putExtra("OwnerId", You.getUser().getID());
-        startActivity(myIntent);
+        ExperimentDAL experimentDAL = new ExperimentDAL();
+        experimentDAL.findExperimentByID(experimentId, new ExperimentDAL.FindExperimentByIDCallback() {
+            @Override
+            public void onCallback(ExperimentInfo experimentInfo) {
+                Intent myIntent = new Intent(view.getContext(), ExperimentViewActivity.class);
+                myIntent.putExtra("IsOwner", isOwner);
+                myIntent.putExtra("NewExperiment", false);
+                myIntent.putExtra("ExperimentInfo", experimentInfo);
+                startActivityForResult(myIntent, 0);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (neverSearched) {
+            trialInfoList.clear();
+            if (userId != null) {
+                uDAL.getSubscribed(userId, new UserDAL.GetSubscribedCallback() {
+                    @Override
+                    public void onCallback(List<String> subscribed) {
+                        Log.d("TEST2", String.valueOf(subscribed));
+                        if (subscribed != null) {
+                            if (subscribed.size() == 0) {
+                                trialInfoAdapter.notifyDataSetChanged();
+                            } else {
+                                for (int i = 0; i < subscribed.size(); i++) {
+                                    ExperimentDAL experimentDAL = new ExperimentDAL();
+                                    experimentDAL.findExperimentByID(subscribed.get(i), new ExperimentDAL.FindExperimentByIDCallback() {
+                                        @Override
+                                        public void onCallback(ExperimentInfo experimentInfo) {
+                                            if (experimentInfo != null &&
+                                                    (experimentInfo.getPublishStatus().equals("Publish") ||
+                                                            experimentInfo.getOwnerId().equals(You.getUser().getID()))) {
+                                                trialInfoList.add(experimentInfo);
+                                                trialInfoAdapter.notifyDataSetChanged();
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
     }
 }

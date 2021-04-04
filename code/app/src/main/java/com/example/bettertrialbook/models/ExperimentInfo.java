@@ -5,13 +5,17 @@ pass and retrieve experiment information from the database.
 
 package com.example.bettertrialbook.models;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import androidx.annotation.RequiresApi;
 
 public class ExperimentInfo implements Comparable<ExperimentInfo>, Parcelable {
     private String description;
     private String ownerId;
-    public String status;
+    public String publishStatus;
+    public String activeStatus;
     private String id;
     private String trialType;
     private Boolean geoLocationRequired;
@@ -20,12 +24,16 @@ public class ExperimentInfo implements Comparable<ExperimentInfo>, Parcelable {
 
     /**
      * Creates an ExperimentInfo object with the following parameters
-     * @param id
-     *  The unique id of the experiment
      * @param description
      *  A description of the experiment
-     * @param status
-     *  Either 'Active', 'Unpublished', or 'Ended'
+     * @param ownerId
+     *  The  id of the experiment's owner
+     * @param publishStatus
+     *  Either 'Published' or 'Unpublished'
+     * @param activeStatus
+     *  Either 'Active' or 'Ended'
+     * @param id
+     *  The unique id of the experiment
      * @param trialType
      *  The kind of trials required for the experiment (Binomial, Count-based, Measurement, Non-negative integer)
      * @param geoLocationRequired
@@ -35,10 +43,12 @@ public class ExperimentInfo implements Comparable<ExperimentInfo>, Parcelable {
      * @param region
      *  The region the experiment is taking place in
      */
-    public ExperimentInfo(String description, String ownerId, String status, String id, String trialType, boolean geoLocationRequired, int minTrials, String region) {
+    public ExperimentInfo(String description, String ownerId, String publishStatus, String activeStatus,
+                            String id, String trialType, boolean geoLocationRequired, int minTrials, String region) {
         this.description = description;
         this.ownerId = ownerId;
-        this.status = status;
+        this.publishStatus = publishStatus;
+        this.activeStatus = activeStatus;
         this.id = id;
         this.trialType = trialType;
         this.geoLocationRequired = geoLocationRequired;
@@ -72,12 +82,21 @@ public class ExperimentInfo implements Comparable<ExperimentInfo>, Parcelable {
      */
 
     /**
-     * gets the status of the experiment
+     * gets the publish status of the experiment
      * @return
-     *  the status ('Active', 'Unpublished', 'Ended')
+     *  the status ('Published', 'Unpublished')
      */
-    public String getStatus() {
-        return status;
+    public String getPublishStatus() {
+        return publishStatus;
+    }
+
+    /**
+     * gets the active status of the experiment
+     * @return
+     *  the status ('Active', 'Ended')
+     */
+    public String getActiveStatus() {
+        return activeStatus;
     }
 
     /**
@@ -142,14 +161,17 @@ public class ExperimentInfo implements Comparable<ExperimentInfo>, Parcelable {
             return false;
         }
 
-        if (this.getClass() == obj.getClass()){
+        if (this.getClass() == obj.getClass()) {
             ExperimentInfo experimentInfo = (ExperimentInfo) obj;
             return this.id.equals(experimentInfo.getId()) && this.description.equals(experimentInfo.getDescription())
-                    && this.status.equals(experimentInfo.getStatus()) && this.trialType.equals(experimentInfo.getTrialType())
-                    && this.geoLocationRequired.equals(experimentInfo.getGeoLocationRequired()) && this.minTrials == experimentInfo.getMinTrials()
+                    && this.publishStatus.equals(experimentInfo.getPublishStatus())
+                    && this.activeStatus.equals(experimentInfo.getActiveStatus())
+                    && this.trialType.equals(experimentInfo.getTrialType())
+                    && this.geoLocationRequired.equals(experimentInfo.getGeoLocationRequired())
+                    && this.minTrials == experimentInfo.getMinTrials()
                     && this.region.equals(experimentInfo.getRegion());
 
-        }else{
+        } else {
             return false;
         }
     }
@@ -165,7 +187,9 @@ public class ExperimentInfo implements Comparable<ExperimentInfo>, Parcelable {
     @Override
     public int compareTo(ExperimentInfo experimentInfo) {
         return this.id.compareTo(experimentInfo.getId()) + this.description.compareTo(experimentInfo.getDescription())
-                + this.status.compareTo(experimentInfo.getStatus()) + this.trialType.compareTo(experimentInfo.getTrialType())
+                + this.publishStatus.compareTo(experimentInfo.getPublishStatus())
+                + this.activeStatus.compareTo(experimentInfo.getActiveStatus())
+                + this.trialType.compareTo(experimentInfo.getTrialType())
                 + String.valueOf(this.geoLocationRequired).compareTo(String.valueOf(experimentInfo.getGeoLocationRequired()))
                 + String.valueOf(this.minTrials).compareTo(String.valueOf(experimentInfo.getMinTrials()))
                 + this.region.compareTo(experimentInfo.getRegion());
@@ -175,7 +199,8 @@ public class ExperimentInfo implements Comparable<ExperimentInfo>, Parcelable {
     protected ExperimentInfo(Parcel in) {
         description = in.readString();
         ownerId = in.readString();
-        status = in.readString();
+        publishStatus = in.readString();
+        activeStatus = in.readString();
         id = in.readString();
         trialType = in.readString();
 //        byte tmpGeoLocationRequired = in.readByte();
@@ -202,11 +227,13 @@ public class ExperimentInfo implements Comparable<ExperimentInfo>, Parcelable {
         return 0;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(description);
         dest.writeString(ownerId);
-        dest.writeString(status);
+        dest.writeString(publishStatus);
+        dest.writeString(activeStatus);
         dest.writeString(id);
         dest.writeString(trialType);
         dest.writeBoolean(geoLocationRequired);

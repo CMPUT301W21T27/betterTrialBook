@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,15 +22,15 @@ import com.example.bettertrialbook.models.Geolocation;
 import com.example.bettertrialbook.models.MeasurementTrial;
 import com.example.bettertrialbook.models.NonNegTrial;
 import com.example.bettertrialbook.models.Trial;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +53,52 @@ public class ExperimentDAL {
         collRef = db.collection("Experiments");
     }
 
+    // Interfaces for callbacks
+    public interface FindExperimentByIDCallback {
+        void onCallback(ExperimentInfo experimentInfo);
+    }
+
+    /**
+     * Searches database for given ID Returns user object if found, or null if not
+     * found
+     *
+     * @param id       - Id to search for
+     * @param callback - return method for firestore queries
+     */
+    public void findExperimentByID(String id, FindExperimentByIDCallback callback) {
+        collRef.document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    ExperimentInfo experimentInfo;
+                    if (document.exists()) {
+                        // experiment found
+                        String description = document.getString("Description");
+                        String publishStatus = document.getString("PublishStatus");
+                        String activeStatus = document.getString("ActiveStatus");
+                        String ownerId = document.getString("Owner");
+                        String trialType = document.getString("TrialType");
+                        Boolean geoLocation = document.getBoolean("GeoLocationRequired");
+                        int minTrials = document.getLong("MinTrials").intValue();
+                        String region = document.getString("Region");
+                        experimentInfo = new ExperimentInfo(description, ownerId, publishStatus, activeStatus, id,
+                                trialType, geoLocation, minTrials, region);
+
+                    } else {
+                        // User not found, return null
+                        Log.d("TEST", "Experiment does not exist");
+                        experimentInfo = null;
+                    }
+                    callback.onCallback(experimentInfo);
+                } else {
+                    // Error occurred
+                    Log.d("TEST", "Failed with:", task.getException());
+                }
+            }
+        });
+    }
+
     /**
      * adds the experiment to the firestore database
      *
@@ -69,7 +113,8 @@ public class ExperimentDAL {
         data.put("Owner", experimentInfo.getOwnerId());
         data.put("Region", experimentInfo.getRegion());
         data.put("MinTrials", experimentInfo.getMinTrials());
-        data.put("Status", experimentInfo.getStatus());
+        data.put("PublishStatus", experimentInfo.getPublishStatus());
+        data.put("ActiveStatus", experimentInfo.getActiveStatus());
         data.put("GeoLocationRequired", experimentInfo.getGeoLocationRequired());
         data.put("TrialType", experimentInfo.getTrialType());
 
@@ -92,8 +137,8 @@ public class ExperimentDAL {
      * @param experimentId the unique id of the experiment to be updated
      * @param status       the new status of the experiment
      */
-    public void setExperimentStatus(String experimentId, String status) {
-        collRef.document(experimentId).update("Status", status).addOnFailureListener(new OnFailureListener() {
+    public void setExperimentStatus(String experimentId, String status, String newStatus) {
+        collRef.document(experimentId).update(status, newStatus).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d(TAG, "Data could not be updated" + e.toString());

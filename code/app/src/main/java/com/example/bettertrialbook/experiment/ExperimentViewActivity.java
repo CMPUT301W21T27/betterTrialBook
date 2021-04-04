@@ -89,7 +89,13 @@ public class ExperimentViewActivity extends AppCompatActivity
         userDAL.findUserByID(experimentInfo.getOwnerId(), new UserDAL.FindUserByIDCallback() {
             @Override
             public void onCallback(User user) {
-                ownerIdText.setText("Owner: " + user.getUsername());
+                if (user != null) {
+                    if (!user.getUsername().equals("")) {
+                        ownerIdText.setText("Owner: " + user.getUsername());
+                    } else {
+                        ownerIdText.setText("Owner: " + user.getID().substring(0, 8));
+                    }
+                }
             }
         });
 
@@ -98,6 +104,8 @@ public class ExperimentViewActivity extends AppCompatActivity
         endButton = findViewById(R.id.end_button);
         subscribeButton = findViewById(R.id.subscribe_button);
         addTrialButton = findViewById(R.id.addTrial_button);
+        String pStatus = experimentInfo.getPublishStatus();
+        String aStatus = experimentInfo.getActiveStatus();
         viewMapButton = findViewById(R.id.viewMap_button);
         if (experimentInfo.getGeoLocationRequired()) {
             addTrialButton.setText("Add Trial\n(Geolocation\nRequired)");
@@ -106,23 +114,29 @@ public class ExperimentViewActivity extends AppCompatActivity
             unpublishButton.setVisibility(View.INVISIBLE);
             endButton.setVisibility(View.INVISIBLE);
 
-            if (experimentInfo.getStatus().equals("Closed")) {
+            if (aStatus != null && aStatus.equals("Closed")) {
                 addTrialButton.setEnabled(false);
             }
 
-            /*
-             * once user subscribing condition set up if () {
-             * subscribeButton.setText("Unsubscribe"); }
-             */
+            userDAL.isSubscribed(experimentId, You.getUser().getID(), new UserDAL.IsSubscribedCallback() {
+                @Override
+                public void onCallback(Boolean isSubscribed) {
+                    if (isSubscribed) {
+                        subscribeButton.setText("Unsubscribe");
+                    } else {
+                        addTrialButton.setEnabled(false);
+                    }
+                }
+            });
 
         } else {
             subscribeButton.setVisibility(View.INVISIBLE);
 
             // if already unpublished, sets button to allow re-publishing
-            if (experimentInfo.getStatus().equals("Unpublish")) {
+            if (pStatus != null && pStatus.equals("Unpublish")) {
                 unpublishButton.setText("Publish");
 
-            } else if (experimentInfo.getStatus().equals("Closed")) {
+            } else if (aStatus != null && aStatus.equals("Closed")) {
                 endButton.setText("Open");
                 addTrialButton.setEnabled(false);
                 // if permanently closed
@@ -231,38 +245,45 @@ public class ExperimentViewActivity extends AppCompatActivity
     // Action based on confirmation
     @Override
     public void onOkPressedConfirm(String tag) {
+        String pStatus = "PublishStatus";
+        String aStatus = "ActiveStatus";
         if (tag.equals("Unpublish")) {
             unpublishButton.setText("Publish");
             ExperimentDAL experimentDAL = new ExperimentDAL();
-            experimentDAL.setExperimentStatus(experimentId, "Unpublish");
+            experimentDAL.setExperimentStatus(experimentId, pStatus, "Unpublish");
 
         } else if (tag.equals("Publish")) {
             unpublishButton.setText("Unpublish");
             ExperimentDAL experimentDAL = new ExperimentDAL();
-            experimentDAL.setExperimentStatus(experimentId, "Active");
+            experimentDAL.setExperimentStatus(experimentId, pStatus, "Publish");
 
         } else if (tag.equals("End")) {
             endButton.setText("Open");
             addTrialButton.setEnabled(false);
 
             ExperimentDAL experimentDAL = new ExperimentDAL();
-            experimentDAL.setExperimentStatus(experimentId, "Closed");
+            experimentDAL.setExperimentStatus(experimentId, aStatus, "Closed");
 
         } else if (tag.equals("Open")) {
             endButton.setText("End");
             addTrialButton.setEnabled(true);
 
             ExperimentDAL experimentDAL = new ExperimentDAL();
-            experimentDAL.setExperimentStatus(experimentId, "Active");
+            experimentDAL.setExperimentStatus(experimentId, aStatus, "Active");
 
         } else if (tag.equals("Subscribe to")) {
             subscribeButton.setText(("Unsubscribe"));
-            // change user subscription status
+            addTrialButton.setEnabled(true);
+
+            UserDAL userDAL = new UserDAL();
+            userDAL.subscribeExperiment(experimentId, You.getUser().getID());
 
         } else if (tag.equals("Unsubscribe from")) {
             subscribeButton.setText(("Subscribe"));
-            // change user subscription status
+            addTrialButton.setEnabled(false);
 
+            UserDAL userDAL = new UserDAL();
+            userDAL.unsubscribeExperiment(experimentId, You.getUser().getID());
         }
     }
 
@@ -273,6 +294,7 @@ public class ExperimentViewActivity extends AppCompatActivity
             Intent myIntent = new Intent(this, MainActivity.class);
             startActivity(myIntent);
         } else {
+            setResult(0);
             finish();
         }
     }
