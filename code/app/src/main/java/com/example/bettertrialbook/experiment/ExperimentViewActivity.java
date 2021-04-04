@@ -31,6 +31,7 @@ import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.forum.ForumActivity;
 import com.example.bettertrialbook.models.ExperimentInfo;
+import com.example.bettertrialbook.models.Geolocation;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.User;
 import com.example.bettertrialbook.profile.ProfileViewActivity;
@@ -50,7 +51,7 @@ public class ExperimentViewActivity extends AppCompatActivity
 
     public TextView regionText, descriptionText, ownerIdText, totalTrialsText, setting;
     Button createQRButton;
-    Button unpublishButton, endButton, addTrialButton, forumButton, subscribeButton;
+    Button unpublishButton, endButton, addTrialButton, forumButton, subscribeButton, viewMapButton;
     ListView trialList;
     ArrayList<Trial> trialDataList;
     ArrayAdapter<Trial> trialAdapter;
@@ -97,6 +98,7 @@ public class ExperimentViewActivity extends AppCompatActivity
         endButton = findViewById(R.id.end_button);
         subscribeButton = findViewById(R.id.subscribe_button);
         addTrialButton = findViewById(R.id.addTrial_button);
+        viewMapButton = findViewById(R.id.viewMap_button);
         if (experimentInfo.getGeoLocationRequired()) {
             addTrialButton.setText("Add Trial\n(Geolocation\nRequired)");
         }
@@ -157,23 +159,46 @@ public class ExperimentViewActivity extends AppCompatActivity
             }
         });
 
+        viewMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // get all geoLocations
+                ArrayList<Geolocation> geoLocations = new ArrayList<>();
+                Log.d("view,", "size: " + trialDataList.size());
+                // create an arraylist of all the geolocations
+                for (int i = 0; i < trialDataList.size(); i++) {
+                    Log.d("view", String.valueOf(i));
+                    geoLocations.add(trialDataList.get(i).getGeolocation());
+                    Log.d("Geolocation1", String.valueOf(trialDataList.get(i).getGeolocation()));
+                }
+
+                Intent intent = new Intent(ExperimentViewActivity.this, GeolocationActivity.class);
+                intent.putExtra("allLocations", true);  // tell the map activity to display instead of select
+                intent.putParcelableArrayListExtra("geoLocations", geoLocations);
+                startActivity(intent);
+            }
+        });
+
         // set up the list of trials
         trialList = findViewById(R.id.trial_listView);
         trialDataList = new ArrayList<>();
         trialAdapter = new CustomTrialList(this, trialDataList, experimentId, isOwner);
         trialList.setAdapter(trialAdapter);
-        trialList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Trial trial = trialDataList.get(position);
-                String experimenterId = trial.getExperimenterID();
-                boolean isTrialOwner = experimenterId.equals(ownerId);
-
-                Intent intent = new Intent(ExperimentViewActivity.this, GeolocationActivity.class);
-                intent.putExtra("IsTrialOwner", isTrialOwner);
-                startActivity(intent);
-            }
-        });
+//        trialList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Trial trial = trialDataList.get(position);
+//                String experimenterId = trial.getExperimenterID();
+//                boolean isTrialOwner = experimenterId.equals(ownerId);
+//
+//                Log.d("view", String.valueOf(trial.getGeolocation().getLocation().getLatitude()));
+//                Log.d("view", String.valueOf(trial.getGeolocation().getLocation().getLongitude()));
+//
+//                Intent intent = new Intent(ExperimentViewActivity.this, GeolocationActivity.class);
+//                intent.putExtra("IsTrialOwner", isTrialOwner);
+//                startActivity(intent);
+//            }
+//        });
         ExperimentDAL experimentDAL = new ExperimentDAL();
 
         // create a document snapshot listener in the DAL to update the list of trials

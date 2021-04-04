@@ -37,6 +37,8 @@ import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.ArrayList;
+
 public class GeolocationActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final int REQUEST_CODE_ASK_PERMISSIONS = 1;
@@ -45,8 +47,10 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
     Button cancelButton, selectButton;
     Marker marker = null;
 
-    Boolean isTrialOwner;
+    // Boolean isTrialOwner;
     Geolocation geolocation;
+    Boolean allGeoLocations;
+    ArrayList<Geolocation> geoLocations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +58,16 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
         setContentView(R.layout.activity_geolocation);
 
         // Fetch extra info
-        isTrialOwner = getIntent().getBooleanExtra("IsTrialOwner", true);
+        // isTrialOwner = getIntent().getBooleanExtra("IsTrialOwner", true);
         geolocation = getIntent().getParcelableExtra("geolocation");
+        allGeoLocations = getIntent().getBooleanExtra("allLocations", false);  // if true, display all the trial locations
+        Log.d("Geolocation", String.valueOf(allGeoLocations));
+        geoLocations = getIntent().getParcelableArrayListExtra("geoLocations");
 
         // Button setup
         cancelButton = findViewById(R.id.mapCancel_button);
         selectButton = findViewById(R.id.mapSelect_button);
-
-
+        
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,17 +75,30 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
             }
         });
 
-        if (isTrialOwner) {
-            selectButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
+        selectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        
+        if (allGeoLocations) {
+            // change button layout so users can't add locations
+            cancelButton.setText("Back");
+            selectButton.setVisibility(View.INVISIBLE);
         }
-        else {
-            selectButton.setAlpha(.5f);
-        }
+
+//        if (isTrialOwner) {
+//            selectButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    finish();
+//                }
+//            });
+//        }
+//        else {
+//            selectButton.setAlpha(.5f);
+//        }
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -166,22 +185,33 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
     }
 
     public void getLocation() {
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            geolocation.setLocation(location);
-                            sendLocation(geolocation);
-                            LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.addMarker(new MarkerOptions().position(currentLocation).title("Marker in Your Location"));
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
-                        } else {
-                            Log.d("Geolocation", "null location");
-                        }
-                    }
-                });
-        if (isTrialOwner) {
+        if (!allGeoLocations) {
+            // selecting a location
+            if (geolocation.getLocation() == null) {
+                fusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                if (location != null) {
+                                    // set the marker to the current location
+                                    geolocation.setLocation(location);
+                                    sendLocation(geolocation);
+                                    LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                                    mMap.addMarker(new MarkerOptions().position(currentLocation).title("Marker in Your Location"));
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
+                                } else {
+                                    Log.d("Geolocation", "null location");
+                                }
+                            }
+                        });
+            } else {
+                // otherwise use the current geolocation
+                sendLocation(geolocation);
+                LatLng currentLocation = new LatLng(geolocation.getLocation().getLatitude(), geolocation.getLocation().getLongitude());
+                mMap.addMarker(new MarkerOptions().position(currentLocation).title("Marker in Your Location"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
+            }
+
             mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng point) {
@@ -190,6 +220,7 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
                     }
 
                     if (point != null) {
+                        // add marker to tapped location
                         marker = mMap.addMarker(new MarkerOptions().position(point).title("Marker in Selected Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
                         Location newLocation = new Location("");
                         newLocation.setLatitude(point.latitude);
@@ -204,9 +235,58 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
                     }
                 }
             });
+        } else {
+            // show all locations
+            Log.d("Geolocation", "size: " + geoLocations.size());
+            for (int i = 0; i < geoLocations.size(); i++) {
+                Log.d("Geolocation", String.valueOf(i));
+                if (geoLocations.get(i).getLocation() != null) {
+                    Log.d("Geolocation", geoLocations.get(i).getLocation().getLatitude() + " " + geoLocations.get(i).getLocation().getLongitude());
+                    // get the lat and lon of each geolocation passed to the map activity
+                    LatLng currentLocation = new LatLng(geoLocations.get(i).getLocation().getLatitude(), geoLocations.get(i).getLocation().getLongitude());
+                    if (currentLocation != null) {
+                        // place a marker on each location
+                        marker = mMap.addMarker(new MarkerOptions().position(currentLocation).title("Marker in Selected Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        Log.d("Geolocation", "selected location");
+                    } else {
+                        Log.d("Geolocation", "null selected location2");
+                    }
+                } else {
+                    Log.d("Geolocation", "null selected location1");
+                }
+            }
+
         }
+
+//        if (isTrialOwner) {
+//            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+//                @Override
+//                public void onMapClick(LatLng point) {
+//                    if (marker != null) {
+//                        marker.remove();
+//                    }
+//
+//                    if (point != null) {
+//                        marker = mMap.addMarker(new MarkerOptions().position(point).title("Marker in Selected Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+//                        Location newLocation = new Location("");
+//                        newLocation.setLatitude(point.latitude);
+//                        newLocation.setLongitude(point.longitude);
+//                        geolocation.setLocation(newLocation);
+//                        sendLocation(geolocation);
+//                        Log.d("Geolocation", String.valueOf(geolocation.getLocation().getLatitude()));
+//                        Log.d("Geolocation", String.valueOf(geolocation.getLocation().getLongitude()));
+//                        Log.d("Geolocation", "selected location");
+//                    } else {
+//                        Log.d("Geolocation", "null selected location");
+//                    }
+//                }
+//            });
+//        }
     }
 
+    /*
+    Communicates with the add trial fragments, sending the selected geolocation to the fragment
+     */
     public void sendLocation(Geolocation geolocation) {
         Log.d("geolocation", "sent location");
         Intent intent = new Intent();

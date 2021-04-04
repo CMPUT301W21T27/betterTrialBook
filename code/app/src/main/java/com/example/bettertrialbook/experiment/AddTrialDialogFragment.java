@@ -60,12 +60,16 @@ public class AddTrialDialogFragment extends DialogFragment {
         return f;
     }
 
+    // the onActivityResult method was only recently deprecated (~6 months ago)
+    // thus with the new implementation slightly more complex and not necessarily stable,
+    // we have decided to keep using this method for the current project
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("trial", "got result");
         super.onActivityResult(requestCode, resultCode, data);
         getActivity();
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            // receive the selected geolocation from the map activity
             geolocation = data.getParcelableExtra("geolocation");
             Log.d("trial", String.valueOf(geolocation.getLocation().getLatitude()));
             Log.d("trial", String.valueOf(geolocation.getLocation().getLongitude()));
@@ -102,12 +106,12 @@ public class AddTrialDialogFragment extends DialogFragment {
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            // if it's required and they do not add a location, do not write the trial to the db
                             if (trialBundle.getBoolean("geolocationRequired") && geolocation.getLocation() == null) {
                                 Toast toast = new Toast(view.getContext());
                                 toast.setText("Failed to create trial.\nGeolocation Required.");
                                 toast.show();
-                            }
-                            else {
+                            } else {
                                 Log.d("trial", String.valueOf(geolocation.getLocation().getLatitude()));
                                 Log.d("trial", String.valueOf(geolocation.getLocation().getLongitude()));
                                 UserDAL userDAL = new UserDAL();
@@ -115,7 +119,7 @@ public class AddTrialDialogFragment extends DialogFragment {
                                 String experimenterId = userDAL.getDeviceUserId(context);
                                 CountTrial trial = new CountTrial(Integer.parseInt(String.valueOf(countEditText.getText())),
                                         UUID.randomUUID().toString(),
-                                        experimenterId);
+                                        experimenterId, geolocation);
                                 ExperimentDAL experimentDAL = new ExperimentDAL();
                                 // use the dal to add the trial to the db
                                 experimentDAL.addTrial(experimentId, trial);
@@ -174,13 +178,22 @@ public class AddTrialDialogFragment extends DialogFragment {
                         @Override
 
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            UserDAL userDAL = new UserDAL();
-                            Context context = view.getContext();
-                            String experimenterId = userDAL.getDeviceUserId(context);
-                            BinomialTrial trial = new BinomialTrial(successes[0], failures[0],
-                                                    UUID.randomUUID().toString(), experimenterId);
-                            ExperimentDAL experimentDAL = new ExperimentDAL();
-                            experimentDAL.addTrial(experimentId, trial);
+                            if (trialBundle.getBoolean("geolocationRequired") && geolocation.getLocation() == null) {
+                                Toast toast = new Toast(view.getContext());
+                                toast.setText("Failed to create trial.\nGeolocation Required.");
+                                toast.show();
+                            }
+                            else {
+                                Log.d("trial", String.valueOf(geolocation.getLocation().getLatitude()));
+                                Log.d("trial", String.valueOf(geolocation.getLocation().getLongitude()));
+                                UserDAL userDAL = new UserDAL();
+                                Context context = view.getContext();
+                                String experimenterId = userDAL.getDeviceUserId(context);
+                                BinomialTrial trial = new BinomialTrial(successes[0], failures[0],
+                                        UUID.randomUUID().toString(), experimenterId, geolocation);
+                                ExperimentDAL experimentDAL = new ExperimentDAL();
+                                experimentDAL.addTrial(experimentId, trial);
+                            }
                         }
                     }).create();
         // 'Non-Negative Integer'
@@ -194,14 +207,23 @@ public class AddTrialDialogFragment extends DialogFragment {
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            UserDAL userDAL = new UserDAL();
-                            Context context = view.getContext();
-                            String experimenterId = userDAL.getDeviceUserId(context);
-                            NonNegTrial trial = new NonNegTrial(Integer.parseInt(String.valueOf(amountEditText.getText())),
-                                                        UUID.randomUUID().toString(),
-                                                        experimenterId);
-                            ExperimentDAL experimentDAL = new ExperimentDAL();
-                            experimentDAL.addTrial(experimentId, trial);
+                            if (trialBundle.getBoolean("geolocationRequired") && geolocation.getLocation() == null) {
+                                Toast toast = new Toast(view.getContext());
+                                toast.setText("Failed to create trial.\nGeolocation Required.");
+                                toast.show();
+                            }
+                            else {
+                                Log.d("trial", String.valueOf(geolocation.getLocation().getLatitude()));
+                                Log.d("trial", String.valueOf(geolocation.getLocation().getLongitude()));
+                                UserDAL userDAL = new UserDAL();
+                                Context context = view.getContext();
+                                String experimenterId = userDAL.getDeviceUserId(context);
+                                NonNegTrial trial = new NonNegTrial(Integer.parseInt(String.valueOf(amountEditText.getText())),
+                                        UUID.randomUUID().toString(),
+                                        experimenterId, geolocation);
+                                ExperimentDAL experimentDAL = new ExperimentDAL();
+                                experimentDAL.addTrial(experimentId, trial);
+                            }
                         }
                     }).create();
         // 'Measurement'
@@ -215,14 +237,23 @@ public class AddTrialDialogFragment extends DialogFragment {
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            UserDAL userDAL = new UserDAL();
-                            Context context = view.getContext();
-                            String experimenterId = userDAL.getDeviceUserId(context);
-                            MeasurementTrial trial = new MeasurementTrial(Double.parseDouble(String.valueOf(amountEditText.getText())),
-                                                        UUID.randomUUID().toString(),
-                                                        experimenterId);
-                            ExperimentDAL experimentDAL = new ExperimentDAL();
-                            experimentDAL.addTrial(experimentId, trial);
+                            if (trialBundle.getBoolean("geolocationRequired") && geolocation.getLocation() == null) {
+                                Toast toast = new Toast(view.getContext());
+                                toast.setText("Failed to create trial.\nGeolocation Required.");
+                                toast.show();
+                            }
+                            else {
+                                Log.d("trial", String.valueOf(geolocation.getLocation().getLatitude()));
+                                Log.d("trial", String.valueOf(geolocation.getLocation().getLongitude()));
+                                UserDAL userDAL = new UserDAL();
+                                Context context = view.getContext();
+                                String experimenterId = userDAL.getDeviceUserId(context);
+                                MeasurementTrial trial = new MeasurementTrial(Double.parseDouble(String.valueOf(amountEditText.getText())),
+                                        UUID.randomUUID().toString(),
+                                        experimenterId, geolocation);
+                                ExperimentDAL experimentDAL = new ExperimentDAL();
+                                experimentDAL.addTrial(experimentId, trial);
+                            }
                         }
                     }).create();
         }
