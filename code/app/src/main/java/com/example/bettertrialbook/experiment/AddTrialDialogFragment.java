@@ -170,6 +170,15 @@ public class AddTrialDialogFragment extends DialogFragment {
                     }
                 }
             });
+            Button addGeolocation = view.findViewById(R.id.binomial_addGeolocation_button);
+            addGeolocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), GeolocationActivity.class);
+                    intent.putExtra("geolocation", geolocation);
+                    startActivityForResult(intent, 1);
+                }
+            });
             return builder
                     .setView(view)
                     .setTitle("Trial Type: " + trialType)
@@ -200,6 +209,15 @@ public class AddTrialDialogFragment extends DialogFragment {
         } else if (trialType.equals(Extras.NONNEG_TYPE)) {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_nonnegative_trial, null);
             EditText amountEditText = view.findViewById(R.id.intamount_editText);
+            Button addGeolocation = view.findViewById(R.id.nonneg_addGeolocation_button);
+            addGeolocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), GeolocationActivity.class);
+                    intent.putExtra("geolocation", geolocation);
+                    startActivityForResult(intent, 1);
+                }
+            });
             return builder
                     .setView(view)
                     .setTitle("Trial Type: " + trialType)
@@ -230,6 +248,15 @@ public class AddTrialDialogFragment extends DialogFragment {
         } else {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_measurement_trial, null);
             EditText amountEditText = view.findViewById(R.id.amount_editText);
+            Button addGeolocation = view.findViewById(R.id.measurement_addGeolocation_button);
+            addGeolocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), GeolocationActivity.class);
+                    intent.putExtra("geolocation", geolocation);
+                    startActivityForResult(intent, 1);
+                }
+            });
             return builder
                     .setView(view)
                     .setTitle("Trial Type: " + trialType)
