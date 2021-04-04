@@ -5,6 +5,8 @@ Currently blacklisting has yet to be implemented.
 
 package com.example.bettertrialbook.dal;
 
+import android.content.Intent;
+import android.location.Location;
 import android.os.Build;
 import android.util.Log;
 
@@ -16,6 +18,7 @@ import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.models.BinomialTrial;
 import com.example.bettertrialbook.models.CountTrial;
 import com.example.bettertrialbook.models.ExperimentInfo;
+import com.example.bettertrialbook.models.Geolocation;
 import com.example.bettertrialbook.models.MeasurementTrial;
 import com.example.bettertrialbook.models.NonNegTrial;
 import com.example.bettertrialbook.models.Trial;
@@ -276,6 +279,19 @@ public class ExperimentDAL {
     private Trial deserializeTrial(HashMap<Object, Object> data, String experimentType) {
         String trialId = data.get("trialID").toString();
         String experimenterId;
+        // deserialize the geolocation within the trial
+        Geolocation geolocation;
+        Location newLocation = new Location("");
+        if (data.get("geolocation") != null) {
+            HashMap<Object, Object> geolocationData = (HashMap<Object, Object>) data.get("geolocation");
+            HashMap<Object, Object> locationData = (HashMap<Object, Object>) geolocationData.get("location");
+            newLocation.setLatitude(Double.parseDouble(String.valueOf(locationData.get("latitude"))));
+            newLocation.setLongitude(Double.parseDouble(String.valueOf(locationData.get("longitude"))));
+            geolocation = new Geolocation(newLocation);
+        } else {
+            // for trials with no geolocation, set the geolocation's location to null
+            geolocation = new Geolocation(null);
+        }
         // some trials in firestore don't have an experiment id, this is just so our app
         // doesn't crash
         if (data.get("experimenterID") == null) {
@@ -286,17 +302,17 @@ public class ExperimentDAL {
         switch (experimentType) {
         case Extras.COUNT_TYPE:
             int count = ((Long) data.get("count")).intValue();
-            return new CountTrial(count, trialId, experimenterId);
+            return new CountTrial(count, trialId, experimenterId, geolocation);
         case Extras.BINOMIAL_TYPE:
             int passCount = ((Long) data.get("passCount")).intValue();
             int failCount = ((Long) data.get("failCount")).intValue();
-            return new BinomialTrial(passCount, failCount, trialId, experimenterId);
+            return new BinomialTrial(passCount, failCount, trialId, experimenterId, geolocation);
         case Extras.NONNEG_TYPE:
             count = ((Long) data.get("count")).intValue();
-            return new NonNegTrial(count, trialId, experimenterId);
+            return new NonNegTrial(count, trialId, experimenterId, geolocation);
         case Extras.MEASUREMENT_TYPE:
             double measurement = (double) data.get("measurement");
-            return new MeasurementTrial(measurement, trialId, experimenterId);
+            return new MeasurementTrial(measurement, trialId, experimenterId, geolocation);
         default:
             throw new IllegalArgumentException("Invalid experiment type");
         }

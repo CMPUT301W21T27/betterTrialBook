@@ -141,8 +141,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                     String id = doc.getId();
                                     String region = (String) doc.getData().get("Region");
                                     String trialType = (String) doc.getData().get("TrialType");
+                                    boolean geoLocationRequired = (boolean) doc.getData().get("GeoLocationRequired");
                                     trialInfoList.add(new ExperimentInfo(description, ownerId, publishStatus, activeStatus,
-                                            id, trialType, false, 0, region));
+                                            id, trialType, geoLocationRequired, 0, region));
                                 }
                             }
                         }

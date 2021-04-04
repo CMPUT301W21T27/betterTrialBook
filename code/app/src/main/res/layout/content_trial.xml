@@ -52,7 +52,8 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="16dp"
             android:text="Block"
-            android:textSize="12dp"/>
+            android:textSize="12dp"
+            android:focusable="false"/>
 
     </LinearLayout>
 

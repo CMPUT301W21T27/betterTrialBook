@@ -203,8 +203,9 @@ public class ExperimentInfo implements Comparable<ExperimentInfo>, Parcelable {
         activeStatus = in.readString();
         id = in.readString();
         trialType = in.readString();
-        byte tmpGeoLocationRequired = in.readByte();
-        geoLocationRequired = tmpGeoLocationRequired == 0 ? null : tmpGeoLocationRequired == 1;
+//        byte tmpGeoLocationRequired = in.readByte();
+//        geoLocationRequired = tmpGeoLocationRequired == 0 ? null : tmpGeoLocationRequired == 1;
+        geoLocationRequired = in.readBoolean();
         minTrials = in.readInt();
         region = in.readString();
     }
