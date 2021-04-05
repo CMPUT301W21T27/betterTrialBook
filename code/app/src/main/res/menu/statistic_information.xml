@@ -3,12 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="ExperimentOverView"
-        android:icon="@drawable/experimentview"
-        android:id="@+id/ExperimentOverView"
-        app:showAsAction="ifRoom"/>
-
-    <item
         android:title="Histogram"
         android:icon="@drawable/histogram"
         android:id="@+id/Histogram"
@@ -18,5 +12,11 @@
         android:title="LineGraphOverTime"
         android:icon="@drawable/plot_over_time"
         android:id="@+id/PlotOverTime"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:title="ExperimentOverView"
+        android:icon="@drawable/experimentview"
+        android:id="@+id/ExperimentOverView"
         app:showAsAction="ifRoom"/>
 </menu>

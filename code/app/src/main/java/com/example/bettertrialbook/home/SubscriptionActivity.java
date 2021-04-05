@@ -97,7 +97,6 @@ public class SubscriptionActivity extends AppCompatActivity implements AdapterVi
         });
     }
 
-    // MAY-DO: I was thinking to change the structure
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {

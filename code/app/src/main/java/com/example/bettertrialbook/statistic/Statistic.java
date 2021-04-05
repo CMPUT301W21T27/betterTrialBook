@@ -201,7 +201,7 @@ public class Statistic {
         double[] quartiles = new double[2];
         ArrayList<Double> dataList;             // Temporary ArrayList used to Sort the data
 
-        if (trials.size() > 0) {
+        if (trials.size() > 1) {
             String experimentType = trials.get(0).getTrialType();
             dataList = SortedArrayList(trials, experimentType);
             // For Odd DataSet , Median Index is the exact Medina Index
@@ -211,7 +211,41 @@ public class Statistic {
             thirdQuartile = thirdQuartile(dataList, medianIndex);
             quartiles[0] = Double.parseDouble(df.format(firstQuartile));
             quartiles[1] = Double.parseDouble(df.format(thirdQuartile));
-        } else {
+        }
+        else if (trials.size() == 1) {
+            if (trials.get(0).getTrialType().equals(Extras.COUNT_TYPE)) {
+                CountTrial countTrial = (CountTrial) trials.get(0);
+                quartiles[0] = Double.parseDouble(df.format(countTrial.getCount()));
+                quartiles[1] = Double.parseDouble(df.format(countTrial.getCount()));
+            }
+            if (trials.get(0).getTrialType().equals(Extras.NONNEG_TYPE)) {
+                NonNegTrial nonNegTrial = (NonNegTrial) trials.get(0);
+                quartiles[0] = Double.parseDouble(df.format(nonNegTrial.getCount()));
+                quartiles[1] = Double.parseDouble(df.format(nonNegTrial.getCount()));
+            }
+            if (trials.get(0).getTrialType().equals(Extras.MEASUREMENT_TYPE)) {
+                MeasurementTrial measurementTrial = (MeasurementTrial) trials.get(0);
+                quartiles[0] = Double.parseDouble(df.format(measurementTrial.getMeasurement()));
+                quartiles[1] = Double.parseDouble(df.format(measurementTrial.getMeasurement()));
+            }
+            if (trials.get(0).getTrialType().equals(Extras.BINOMIAL_TYPE)) {
+                BinomialTrial binomialTrial = (BinomialTrial) trials.get(0);
+                if (binomialTrial.getPassCount() + binomialTrial.getFailCount() == 1) {
+                    quartiles[0] = Double.parseDouble(df.format(binomialTrial.getFailCount() + binomialTrial.getPassCount()));
+                    quartiles[0] = Double.parseDouble(df.format(binomialTrial.getFailCount() + binomialTrial.getPassCount()));
+                }
+                // Regular Method
+                else {
+                    dataList = SortedArrayList(trials, "BINOMIAL_TYPE");
+                    medianIndex = dataList.size() / 2 ;
+                    firstQuartile = firstQuartile(dataList, medianIndex);
+                    thirdQuartile = thirdQuartile(dataList, medianIndex);
+                    quartiles[0] = Double.parseDouble(df.format(firstQuartile));
+                    quartiles[1] = Double.parseDouble(df.format(thirdQuartile));
+                }
+            }
+        }
+        else {
             quartiles[0] = 0.0;
             quartiles[1] = 0.0;
         }

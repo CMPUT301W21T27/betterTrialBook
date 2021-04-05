@@ -57,7 +57,9 @@ public class Histogram extends AppCompatActivity {
         for (int i = 0; i < binFrequency.size(); i++) {
             barEntries.add(new BarEntry(i, binFrequency.get(i)));
         }
+
         BarDataSet barDataSet = new BarDataSet(barEntries, "Frequency");
+        barDataSet.setValueTextSize(15f);
 
         BarData barData = new BarData(barDataSet);
         barChart.setData(barData);
@@ -73,15 +75,16 @@ public class Histogram extends AppCompatActivity {
         XAxis xAxis = barChart.getXAxis();
         YAxis leftAxis = barChart.getAxisLeft();
         YAxis rightAxis = barChart.getAxisRight();
+        float width = barChart.getWidth();
+        float height = barChart.getHeight();
 
 
         barChart.setExtraBottomOffset(50);
         barChart.getLegend().setEnabled(false);
-        barChart.getLegend().setEnabled(false);
         barChart.getDescription().setEnabled(false);
 
         xAxis.setYOffset(20);
-        xAxis.setTextSize(15f);
+        xAxis.setTextSize(20f);
         xAxis.setGranularity(1f);
         xAxis.setDrawGridLines(false);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -89,8 +92,10 @@ public class Histogram extends AppCompatActivity {
 
         rightAxis.setEnabled(false);
 
+        leftAxis.setTextSize(20f);
         leftAxis.setGridLineWidth(1);
         leftAxis.setDrawZeroLine(false);
+        leftAxis.setAxisMinimum(0);
     }
 
     @Override

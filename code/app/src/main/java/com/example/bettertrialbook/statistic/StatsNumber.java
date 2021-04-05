@@ -41,15 +41,15 @@ public class StatsNumber extends AppCompatActivity {
         double mean = statistic.Mean(trialDataList);
         double median = statistic.Median(trialDataList);
         double stdDev = statistic.StdDev(trialDataList, mean);
-        // double[] quartiles = statistic.Quartiles(trialDataList);
+        double[] quartiles = statistic.Quartiles(trialDataList);
 
         // Display the Statistic Information to the User
         meanResult.setText(String.valueOf(mean));
         medianResult.setText(String.valueOf(median));
         stdDevResult.setText(String.valueOf(stdDev));
-        // There is problem with the Quartile method with 1 trial
-        // quartile1Result.setText(String.valueOf(quartiles[0]));
-        // quartile3Result.setText(String.valueOf(quartiles[1]));
+        //There is problem with the Quartile method with 1 trial
+        quartile1Result.setText(String.valueOf(quartiles[0]));
+        quartile3Result.setText(String.valueOf(quartiles[1]));
     }
 
     @Override

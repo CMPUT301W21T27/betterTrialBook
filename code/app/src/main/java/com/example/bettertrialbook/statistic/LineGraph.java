@@ -5,9 +5,15 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.models.Trial;
@@ -37,12 +43,33 @@ public class LineGraph extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         trialDataList = (ArrayList<Trial>) bundle.getSerializable("Trials");
 
+        Button mean = findViewById(R.id.MeanOverTime);
+        Button median = findViewById(R.id.MedianOverTime);
+        Button stdDev = findViewById(R.id.StdDevOverTime);
         LineChart lineChart = findViewById(R.id.LineChart);
 
         // Testing: Plot the Graph
-        createLineChart(lineChart, "Mean", trialDataList);
         lineChartSetting(lineChart, trialDataList.size());
+        mean.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createLineChart(lineChart, "Mean", trialDataList);
+            }
+        });
 
+        median.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createLineChart(lineChart, "Median", trialDataList);
+            }
+        });
+
+        stdDev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createLineChart(lineChart, "StdDev", trialDataList);
+            }
+        });
     }
 
     public void createLineChart(LineChart lineChart, String category, ArrayList<Trial> trials) {
@@ -84,6 +111,7 @@ public class LineGraph extends AppCompatActivity {
 
         LineData lineData = new LineData(dataset);
         lineChart.setData(lineData);
+        lineChart.invalidate();
     }
 
 
@@ -92,7 +120,6 @@ public class LineGraph extends AppCompatActivity {
         YAxis leftAxis = lineChart.getAxisLeft();
         YAxis rightAxis = lineChart.getAxisRight();
 
-
         lineChart.setDragEnabled(true);
         lineChart.setScaleEnabled(true);
         lineChart.setTouchEnabled(true);
@@ -100,12 +127,6 @@ public class LineGraph extends AppCompatActivity {
         lineChart.getLegend().setEnabled(false);
         lineChart.getDescription().setEnabled(false);
         lineChart.setExtraBottomOffset(50);
-
-        /* Make a marker and make the x-axis name to be dynamical.
-        lineChart.getDescription().setPosition(600, 1400);
-        lineChart.getDescription().setText("Trial");
-        lineChart.getDescription().setTextSize(25);
-        */
 
         xAxis.setTextSize(15f);
         xAxis.setLabelCount(size);

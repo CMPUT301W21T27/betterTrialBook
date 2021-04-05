@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         SearchView searchItem = findViewById(R.id.SearchItem);
         ListView resultList = findViewById(R.id.Result_ListView);
         // For Targeting User or Description
+        // For the User: it searches the id of the documentation on FireStore
         ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this,
                 R.array.SearchTarget, android.R.layout.simple_spinner_item);
         // For Targeting the experiment's type
@@ -219,7 +220,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         }
     }
-// -----------------------------------------Used For ToolBar----------------------------------------
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -232,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         switch(item.getItemId()) {
             /*
              * Calls the ProfileViewActivity Sends user object "you" to display their info
-             * Expects an updated "you" object as a return
              */
             case R.id.Profile:
                 Intent intent1 = new Intent(this, ProfileViewActivity.class);
