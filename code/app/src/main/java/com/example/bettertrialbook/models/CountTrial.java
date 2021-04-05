@@ -4,6 +4,8 @@ The CountTrial class extends the Trial class and represents trials with counts.
 
 package com.example.bettertrialbook.models;
 
+import android.os.Parcel;
+
 import com.example.bettertrialbook.Extras;
 
 import java.util.ArrayList;
@@ -17,11 +19,14 @@ public class CountTrial extends Trial implements Comparable<CountTrial> {
      *  the recorded number of counts for the trial
      * @param trialId
      *  the id of the trial
+     * @param geolocation
+     *  the geolocation of the trial
      */
-    public CountTrial(int count, String trialId, String experimenterId) {
+    public CountTrial(int count, String trialId, String experimenterId, Geolocation geolocation) {
         this.count = count;
         setTrialID(trialId);
         setExperimenterID(experimenterId);
+        setGeolocation(geolocation);
     }
 
     /**
@@ -63,6 +68,6 @@ public class CountTrial extends Trial implements Comparable<CountTrial> {
     @Override
     public int compareTo(CountTrial countTrial) {
         return String.valueOf(this.count).compareTo(String.valueOf(countTrial.getCount()))
-                + this.getTrialType().compareTo(countTrial.getTrialType()) + this.getTrialID().compareTo(countTrial.getTrialID());
+                + this.getTrialType().compareTo(countTrial.getTrialType()) + this.getTrialID().compareTo(countTrial.getTrialID()) + this.getGeolocation().compareTo(countTrial.getGeolocation());
     }
 }

@@ -55,9 +55,13 @@
         <item>Measurement Based</item>
         <item>Binomial Based</item>
     </string-array>
+
     <string-array name="Options">
         <item>Data: Mean Over Time</item>
         <item>Data: Median Over Time</item>
         <item>Data: StdDev Over Time</item>
     </string-array>
+
+    <string name="title_activity_geolocation">Map</string>
+
 </resources>
