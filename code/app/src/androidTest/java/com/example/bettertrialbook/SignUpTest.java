@@ -67,7 +67,7 @@ public class SignUpTest {
 
         solo.assertCurrentActivity(activityMessage,MainActivity.class);
         solo.sleep(5000);   //wait for database access to finish
-        solo.clickOnImage(1);
+        solo.clickOnView(solo.getCurrentActivity().findViewById(R.id.Profile));
         solo.assertCurrentActivity(activityMessage, ProfileViewActivity.class);
     }
 
