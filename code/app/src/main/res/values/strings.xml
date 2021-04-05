@@ -55,4 +55,5 @@
         <item>Measurement Based</item>
         <item>Binomial Based</item>
     </string-array>
+    <string name="title_activity_geolocation">Map</string>
 </resources>

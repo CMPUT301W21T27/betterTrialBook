@@ -18,10 +18,13 @@ public class BinomialTrial extends Trial implements Comparable<BinomialTrial> {
      *  the number of recorded failures
      * @param trialId
      *  the id of the trial
+     * @param geolocation
+     *  the geolocation of the trial
      */
-    public BinomialTrial(int passCount, int failCount, String trialId, String experimenterId) {
+    public BinomialTrial(int passCount, int failCount, String trialId, String experimenterId, Geolocation geolocation) {
         this.passCount = passCount;
         this.failCount = failCount;
+        setGeolocation(geolocation);
         setTrialID(trialId);
         setExperimenterID(experimenterId);
     }
@@ -83,6 +86,6 @@ public class BinomialTrial extends Trial implements Comparable<BinomialTrial> {
     @Override
     public int compareTo(BinomialTrial binomialTrial) {
         return String.valueOf(this.passCount).compareTo(String.valueOf(binomialTrial.getPassCount())) + String.valueOf(this.failCount).compareTo(String.valueOf(binomialTrial.getFailCount()))
-                + this.getTrialType().compareTo(binomialTrial.getTrialType()) + this.getTrialID().compareTo(binomialTrial.getTrialID());
+                + this.getTrialType().compareTo(binomialTrial.getTrialType()) + this.getTrialID().compareTo(binomialTrial.getTrialID()) + this.getGeolocation().compareTo(binomialTrial.getGeolocation());
     }
 }

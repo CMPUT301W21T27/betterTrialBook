@@ -14,17 +14,31 @@ public abstract class Trial implements Serializable {
     private String trialID;
     private String experimenterID;
     private Boolean blacklist = false;
+    private Geolocation geolocation;
 
-    /*
+    /**
+     * gets the geolocation of the Trial
+     * @return
+     *  the geolocation of the trial
+     */
     public Geolocation getGeolocation() {
         return geolocation;
     }
 
+    /**
+     * sets the geolocation of the trial
+     * @param geolocation
+     *  the geolocation to be set
+     */
     public void setGeolocation(Geolocation geolocation) {
         this.geolocation = geolocation;
     }
-    */
 
+    /**
+     * gets the id of the trial
+     * @return
+     *  the id of the trial
+     */
     public String getTrialID() {
         return trialID;
     }
@@ -38,6 +52,11 @@ public abstract class Trial implements Serializable {
         this.trialID = trialID;
     }
 
+    /**
+     * gets the experimenter who made the trial's id
+     * @return
+     *  the id of the experimenter who created the trial
+     */
     public String getExperimenterID() {
         return experimenterID;
     }
