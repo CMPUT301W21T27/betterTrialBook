@@ -15,14 +15,11 @@ public class NonNegTrial extends Trial implements Comparable<NonNegTrial> {
      *  the count being recorded
      * @param trialId
      *  the id of the trial
-     * @param geolocation
-     *  the geolocation of the trial
      */
-    public NonNegTrial(int count, String trialId, String experimenterId, Geolocation geolocation) {
+    public NonNegTrial(int count, String trialId, String experimenterId) {
         this.count = count;
         setTrialID(trialId);
         setExperimenterID(experimenterId);
-        setGeolocation(geolocation);
     }
 
     /**
@@ -64,7 +61,6 @@ public class NonNegTrial extends Trial implements Comparable<NonNegTrial> {
     @Override
     public int compareTo(NonNegTrial nonNegTrial) {
         return String.valueOf(this.count).compareTo(String.valueOf(nonNegTrial.getCount()))
-                + this.getTrialType().compareTo(nonNegTrial.getTrialType()) + this.getTrialID().compareTo(nonNegTrial.getTrialID())
-                + this.getGeolocation().compareTo(nonNegTrial.getGeolocation());
+                + this.getTrialType().compareTo(nonNegTrial.getTrialType()) + this.getTrialID().compareTo(nonNegTrial.getTrialID());
     }
 }

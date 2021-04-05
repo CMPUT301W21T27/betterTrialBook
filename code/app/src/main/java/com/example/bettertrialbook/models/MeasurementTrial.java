@@ -16,14 +16,11 @@ public class MeasurementTrial extends Trial implements Comparable<MeasurementTri
      *  the double measurement being recorded
      * @param trialId
      *  the id of the trial
-     * @param geolocation
-     *  the geolocation of the trial
      */
-    public MeasurementTrial(Double measurement, String trialId, String experimenterId, Geolocation geolocation) {
+    public MeasurementTrial(Double measurement, String trialId, String experimenterId) {
         this.measurement = measurement;
         setTrialID(trialId);
         setExperimenterID(experimenterId);
-        setGeolocation(geolocation);
     }
 
     /**
@@ -65,7 +62,6 @@ public class MeasurementTrial extends Trial implements Comparable<MeasurementTri
     @Override
     public int compareTo(MeasurementTrial measurementTrial) {
         return String.valueOf(this.measurement).compareTo(String.valueOf(measurementTrial.getMeasurement()))
-                + this.getTrialType().compareTo(measurementTrial.getTrialType()) + this.getTrialID().compareTo(measurementTrial.getTrialID())
-                + this.getGeolocation().compareTo(measurementTrial.getGeolocation());
+                + this.getTrialType().compareTo(measurementTrial.getTrialType()) + this.getTrialID().compareTo(measurementTrial.getTrialID());
     }
 }
