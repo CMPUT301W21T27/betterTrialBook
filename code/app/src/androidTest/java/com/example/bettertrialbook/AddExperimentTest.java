@@ -9,27 +9,32 @@ import android.widget.EditText;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.bettertrialbook.dal.Firestore;
 import com.example.bettertrialbook.experiment.ExperimentAddActivity;
 import com.example.bettertrialbook.experiment.ExperimentViewActivity;
 import com.example.bettertrialbook.home.MainActivity;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class AddExperimentTest {
     private Solo solo;
-
+    public ActivityTestRule<MainActivity> rule;
 
     @Rule
-    public ActivityTestRule<MainActivity> rule =
-            new ActivityTestRule<>(MainActivity.class,true,true);
-
+    public TestRule setRules(){
+        Firestore.useEmulator();
+        rule = new ActivityTestRule<>(MainActivity.class,true,true);
+        return rule;
+    }
     @Before
     public void setUp() throws Exception {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
@@ -128,6 +133,8 @@ public class AddExperimentTest {
         assertEquals("Description: Counting Stars", descriptionText);
         final String regionText = activity.regionText.getText().toString();
         assertEquals("Region: Calgary", regionText);
+
+        solo.sleep(5000);
     }
 
     /**
