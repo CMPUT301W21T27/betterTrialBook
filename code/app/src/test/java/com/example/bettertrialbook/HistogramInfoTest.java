@@ -2,6 +2,7 @@ package com.example.bettertrialbook;
 
 import com.example.bettertrialbook.statistic.HistogramInfo;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -10,8 +11,15 @@ import static junit.framework.TestCase.assertEquals;
 
 public class HistogramInfoTest {
 
-    private ArrayList<Double> result;
-    private ArrayList<Double> dataSet;
+    /*  Remarks:
+     *  The ArrayList<Double> data passed in is a sorted ArrayList.
+     */
+
+    private ArrayList<Double> result1;
+    private ArrayList<Double> result2;
+    private ArrayList<Double> dataSet1;
+    private ArrayList<Double> dataSet2;
+
     HistogramInfo histogramInfo = new HistogramInfo();
 
     private ArrayList<Double> mockDataSetOverFive() {
@@ -30,52 +38,98 @@ public class HistogramInfoTest {
         return data;
     }
 
+    private ArrayList<Double> mockDataSetBelowFive() {
+        ArrayList<Double> data = new ArrayList<>();
+        data.add(0.0);
+        data.add(0.0);
+        data.add(0.0);
+        data.add(1.0);
+        data.add(1.0);
+        data.add(1.0);
+        data.add(1.0);
+        data.add(1.0);
+        data.add(1.0);
+
+        return data;
+    }
+
+    @Before
+    public void setUp() {
+        dataSet1 = mockDataSetOverFive();
+        dataSet2 = mockDataSetBelowFive();
+    }
+
     @Test
     public void testDistinctExperimentItem() {
-        dataSet = mockDataSetOverFive();
-        result = histogramInfo.distinctExperimentData(dataSet);
-
-        assertEquals(7, result.size());
-        assertEquals(1.0, result.get(0));
-        assertEquals(2.0, result.get(1));
-        assertEquals(3.0, result.get(2));
-        assertEquals(4.0, result.get(3));
-        assertEquals(5.0, result.get(4));
-        assertEquals(6.0, result.get(5));
-        assertEquals(7.0, result.get(6));
+        result1 = histogramInfo.distinctExperimentData(dataSet1);
+        result2 = histogramInfo.distinctExperimentData(dataSet2);
+        // Result related to more than or 5 distinct elements in the dataset
+        assertEquals(7, result1.size());
+        assertEquals(1.0, result1.get(0));
+        assertEquals(2.0, result1.get(1));
+        assertEquals(3.0, result1.get(2));
+        assertEquals(4.0, result1.get(3));
+        assertEquals(5.0, result1.get(4));
+        assertEquals(6.0, result1.get(5));
+        assertEquals(7.0, result1.get(6));
+        // Result related to less than 5 distinct elements in the dataset
+        assertEquals(2, result2.size());
+        assertEquals(0.0, result2.get(0));
+        assertEquals(1.0, result2.get(1));
     }
 
     @Test
     public void testRangeOfData() {
-        dataSet = mockDataSetOverFive();
-        Double answer = histogramInfo.rangeOfData(dataSet);
+        double answer1 = histogramInfo.rangeOfData(dataSet1);
+        double answer2 = histogramInfo.rangeOfData(dataSet2);
 
-        assertEquals(6.0, answer);
+        assertEquals(6.0, answer1);
+        assertEquals(1.0, answer2);
     }
 
     @Test
     public void testGetNumberofBins() {
-        dataSet = mockDataSetOverFive();
-        int answer = histogramInfo.getNumberofBins(dataSet);
+        int answer1 = histogramInfo.getNumberofBins(dataSet1);
+        int answer2 = histogramInfo.getNumberofBins(dataSet2);
 
-        assertEquals(5, answer);
+        assertEquals(5, answer1);
+        assertEquals(2, answer2);
     }
 
     @Test
     public void testDifferenceForBins() {
-        dataSet = mockDataSetOverFive();
-        Double range = histogramInfo.rangeOfData(dataSet);
-        int noOfBins = histogramInfo.getNumberofBins(dataSet);
+        double range = histogramInfo.rangeOfData(dataSet1);
+        int noOfBins = histogramInfo.getNumberofBins(dataSet1);
         int answer = histogramInfo.differenceForBins(range, noOfBins);
 
         assertEquals(1, answer);
     }
 
     @Test
+    public void testGetCategory() {
+        int noOfBins = histogramInfo.getNumberofBins(dataSet2);
+        double[] answer = histogramInfo.getCategory(dataSet2, noOfBins);
+
+        assertEquals(0.0, answer[0]);
+        assertEquals(1.0, answer[1]);
+    }
+
+    @Test
+    public void testGetBinFrequencyB() {
+        int noOfBins = histogramInfo.getNumberofBins(dataSet2);
+        ArrayList<Integer> result = histogramInfo.getBinFrequencyB(dataSet2, noOfBins);
+
+        int answer1 = result.get(0);
+        int answer2 = result.get(1);
+
+        assertEquals(3, answer1);
+        assertEquals(6, answer2);
+    }
+
+    @Test
     public void testGetMaxForEachBin() {
-        dataSet = mockDataSetOverFive();
-        Double range = histogramInfo.rangeOfData(dataSet);
-        int noOfBins = histogramInfo.getNumberofBins(dataSet);
+        Double range = histogramInfo.rangeOfData(dataSet1);
+        int noOfBins = histogramInfo.getNumberofBins(dataSet1);
         int diffBins = histogramInfo.differenceForBins(range, noOfBins);
         int[] maxForEachBin = histogramInfo.getMaxForEachBin(diffBins, noOfBins);
 
@@ -88,9 +142,8 @@ public class HistogramInfoTest {
 
     @Test
     public void testGetMinForEachBin() {
-        dataSet = mockDataSetOverFive();
-        Double range = histogramInfo.rangeOfData(dataSet);
-        int noOfBins = histogramInfo.getNumberofBins(dataSet);
+        Double range = histogramInfo.rangeOfData(dataSet1);
+        int noOfBins = histogramInfo.getNumberofBins(dataSet1);
         int diffBins = histogramInfo.differenceForBins(range, noOfBins);
         int[] maxForEachBin = histogramInfo.getMaxForEachBin(diffBins, noOfBins);
         int[] minForEachBin = histogramInfo.getMinForEachBin(diffBins, maxForEachBin, noOfBins);
@@ -103,9 +156,8 @@ public class HistogramInfoTest {
     }
 
     @Test
-    public void testCollectFrequency() {
-        dataSet = mockDataSetOverFive();
-        ArrayList<Integer> result = histogramInfo.collectFrequency(dataSet);
+    public void testGetBinFrequencyA() {
+        ArrayList<Integer> result = histogramInfo.collectFrequency(dataSet1);
 
         int frequency1 = result.get(0);
         int frequency2 = result.get(1);
@@ -121,8 +173,7 @@ public class HistogramInfoTest {
 
     @Test
     public void testGetLabels() {
-        dataSet = mockDataSetOverFive();
-        ArrayList<String> labels = histogramInfo.getLabels(dataSet);
+        ArrayList<String> labels = histogramInfo.getLabels(dataSet1);
 
         String label1 = labels.get(0);
         String label2 = labels.get(1);
@@ -134,5 +185,13 @@ public class HistogramInfoTest {
         assertEquals("4-5", label3);
         assertEquals("6-7", label4);
         assertEquals("8-9", label5);
+
+        ArrayList<String> labelS = histogramInfo.getLabels(dataSet2);
+
+        String label6 = labelS.get(0);
+        String label7 = labelS.get(1);
+
+        assertEquals("0.0", label6);
+        assertEquals("1.0", label7);
     }
 }

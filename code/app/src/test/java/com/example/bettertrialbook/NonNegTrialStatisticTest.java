@@ -3,7 +3,6 @@
  */
 package com.example.bettertrialbook;
 
-import com.example.bettertrialbook.models.MeasurementTrial;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.NonNegTrial;
 import com.example.bettertrialbook.statistic.Statistic;
@@ -21,12 +20,12 @@ public class NonNegTrialStatisticTest {
     private ArrayList<Trial> nonNegEvenTrials;
     private ArrayList<Trial> nonNegEmptyTrials;
 
-    private ArrayList<Trial> mockEmptyCountTrials() {
+    private ArrayList<Trial> mockEmptyNonNegTrials() {
         ArrayList<Trial> nonNeg = new ArrayList<>();
         return nonNeg;
     }
 
-    private ArrayList<Trial> mockEvenCountTrials() {
+    private ArrayList<Trial> mockEvenNonNegTrials() {
         ArrayList<Trial> nonNeg = new ArrayList<>();
         nonNeg.add(new NonNegTrial(1, "NonNegTestID1", "Person1"));
         nonNeg.add(new NonNegTrial(2, "NonNegTestID2", "Person2"));
@@ -35,7 +34,7 @@ public class NonNegTrialStatisticTest {
         return nonNeg;
     }
 
-    private ArrayList<Trial> mockOddCountTrials() {
+    private ArrayList<Trial> mockOddNonNegTrials() {
         ArrayList<Trial> nonNeg = new ArrayList<>();
         nonNeg.add(new NonNegTrial(1, "NonNegTestID1", "Person1"));
         nonNeg.add(new NonNegTrial(2, "NonNegTestID2", "Person2"));
@@ -48,9 +47,9 @@ public class NonNegTrialStatisticTest {
     @Before
     public void setUp() {
         statistic = new Statistic();
-        nonNegOddTrials = mockOddCountTrials();
-        nonNegEvenTrials = mockEvenCountTrials();
-        nonNegEmptyTrials = mockEmptyCountTrials();
+        nonNegOddTrials = mockOddNonNegTrials();
+        nonNegEvenTrials = mockEvenNonNegTrials();
+        nonNegEmptyTrials = mockEmptyNonNegTrials();
     }
 
     @Test

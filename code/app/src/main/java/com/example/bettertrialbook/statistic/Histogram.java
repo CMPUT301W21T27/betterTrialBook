@@ -4,27 +4,29 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
-import android.widget.TextView;
 import android.view.MenuInflater;
 
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.models.Trial;
 import com.github.mikephil.charting.charts.BarChart;
-
+import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Histogram extends AppCompatActivity {
+    private ArrayList<Trial> trialDataList;
     private final Statistic statistic = new Statistic();
     private final HistogramInfo histogramInfo = new HistogramInfo();
 
@@ -37,67 +39,64 @@ public class Histogram extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-
-        ArrayList<Trial> trialDataList = (ArrayList<Trial>) bundle.getSerializable("Trials");
+        trialDataList = (ArrayList<Trial>) bundle.getSerializable("Trials");
         ArrayList<Double> dataList = statistic.experimentData(trialDataList);
+        List<String> labels = histogramInfo.getLabels(dataList);
 
-        BarChart barChart = findViewById(R.id.Graph);
-        TextView meanResult = findViewById(R.id.Mean_Result);
-        TextView medianResult = findViewById(R.id.Median_Result);
-        TextView stdDevResult = findViewById(R.id.StdDev_Result);
-        TextView quartile1Result = findViewById(R.id.FirstQuartile_Result);
-        TextView quartile3Result = findViewById(R.id.ThirdQuartile_Result);
+        BarChart barChart = findViewById(R.id.Bar_Chart);
 
-        // Calculate the information
-        double mean = statistic.Mean(trialDataList);
-        double median = statistic.Median(trialDataList);
-        double stdDev = statistic.StdDev(trialDataList, mean);
-        double[] quartiles = statistic.Quartiles(trialDataList);
+        barChartSetting(barChart, labels);
+        plotTheGraph(barChart, dataList);
+    }
 
-        // Display the Statistic Information to the User
-        meanResult.setText(String.valueOf(mean));
-        medianResult.setText(String.valueOf(median));
-        stdDevResult.setText(String.valueOf(stdDev));
-        quartile1Result.setText(String.valueOf(quartiles[0]));
-        quartile3Result.setText(String.valueOf(quartiles[1]));
-
-        // Plot the Histogram
+    public void plotTheGraph(BarChart barChart, ArrayList<Double> dataList) {
         ArrayList<Integer> binFrequency = histogramInfo.collectFrequency(dataList);
         ArrayList<String> labels = histogramInfo.getLabels(dataList);
 
-        XAxis xAxis = barChart.getXAxis();
-        xAxis.setDrawGridLines(false);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setTextSize(15f);
-
-        YAxis rightAxis = barChart.getAxisRight();
-        rightAxis.setEnabled(false);
-
-        YAxis leftAxis = barChart.getAxisLeft();
-        leftAxis.setTextSize(15f);
-        leftAxis.setLabelCount(5, true);
-        leftAxis.setAxisMinValue(0);
-        leftAxis.setAxisMaxValue(4);
-
-        barChart.setDescription("");
-
         ArrayList<BarEntry> barEntries = new ArrayList<>();
         for (int i = 0; i < binFrequency.size(); i++) {
-            barEntries.add(new BarEntry(binFrequency.get(i), i));
+            barEntries.add(new BarEntry(i, binFrequency.get(i)));
         }
         BarDataSet barDataSet = new BarDataSet(barEntries, "Frequency");
 
-        BarData theData = new BarData(labels, barDataSet);
-        barChart.setData(theData);
-
+        BarData barData = new BarData(barDataSet);
+        barChart.setData(barData);
 
         barChart.setScaleEnabled(true);
+        barChart.setDragEnabled(true);
+        barChart.setTouchEnabled(true);
+
+        barChart.invalidate();
+    }
+
+    public void barChartSetting(BarChart barChart, List<String> labels) {
+        XAxis xAxis = barChart.getXAxis();
+        YAxis leftAxis = barChart.getAxisLeft();
+        YAxis rightAxis = barChart.getAxisRight();
+
+
+        barChart.setExtraBottomOffset(50);
+        barChart.getLegend().setEnabled(false);
+        barChart.getLegend().setEnabled(false);
+        barChart.getDescription().setEnabled(false);
+
+        xAxis.setYOffset(20);
+        xAxis.setTextSize(15f);
+        xAxis.setGranularity(1f);
+        xAxis.setDrawGridLines(false);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+
+        rightAxis.setEnabled(false);
+
+        leftAxis.setGridLineWidth(1);
+        leftAxis.setDrawZeroLine(false);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.statistic_information, menu);
+        inflater.inflate(R.menu.statistic_graph, menu);
         return true;
     }
 
@@ -106,7 +105,8 @@ public class Histogram extends AppCompatActivity {
         if (item.getItemId() == R.id.ExperimentOverView) {
             finish();
             return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 }

@@ -31,6 +31,7 @@ import com.example.bettertrialbook.models.ExperimentInfo;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.User;
 import com.example.bettertrialbook.profile.ProfileViewActivity;
+import com.example.bettertrialbook.statistic.StatsNumber;
 
 import java.util.ArrayList;
 
@@ -198,7 +199,7 @@ public class ExperimentViewActivity extends AppCompatActivity
     }
 
     public void statisticReport() {
-        Intent intent = new Intent(this, Histogram.class);
+        Intent intent = new Intent(this, StatsNumber.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("Trials", trialDataList);
         intent.putExtras(bundle);

@@ -20,12 +20,12 @@ public class BinominalTrialStatisticTest {
     private ArrayList<Trial> binomialEvenTrials;
     private ArrayList<Trial> binomialEmptyTrials;
 
-    private ArrayList<Trial> mockEmptyCountTrials() {
-        ArrayList<Trial> mm = new ArrayList<>();
-        return mm;
+    private ArrayList<Trial> mockEmptyBinomialTrial() {
+        ArrayList<Trial> binomial = new ArrayList<>();
+        return binomial;
     }
 
-    private ArrayList<Trial> mockEvenCountTrials() {
+    private ArrayList<Trial> mockEvenBinomialTrial() {
         ArrayList<Trial> binomial = new ArrayList<>();
 
         binomial.add(new BinomialTrial(5, 9, "BinomialTestID1", "Person1"));
@@ -33,7 +33,7 @@ public class BinominalTrialStatisticTest {
         return binomial;
     }
 
-    private ArrayList<Trial> mockOddCountTrials() {
+    private ArrayList<Trial> mockOddBinomialTrial() {
         ArrayList<Trial> binomial = new ArrayList<>();
 
         binomial.add(new BinomialTrial(8, 3, "BinomialTestID2", "Person2"));
@@ -44,9 +44,9 @@ public class BinominalTrialStatisticTest {
     @Before
     public void setUp() {
         statistic = new Statistic();
-        binomialOddTrials = mockOddCountTrials();
-        binomialEvenTrials = mockEvenCountTrials();
-        binomialEmptyTrials = mockEmptyCountTrials();
+        binomialOddTrials = mockOddBinomialTrial();
+        binomialEvenTrials = mockEvenBinomialTrial();
+        binomialEmptyTrials = mockEmptyBinomialTrial();
     }
 
     @Test
@@ -69,7 +69,7 @@ public class BinominalTrialStatisticTest {
     }
 
     @Test
-    public void binomialgMeanTest() {
+    public void binomialMeanTest() {
         double meanForOdd;
         double meanForEven;
         double meanForEmpty;

@@ -10,8 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BetterTrialBook">
         <activity
+            android:name=".statistic.StatsNumber"
+            android:label="@string/statsInformation"
+            android:theme="@style/Theme.BetterTrialBook.NoActionBar">
+        </activity>
+        <activity
+            android:name=".statistic.LineGraph"
+            android:label="@string/title_activity_line_graph"
+            android:theme="@style/Theme.BetterTrialBook.NoActionBar"></activity>
+        <activity
             android:name=".home.SubscriptionActivity"
-            android:label="@string/subscription_screen"/>
+            android:label="@string/subscription_screen" />
         <activity
             android:name=".statistic.Histogram"
             android:label="@string/title_activity_statisitc_information"

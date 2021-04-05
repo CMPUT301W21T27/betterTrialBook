@@ -2,9 +2,11 @@
     <string name="app_name">betterTrialBook</string>
     <string name="main_home_screen">BetterTrial Book</string>
     <string name="subscription_screen">Subscription</string>
+    <string name="statsInformation">Stats Info</string>
     <string name="title_activity_statisitc_information">Statistic Information</string>
     <string name="title_activity_statistic_home_page">Statistic</string>
     <string name="title_activity_experiment_view">ExperimentViewActivity</string>
+    <string name="title_activity_line_graph">Line Graph Data</string>
     <string name="first_fragment_label">First Fragment</string>
 
     <!-- Strings used for fragments for navigation -->
