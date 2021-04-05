@@ -21,21 +21,24 @@ import com.example.bettertrialbook.R;
 
 public class ConfirmationFragment extends DialogFragment {
     private String tag = "";
+    private String experimenterID = "";
     private OnFragmentInteractionListener listener;
+    private Boolean blacklist = false;
 
     /* Ok pressed interface */
     public interface OnFragmentInteractionListener {
-        void onOkPressedConfirm(String tag);
+        void onOkPressedConfirm(String tag, String experimenterID);
     }
 
     public ConfirmationFragment() {
         super();
     }
 
-    public ConfirmationFragment(String tag) {
+    public ConfirmationFragment(String tag, Boolean blacklist, String experimenterID) {
         super();
-        if (tag.equals(""));
+        this.blacklist = blacklist;
         this.tag = tag;
+        this.experimenterID = experimenterID;
     }
 
     @Override
@@ -60,7 +63,12 @@ public class ConfirmationFragment extends DialogFragment {
         } else if (tag.equals("Unsubscribe")) {
             tag += " from";
         }
-        confirmationText.setText(String.format("Are you sure you want to %s the experiment?", tag.toLowerCase()));
+
+        if (blacklist) {
+            confirmationText.setText(String.format("Are you sure you want to %s this experimenter's trials?", tag.toLowerCase()));
+        } else {
+            confirmationText.setText(String.format("Are you sure you want to %s the experiment?", tag.toLowerCase()));
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
@@ -70,7 +78,7 @@ public class ConfirmationFragment extends DialogFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onOkPressedConfirm(tag);
+                        listener.onOkPressedConfirm(tag, experimenterID);
                     }
                 })
                 .create();

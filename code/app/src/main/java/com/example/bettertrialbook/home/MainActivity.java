@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                 String ownerId = (String) doc.getData().get("Owner");
                                 String publishStatus = (String) doc.getData().get("PublishStatus");
                                 String activeStatus = (String) doc.getData().get("ActiveStatus");
-                                if ((ownerId != null && ownerId.equals(You.getUser().getID()))
+                                if ((ownerId != null && You.getUser() != null && ownerId.equals(You.getUser().getID()))
                                         || (publishStatus != null && !publishStatus.equals("Unpublish"))) {
                                     String id = doc.getId();
                                     String region = (String) doc.getData().get("Region");

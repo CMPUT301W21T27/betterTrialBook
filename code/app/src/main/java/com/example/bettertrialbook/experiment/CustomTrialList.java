@@ -103,32 +103,6 @@ public class CustomTrialList extends ArrayAdapter<Trial> {
             trialResult.setText(String.valueOf(measurementTrial.getMeasurement()));
         }
 
-        Button blacklistButton = view.findViewById(R.id.blacklist_button);
-        // Owner has the right to blacklist the experiment
-        // Experimenter has no right to blacklist the experiment
-        if (!isOwner) {
-            blacklistButton.setVisibility(View.INVISIBLE);
-        }
-
-        blacklistButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: COMPLETE modifyExperimentBlacklist Function and add in confirmation dialog
-                // confirmationDialog((String) blacklistButton.getText());
-                ExperimentDAL experimentDAL = new ExperimentDAL();
-                // experimentDAL.modifyExperimentBlacklist(experimentId, "", experimenterId, true);
-            }
-        });
-
         return view;
     }
-    /*
-    public void confirmationDialog(String tag) {
-        new ConfirmationFragment(tag).show(getSupportFragmentManager(), "BLOCK");
-    }
-
-    @Override
-    public void onOkPressedConfirm(String tag) {
-
-    }*/
 }

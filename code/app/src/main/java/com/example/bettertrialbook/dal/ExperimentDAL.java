@@ -174,6 +174,7 @@ public class ExperimentDAL {
      */
     public void modifyExperimentBlacklist(String experimentId, String experimentType, String experimenterId,
             Boolean blacklist) {
+        Log.d("TEST2", "INITIAL: "+experimenterId);
         collRef.document(experimentId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -203,40 +204,6 @@ public class ExperimentDAL {
                          */
                     }
                 }
-                /*
-                 * if (experimentType.equals(Extras.COUNT_TYPE)) { // kinda jank, from what I
-                 * can tell, a hashmap is returned so need to access values through their keys
-                 * 
-                 * 
-                 * } else if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
-                 * 
-                 * ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object,
-                 * Object>>) (value.getData()).get("Trials"); if (trials != null) { for
-                 * (HashMap<Object, Object> trial : trials) { BinomialTrial binomialTrial = new
-                 * BinomialTrial(Integer.parseInt(String.valueOf(trial.get("passCount"))),
-                 * Integer.parseInt(String.valueOf(trial.get("failCount"))),
-                 * String.valueOf(trial.get("trialID")),
-                 * String.valueOf(trial.get("experimenterID"))); } }
-                 * 
-                 * } else if (experimentType.equals(Extras.NONNEG_TYPE)) {
-                 * 
-                 * ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object,
-                 * Object>>) (value.getData()).get("Trials"); if (trials != null) { for
-                 * (HashMap<Object, Object> trial : trials) { NonNegTrial nonNegTrial = new
-                 * NonNegTrial(Integer.parseInt(String.valueOf(trial.get("count"))),
-                 * String.valueOf(trial.get("trialID")),
-                 * String.valueOf(trial.get("experimenterID"))); } }
-                 * 
-                 * } else {
-                 * 
-                 * ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object,
-                 * Object>>) (value.getData()).get("Trials"); if (trials != null) { for
-                 * (HashMap<Object, Object> trial : trials) { MeasurementTrial measurementTrial
-                 * = new
-                 * MeasurementTrial(Double.parseDouble(String.valueOf(trial.get("measurement")))
-                 * , String.valueOf(trial.get("trialID")),
-                 * String.valueOf(trial.get("experimenterID"))); } } }
-                 */
             }
         });
 

@@ -44,7 +44,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
+        <!--Button
             android:id="@+id/blacklist_button"
             android:layout_width="100dp"
             android:layout_height="40dp"
@@ -52,7 +52,7 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="16dp"
             android:text="Block"
-            android:textSize="12dp"/>
+            android:textSize="12dp"/-->
 
     </LinearLayout>
 
