@@ -68,7 +68,7 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
         // Button setup
         cancelButton = findViewById(R.id.mapCancel_button);
         selectButton = findViewById(R.id.mapSelect_button);
-        
+
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,7 +82,7 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
                 finish();
             }
         });
-        
+
         if (allGeoLocations) {
             // change button layout so users can't add locations
             cancelButton.setText("Back");
@@ -188,7 +188,7 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
     public void getLocation() {
         if (!allGeoLocations) {
             // selecting a location
-            if (geolocation.getLocation() == null) {
+            if (geolocation != null && geolocation.getLocation() == null) {
                 fusedLocationClient.getLastLocation()
                         .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                             @Override
