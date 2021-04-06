@@ -1,3 +1,8 @@
+/*
+    Fragment for choosing an option after clicking on a trial/user. The owner can blacklist them
+    which hides all their trials and doesn't allow them to add additional trials. Everyone can
+    view someone else's profile
+ */
 package com.example.bettertrialbook.experiment;
 
 import android.app.AlertDialog;
@@ -52,8 +57,6 @@ public class TrialProfileFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_trial_profile,null);
         TextView fragmentText = view.findViewById(R.id.trial_profile);
-
-        // maybe add the current selected userID/username
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         if (isOwner) {
