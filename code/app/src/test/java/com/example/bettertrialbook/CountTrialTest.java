@@ -4,7 +4,10 @@ Unit tests for the CountTrial class
 
 package com.example.bettertrialbook;
 
+import android.location.Location;
+
 import com.example.bettertrialbook.models.CountTrial;
+import com.example.bettertrialbook.models.Geolocation;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,19 +16,21 @@ import static org.junit.Assert.assertEquals;
 
 public class CountTrialTest {
     CountTrial testTrial;
+    Geolocation mockGeolocation;
 
     private CountTrial mockTrial() {
-        return new CountTrial(69, "testid", "testUser");
+        return new CountTrial(69, "testid", "testUser", new Geolocation(new Location("")));
     }
 
     @Before
     public void setUp() {
         testTrial = mockTrial();
+        mockGeolocation = new Geolocation(new Location(""));
     }
 
     @Test
     public void createTrialTest() {
-        CountTrial comparisonTrial = new CountTrial(69, "testid", "testUser");
+        CountTrial comparisonTrial = new CountTrial(69, "testid", "testUser", mockGeolocation);
         assertEquals(0, comparisonTrial.compareTo(testTrial));
     }
 
@@ -57,5 +62,17 @@ public class CountTrialTest {
     public void setTrialIdTest() {
         testTrial.setTrialID("newtestid");
         assertEquals("newtestid", testTrial.getTrialID());
+    }
+
+    @Test
+    public void getGeolocationTest() {
+        testTrial = mockTrial();
+        assertEquals(mockGeolocation, testTrial.getGeolocation());
+    }
+
+    @Test
+    public void setGeolocationTest() {
+        testTrial.setGeolocation(mockGeolocation);
+        assertEquals(mockGeolocation, testTrial.getGeolocation());
     }
 }
