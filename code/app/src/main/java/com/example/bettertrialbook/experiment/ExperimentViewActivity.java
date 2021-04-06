@@ -2,7 +2,6 @@
     Activity for viewing experiment details. Uses the ExperimentDAL to get the data
     from the database. Uses the UserDAL to get the id of the user so that owner functions can
     be hidden from non-owners.
-    TODO: QR functionality, blacklist user's trials, geolocation, view other's profile, statistics
  */
 package com.example.bettertrialbook.experiment;
 
@@ -17,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -38,8 +38,8 @@ import com.example.bettertrialbook.statistic.StatsNumber;
 
 import java.util.ArrayList;
 
-public class ExperimentViewActivity extends AppCompatActivity
-        implements ConfirmationFragment.OnFragmentInteractionListener, TrialProfileFragment.OnFragmentInteractionListener {
+public class ExperimentViewActivity extends AppCompatActivity implements
+        ConfirmationFragment.OnFragmentInteractionListener, TrialProfileFragment.OnFragmentInteractionListener {
     Boolean newExperiment;
     Boolean isOwner;
     String experimentId;
@@ -83,7 +83,7 @@ public class ExperimentViewActivity extends AppCompatActivity
         createQRButton = findViewById(R.id.createQR_button);
 
         regionText.setText("Region: " + experimentInfo.getRegion());
-        setting.setPaintFlags(setting.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        setting.setPaintFlags(setting.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         descriptionText.setText("Description: " + experimentInfo.getDescription());
 
         // get owner name
@@ -112,6 +112,8 @@ public class ExperimentViewActivity extends AppCompatActivity
         if (experimentInfo.getGeoLocationRequired()) {
             addTrialButton.setText("Add Trial\n(Geolocation\nRequired)");
         }
+
+        ExperimentDAL experimentDAL = new ExperimentDAL();
         if (!isOwner) {
             unpublishButton.setVisibility(View.INVISIBLE);
             endButton.setVisibility(View.INVISIBLE);
@@ -131,16 +133,42 @@ public class ExperimentViewActivity extends AppCompatActivity
                 }
             });
 
-            ExperimentDAL experimentDAL = new ExperimentDAL();
-            You you = new You();
+            // adds listener to check in real-time if a user has been blacklisted
+            experimentDAL.addBlacklistListener(experimentId, You.getUser().getID(),
+                    new ExperimentDAL.IsBlacklistedCallback() {
+                        @Override
+                        public void onCallback(Boolean isBlacklisted) {
+                            if (isBlacklisted) {
+                                Toast.makeText(getApplicationContext(),
+                                        String.format("You can no longer add trials to this experiment",
+                                                experimentInfo.getDescription()),
+                                        Toast.LENGTH_LONG).show();
+                                addTrialButton.setEnabled(false);
+                            } else {
+                                addTrialButton.setEnabled(true);
+                            }
+                        }
+                    });
 
-            experimentDAL.addBlacklistListener(experimentId, You.getUser().getID(), new ExperimentDAL.IsBlacklistedCallback() {
+            // adds listener to check in real-time for any status changes that affects add
+            // trial or experiment visibility
+            experimentDAL.addStatusListener(experimentId, new ExperimentDAL.IsOpenCallback() {
                 @Override
-                public void onCallback(Boolean isBlacklisted) {
-                    Log.d("TEST2", "PEE "+String.valueOf(isBlacklisted));
-                    if (isBlacklisted) {
+                public void onCallback(String isOpen) {
+                    if (isOpen.equals("Unpublish")) {
+                        Toast.makeText(getApplicationContext(),
+                                String.format("Experiment %s has been unpublished", experimentInfo.getDescription()),
+                                Toast.LENGTH_LONG).show();
+                        onBackPressed();
+
+                    } else if (isOpen.equals("Closed")) {
+                        Toast.makeText(getApplicationContext(), "This experiment has been closed", Toast.LENGTH_SHORT)
+                                .show();
                         addTrialButton.setEnabled(false);
-                    } else {
+
+                    } else if (isOpen.equals("Active")) {
+                        Toast.makeText(getApplicationContext(), "This experiment has been reopened", Toast.LENGTH_SHORT)
+                                .show();
                         addTrialButton.setEnabled(true);
                     }
                 }
@@ -161,6 +189,7 @@ public class ExperimentViewActivity extends AppCompatActivity
             }
         }
 
+        // all the onClick listeners
         unpublishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -185,7 +214,8 @@ public class ExperimentViewActivity extends AppCompatActivity
         addTrialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment newFragment = AddTrialDialogFragment.newInstance(experimentType, experimentId, geolocationRequired);
+                DialogFragment newFragment = AddTrialDialogFragment.newInstance(experimentType, experimentId,
+                        geolocationRequired);
                 newFragment.show(getSupportFragmentManager(), "ADD TRIAL");
             }
         });
@@ -196,7 +226,6 @@ public class ExperimentViewActivity extends AppCompatActivity
                 statisticReport();
             }
         });
-
 
         viewMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,7 +244,7 @@ public class ExperimentViewActivity extends AppCompatActivity
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("GeoLocation", geoLocations);
                 intent.putExtras(bundle);
-                intent.putExtra("allLocations", true);  // tell the map activity to display instead of select
+                intent.putExtra("allLocations", true); // tell the map activity to display instead of select
                 startActivity(intent);
             }
         });
@@ -226,16 +255,15 @@ public class ExperimentViewActivity extends AppCompatActivity
         trialAdapter = new CustomTrialList(this, trialDataList, experimentId, isOwner);
         trialList.setAdapter(trialAdapter);
         trialList.setOnItemClickListener(new OnItemClickListener() {
-             @Override
-             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                 String experimenterID = trialAdapter.getItem(position).getExperimenterID();
-                 Trial trial = trialAdapter.getItem(position);
-                 new TrialProfileFragment(isOwner,trial).show(getSupportFragmentManager(), "PROFILE");
-             }
-         });
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String experimenterID = trialAdapter.getItem(position).getExperimenterID();
+                Trial trial = trialAdapter.getItem(position);
+                new TrialProfileFragment(isOwner, trial).show(getSupportFragmentManager(), "PROFILE");
+            }
+        });
 
         // create a document snapshot listener in the DAL to update the list of trials
-        ExperimentDAL experimentDAL = new ExperimentDAL();
         experimentDAL.addTrialListener(experimentId, experimentType, trials -> {
             trialDataList.clear();
             trialDataList.addAll(trials);
@@ -245,28 +273,16 @@ public class ExperimentViewActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    public void openForum(View view) {
-        Intent intent = new Intent(this, ForumActivity.class);
-        intent.putExtra(Extras.EXPERIMENT_ID, experimentId);
-        startActivity(intent);
-    }
-
+    /**
+     * Opening up confirmation fragment and action on callback
+     *
+     * @param tag            the tag to determine what text displayed in
+     *                       confirmation
+     * @param blacklist      if this is a blacklist fragment or not
+     * @param experimenterID experimenter's id for blacklist logic
+     */
     public void confirmationDialog(String tag, Boolean blacklist, String experimenterID) {
         new ConfirmationFragment(tag, blacklist, experimenterID).show(getSupportFragmentManager(), "CONF");
-    }
-
-    public void statisticReport() {
-        Intent intent = new Intent(this, StatsNumber.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("Trials", trialDataList);
-        intent.putExtras(bundle);
-        intent.putExtra("TrialType", experimentType);
-        startActivity(intent);
     }
 
     // Action based on confirmation
@@ -320,15 +336,41 @@ public class ExperimentViewActivity extends AppCompatActivity
     }
 
     @Override
-    public void onViewProfile() {
-        viewProfile(findViewById(android.R.id.content).getRootView());
-    }
-
-    @Override
     public void onBlacklist(String experimenterId) {
         confirmationDialog("block", true, experimenterId);
     }
 
+    // navigation between activities
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * @param view - Navigate to forum
+     */
+    public void openForum(View view) {
+        Intent intent = new Intent(this, ForumActivity.class);
+        intent.putExtra(Extras.EXPERIMENT_ID, experimentId);
+        startActivity(intent);
+    }
+
+    /**
+     * Prepare data for statistics page
+     */
+    public void statisticReport() {
+        Intent intent = new Intent(this, StatsNumber.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("Trials", trialDataList);
+        intent.putExtras(bundle);
+        intent.putExtra("TrialType", experimentType);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onViewProfile() {
+        viewProfile(findViewById(android.R.id.content).getRootView());
+    }
 
     // when back button is pressed
     @Override
@@ -342,20 +384,20 @@ public class ExperimentViewActivity extends AppCompatActivity
         }
     }
 
-
     /**
-     * @param view - When clicking a username from experiment view, open up their profile
+     * @param view - When clicking a username from experiment view, open up their
+     *             profile
      */
-    public void viewProfile(View view){
+    public void viewProfile(View view) {
         Intent intent;
         intent = new Intent(this, ProfileViewActivity.class);
 
         // Are 'You' the owner, send in 'You' object
-        if(isOwner){
-            intent.putExtra("User",You.getUser());
+        if (isOwner) {
+            intent.putExtra("User", You.getUser());
             startActivity(intent);
 
-        //Else, create a user object from the owner's ID and send it in to activity
+            // Else, create a user object from the owner's ID and send it in to activity
         } else {
             UserDAL uDAL = new UserDAL();
             uDAL.findUserByID(experimentInfo.getOwnerId(), new UserDAL.FindUserByIDCallback() {
@@ -367,9 +409,5 @@ public class ExperimentViewActivity extends AppCompatActivity
                 }
             });
         }
-    }
-
-    public void createQRCode(View v){
-        startActivity(new Intent(this, CreateQRActivity.class));
     }
 }

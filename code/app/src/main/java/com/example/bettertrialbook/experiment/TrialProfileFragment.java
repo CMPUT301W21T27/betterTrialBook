@@ -1,3 +1,8 @@
+/*
+    Fragment for choosing an option after clicking on a trial/user. The owner can blacklist them
+    which hides all their trials and doesn't allow them to add additional trials. Everyone can
+    view someone else's profile
+ */
 package com.example.bettertrialbook.experiment;
 
 import android.app.AlertDialog;
@@ -36,7 +41,7 @@ public class TrialProfileFragment extends DialogFragment {
 
     }
 
-    public TrialProfileFragment( Boolean isOwner, Trial trial) {
+    public TrialProfileFragment(Boolean isOwner, Trial trial) {
         super();
         this.trial = trial;
         this.isOwner = isOwner;
@@ -49,8 +54,7 @@ public class TrialProfileFragment extends DialogFragment {
             listener = (OnFragmentInteractionListener) context;
 
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -59,20 +63,16 @@ public class TrialProfileFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_trial_profile, null);
 
-        // maybe add the current selected userID/username
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        return builder
-                .setView(view)
-                .setTitle("Trial Actions")
-                .setItems(availableActions(), (dialog, which) -> onActionClick(which))
-                .create();
+        return builder.setView(view).setTitle("Trial Actions")
+                .setItems(availableActions(), (dialog, which) -> onActionClick(which)).create();
     }
 
     private String[] availableActions() {
         if (isOwner) {
-            return new String[]{"View Profile", "Create QR Code", "Block Trials"};
+            return new String[] { "View Profile", "Create QR Code", "Block Trials" };
         }
-        return new String[]{"View Profile", "Create QR Code"};
+        return new String[] { "View Profile", "Create QR Code" };
     }
 
     private void onActionClick(int actionIndex) {
@@ -93,11 +93,10 @@ public class TrialProfileFragment extends DialogFragment {
         }
     }
 
-    private void onCreateQRCodeClick(){
+    private void onCreateQRCodeClick() {
         Intent intent = new Intent(getContext(), CreateQRActivity.class);
         intent.putExtra(Extras.TRIAL, trial);
         intent.putExtra(Extras.EXPERIMENT_ID, experimentID);
         startActivity(intent);
     }
 }
-
