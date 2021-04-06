@@ -2,7 +2,6 @@
     Activity for viewing experiment details. Uses the ExperimentDAL to get the data
     from the database. Uses the UserDAL to get the id of the user so that owner functions can
     be hidden from non-owners.
-    TODO: QR functionality, blacklist user's trials, geolocation, view other's profile, statistics
  */
 package com.example.bettertrialbook.experiment;
 
@@ -17,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -111,6 +111,8 @@ public class ExperimentViewActivity extends AppCompatActivity
         if (experimentInfo.getGeoLocationRequired()) {
             addTrialButton.setText("Add Trial\n(Geolocation\nRequired)");
         }
+
+        ExperimentDAL experimentDAL = new ExperimentDAL();
         if (!isOwner) {
             unpublishButton.setVisibility(View.INVISIBLE);
             endButton.setVisibility(View.INVISIBLE);
@@ -130,16 +132,33 @@ public class ExperimentViewActivity extends AppCompatActivity
                 }
             });
 
-            ExperimentDAL experimentDAL = new ExperimentDAL();
-            You you = new You();
-
+            // adds listener to check in real-time if a user has been blacklisted
             experimentDAL.addBlacklistListener(experimentId, You.getUser().getID(), new ExperimentDAL.IsBlacklistedCallback() {
                 @Override
                 public void onCallback(Boolean isBlacklisted) {
-                    Log.d("TEST2", "PEE "+String.valueOf(isBlacklisted));
                     if (isBlacklisted) {
+                        Toast.makeText(getApplicationContext(), String.format("You can no longer add trials to this experiment", experimentInfo.getDescription()), Toast.LENGTH_LONG).show();
                         addTrialButton.setEnabled(false);
                     } else {
+                        addTrialButton.setEnabled(true);
+                    }
+                }
+            });
+
+            // adds listener to check in real-time for any status changes that affects add trial or experiment visibility
+            experimentDAL.addStatusListener(experimentId, new ExperimentDAL.IsOpenCallback() {
+                @Override
+                public void onCallback(String isOpen) {
+                    if (isOpen.equals("Unpublish")) {
+                        Toast.makeText(getApplicationContext(), String.format("Experiment %s has been unpublished", experimentInfo.getDescription()), Toast.LENGTH_LONG).show();
+                        onBackPressed();
+
+                    } else if (isOpen.equals("Closed")) {
+                        Toast.makeText(getApplicationContext(), "This experiment has been closed", Toast.LENGTH_SHORT).show();
+                        addTrialButton.setEnabled(false);
+
+                    } else if (isOpen.equals("Active")) {
+                        Toast.makeText(getApplicationContext(), "This experiment has been reopened", Toast.LENGTH_SHORT).show();
                         addTrialButton.setEnabled(true);
                     }
                 }
@@ -160,6 +179,7 @@ public class ExperimentViewActivity extends AppCompatActivity
             }
         }
 
+        // all the onClick listeners
         unpublishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -248,7 +268,6 @@ public class ExperimentViewActivity extends AppCompatActivity
          });
 
         // create a document snapshot listener in the DAL to update the list of trials
-        ExperimentDAL experimentDAL = new ExperimentDAL();
         experimentDAL.addTrialListener(experimentId, experimentType, trials -> {
             trialDataList.clear();
             trialDataList.addAll(trials);
@@ -258,28 +277,15 @@ public class ExperimentViewActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    public void openForum(View view) {
-        Intent intent = new Intent(this, ForumActivity.class);
-        intent.putExtra(Extras.EXPERIMENT_ID, experimentId);
-        startActivity(intent);
-    }
-
+    /**
+     * Opening up confirmation fragment and action on callback
+     *
+     * @param tag the tag to determine what text displayed in confirmation
+     * @param blacklist if this is a blacklist fragment or not
+     * @param experimenterID experimenter's id for blacklist logic
+     */
     public void confirmationDialog(String tag, Boolean blacklist, String experimenterID) {
         new ConfirmationFragment(tag, blacklist, experimenterID).show(getSupportFragmentManager(), "CONF");
-    }
-
-    public void statisticReport() {
-        Intent intent = new Intent(this, StatsNumber.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("Trials", trialDataList);
-        intent.putExtras(bundle);
-        intent.putExtra("TrialType", experimentType);
-        startActivity(intent);
     }
 
     // Action based on confirmation
@@ -333,13 +339,40 @@ public class ExperimentViewActivity extends AppCompatActivity
     }
 
     @Override
-    public void onViewProfile() {
-        viewProfile(findViewById(android.R.id.content).getRootView());
+    public void onBlacklist(String experimenterId) {
+        confirmationDialog("block", true, experimenterId);
+    }
+
+    // navigation between activities
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * @param view - Navigate to forum
+     */
+    public void openForum(View view) {
+        Intent intent = new Intent(this, ForumActivity.class);
+        intent.putExtra(Extras.EXPERIMENT_ID, experimentId);
+        startActivity(intent);
+    }
+
+    /**
+     * Prepare data for statistics page
+     */
+    public void statisticReport() {
+        Intent intent = new Intent(this, StatsNumber.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("Trials", trialDataList);
+        intent.putExtras(bundle);
+        intent.putExtra("TrialType", experimentType);
+        startActivity(intent);
     }
 
     @Override
-    public void onBlacklist(String experimenterId) {
-        confirmationDialog("block", true, experimenterId);
+    public void onViewProfile() {
+        viewProfile(findViewById(android.R.id.content).getRootView());
     }
 
     // when back button is pressed

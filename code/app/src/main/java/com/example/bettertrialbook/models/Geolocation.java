@@ -47,7 +47,7 @@ public class Geolocation implements Parcelable, Comparable<Geolocation> {
 
     // parcelable methods
     protected Geolocation(Parcel in) {
-        location = in.readParcelable(ContactInfo.class.getClassLoader());
+        location = in.readParcelable(Location.class.getClassLoader());
     }
 
     public static final Creator<Geolocation> CREATOR = new Creator<Geolocation>() {

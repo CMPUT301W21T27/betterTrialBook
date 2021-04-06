@@ -5,9 +5,7 @@ Currently blacklisting has yet to be implemented.
 
 package com.example.bettertrialbook.dal;
 
-import android.content.Intent;
 import android.location.Location;
-import android.os.Build;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
@@ -33,8 +31,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,6 +58,14 @@ public class ExperimentDAL {
     // Interfaces for callbacks
     public interface FindExperimentByIDCallback {
         void onCallback(ExperimentInfo experimentInfo);
+    }
+
+    public interface IsBlacklistedCallback {
+        void onCallback(Boolean isBlacklisted);
+    }
+
+    public interface IsOpenCallback {
+        void onCallback(String status);
     }
 
     /**
@@ -155,6 +161,38 @@ public class ExperimentDAL {
         });
     }
 
+    /**
+     * Adds listener to callback with new status of experiment
+     *
+     * @param experimentId   the id of the currently selected experiment
+     */
+    public void addStatusListener(String experimentId, IsOpenCallback callback) {
+        final DocumentReference docRef = collRef.document(experimentId);
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                String status = "";
+                if (value != null && value.exists()) {
+                    String activeStatus = (String) value.getData().get("ActiveStatus");
+                    String publishStatus = (String) value.getData().get("PublishStatus");
+                    if (activeStatus != null && activeStatus.equals("Closed")) {
+                        status = "Closed";
+                    }
+                    if (publishStatus != null && publishStatus.equals("Unpublish")) {
+                        status = "Unpublish";
+                    }
+                }
+                callback.onCallback(status);
+            }
+        });
+    }
+
+    /**
+     * Add new trial to experiment
+     *
+     * @param experimentId the unique id of the experiment
+     * @param trial       trial and its data
+     */
     public void addTrial(String experimentId, Trial trial) {
         collRef.document(experimentId).update("Trials", FieldValue.arrayUnion(trial))
                 .addOnFailureListener(new OnFailureListener() {
@@ -168,140 +206,6 @@ public class ExperimentDAL {
                         Log.d(TAG, "Data has been updated");
                     }
                 });
-    }
-
-    /**
-     * Adds or removes an experimenter + their trials from a blacklist
-     *
-     * @param experimentId   the id of the currently selected experiment
-     * @param experimenterId the experimenter to be added or removed
-     * @param blacklist      the trial's blacklist
-     */
-    public void modifyBlacklist(String experimentId, String experimenterId, Boolean blacklist) {
-        if (blacklist) {
-            blacklistUser(experimentId, experimenterId);
-
-        } else {
-            unblacklistUser(experimentId, experimenterId);
-        }
-        collRef.document(experimentId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document != null) {
-                        ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (document.getData()).get("Trials");
-                        if (trials != null) {
-                            ListIterator<HashMap<Object, Object>> iter = trials.listIterator();
-                            ArrayList<HashMap<Object, Object>> updatedTrials = new ArrayList<HashMap<Object, Object>>();
-                            while (iter.hasNext()) {
-                                HashMap<Object, Object> currentIter = iter.next();
-                                String currentID = (String) currentIter.get("experimenterID");
-                                if (currentID != null) {
-                                    if (currentID.equals(experimenterId)) {
-                                        currentIter.put("blacklist", blacklist);
-                                    }
-                                    updatedTrials.add(currentIter);
-                                    Log.d("TEST", "blacklist: " + currentID + " " + String.valueOf(currentIter.get("blacklist")));
-                                }
-                            }
-                            collRef.document(experimentId).update("Trials", updatedTrials);
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    public interface IsBlacklistedCallback {
-        void onCallback(Boolean isBlacklisted);
-    }
-
-    public void getBlacklistUser(String experimentId, String experimenterId, IsBlacklistedCallback callback) {
-        collRef.document(experimentId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                boolean isBlacklisted = false;
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document != null) {
-                        Log.d(TAG, "Document has been loaded");
-                        List<String> blacklist = (List<String>) document.get("Blacklist");
-                        Log.d("TEST2", experimenterId);
-                        if (blacklist != null) {
-                            for (int i = 0; i < blacklist.size(); i++) {
-                                String current = blacklist.get(i);
-                                Log.d("TEST2", current);
-                                if (current.equals(experimenterId)) {
-                                    isBlacklisted = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                    } else {
-                        Log.d(TAG, "No such document exists");
-                    }
-
-                } else {
-                    Log.d(TAG, "Document could not be loaded");
-                }
-                callback.onCallback(isBlacklisted);
-            }
-        });
-    }
-
-    public void addBlacklistListener(String experimentId, String experimenterId, IsBlacklistedCallback callback) {
-        final DocumentReference docRef = collRef.document(experimentId);
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                boolean isBlacklisted = false;
-                if (value != null && value.exists()) {
-                    List<String> blacklist = (List<String>) value.getData().get("Blacklist");
-                    if (blacklist != null) {
-                        for (int i = 0; i < blacklist.size(); i++) {
-                            String current = blacklist.get(i);
-                            if (current.equals(experimenterId)) {
-                                isBlacklisted = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                callback.onCallback(isBlacklisted);
-            }
-        });
-    }
-
-    public void blacklistUser(String experimentId, String experimenterId) {
-        collRef.document(experimentId).update("Blacklist", FieldValue.arrayUnion(experimenterId))
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data could not be updated" + e.toString());
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "Data has been updated");
-            }
-        });
-    }
-
-    public void unblacklistUser(String experimentId, String experimenterId) {
-        collRef.document(experimentId).update("Blacklist", FieldValue.arrayRemove(experimenterId))
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data could not be updated" + e.toString());
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "Data has been updated");
-            }
-        });
     }
 
     /**
@@ -340,6 +244,160 @@ public class ExperimentDAL {
             }
 
             callback.execute(trialList);
+        });
+    }
+
+    /**
+     * Adds or removes an experimenter + their trials from a blacklist
+     *
+     * @param experimentId   the id of the currently selected experiment
+     * @param experimenterId the experimenter to be added or removed
+     * @param blacklist      the trial/experimenter's blacklist status
+     */
+    public void modifyBlacklist(String experimentId, String experimenterId, Boolean blacklist) {
+        if (blacklist) {
+            blacklistUser(experimentId, experimenterId);
+
+        } else {
+            unblacklistUser(experimentId, experimenterId);
+        }
+        collRef.document(experimentId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (document.getData()).get("Trials");
+                        if (trials != null) {
+                            ListIterator<HashMap<Object, Object>> iter = trials.listIterator();
+                            ArrayList<HashMap<Object, Object>> updatedTrials = new ArrayList<HashMap<Object, Object>>();
+                            while (iter.hasNext()) {
+                                HashMap<Object, Object> currentIter = iter.next();
+                                String currentID = (String) currentIter.get("experimenterID");
+                                if (currentID != null) {
+                                    if (currentID.equals(experimenterId)) {
+                                        currentIter.put("blacklist", blacklist);
+                                    }
+                                    updatedTrials.add(currentIter);
+                                    Log.d("TEST", "blacklist: " + currentID + " " + String.valueOf(currentIter.get("blacklist")));
+                                }
+                            }
+                            collRef.document(experimentId).update("Trials", updatedTrials);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Returns blacklist status of user
+     *
+     * @param experimentId   the id of the currently selected experiment
+     * @param experimenterId the experimenter to be checked
+     */
+    public void getBlacklistUser(String experimentId, String experimenterId, IsBlacklistedCallback callback) {
+        collRef.document(experimentId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                boolean isBlacklisted = false;
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        Log.d(TAG, "Document has been loaded");
+                        List<String> blacklist = (List<String>) document.get("Blacklist");
+                        Log.d("TEST2", experimenterId);
+                        if (blacklist != null) {
+                            for (int i = 0; i < blacklist.size(); i++) {
+                                String current = blacklist.get(i);
+                                Log.d("TEST2", current);
+                                if (current.equals(experimenterId)) {
+                                    isBlacklisted = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                    } else {
+                        Log.d(TAG, "No such document exists");
+                    }
+
+                } else {
+                    Log.d(TAG, "Document could not be loaded");
+                }
+                callback.onCallback(isBlacklisted);
+            }
+        });
+    }
+
+    /**
+     * Adds listener to automatically update blacklist status of all trials when user blacklisted
+     *
+     * @param experimentId   the id of the currently selected experiment
+     * @param experimenterId the experimenter to be added or removed
+     */
+    public void addBlacklistListener(String experimentId, String experimenterId, IsBlacklistedCallback callback) {
+        final DocumentReference docRef = collRef.document(experimentId);
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                boolean isBlacklisted = false;
+                if (value != null && value.exists()) {
+                    List<String> blacklist = (List<String>) value.getData().get("Blacklist");
+                    if (blacklist != null) {
+                        for (int i = 0; i < blacklist.size(); i++) {
+                            String current = blacklist.get(i);
+                            if (current.equals(experimenterId)) {
+                                isBlacklisted = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                callback.onCallback(isBlacklisted);
+            }
+        });
+    }
+
+    /**
+     * Blacklists user and adds them to experiment's Blacklist array
+     *
+     * @param experimentId   the id of the currently selected experiment
+     * @param experimenterId the experimenter to be added or removed
+     */
+    public void blacklistUser(String experimentId, String experimenterId) {
+        collRef.document(experimentId).update("Blacklist", FieldValue.arrayUnion(experimenterId))
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data could not be updated" + e.toString());
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Data has been updated");
+            }
+        });
+    }
+
+    /**
+     * Unblacklists user and removes them from experiment's Blacklist array
+     *
+     * @param experimentId   the id of the currently selected experiment
+     * @param experimenterId the experimenter to be added or removed
+     */
+    public void unblacklistUser(String experimentId, String experimenterId) {
+        collRef.document(experimentId).update("Blacklist", FieldValue.arrayRemove(experimenterId))
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data could not be updated" + e.toString());
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Data has been updated");
+            }
         });
     }
 
@@ -464,6 +522,4 @@ public class ExperimentDAL {
             throw new IllegalArgumentException("Invalid experiment type");
         }
     }
-
-
 }
