@@ -33,6 +33,7 @@ import com.example.bettertrialbook.models.Geolocation;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.User;
 import com.example.bettertrialbook.profile.ProfileViewActivity;
+import com.example.bettertrialbook.qr.CreateQRActivity;
 import com.example.bettertrialbook.statistic.StatsNumber;
 
 import java.util.ArrayList;
@@ -379,5 +380,9 @@ public class ExperimentViewActivity extends AppCompatActivity
                 }
             });
         }
+    }
+
+    public void createQRCode(View v){
+        startActivity(new Intent(this, CreateQRActivity.class));
     }
 }

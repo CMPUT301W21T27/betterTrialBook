@@ -37,7 +37,6 @@ public class ScanQRActivity extends AppCompatActivity {
                 setupCamera();
             });
 
-    private Camera camera;
 
     //https://developer.android.com/training/camerax/preview
     @Override
@@ -79,7 +78,7 @@ public class ScanQRActivity extends AppCompatActivity {
                 .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                 .build();
 
-        camera = cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, cameraPreview(), barcodeAnalyzer());
+        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, cameraPreview(), barcodeAnalyzer());
     }
 
     private Preview cameraPreview() {
