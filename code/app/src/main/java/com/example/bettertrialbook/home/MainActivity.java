@@ -30,6 +30,7 @@ import com.example.bettertrialbook.experiment.ExperimentViewActivity;
 import com.example.bettertrialbook.models.ExperimentInfo;
 import com.example.bettertrialbook.models.User;
 import com.example.bettertrialbook.profile.ProfileViewActivity;
+import com.example.bettertrialbook.qr.ScanQRActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -252,5 +253,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void openQRScanner(View v){
+        startActivity(new Intent(this, ScanQRActivity.class));
     }
 }
