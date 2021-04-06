@@ -8,14 +8,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.bettertrialbook.R;
-import com.example.bettertrialbook.dal.UserDAL;
-import com.example.bettertrialbook.models.User;
+import com.example.bettertrialbook.You;
 
 public class TrialProfileFragment extends DialogFragment {
     private TrialProfileFragment.OnFragmentInteractionListener listener;
@@ -63,7 +63,13 @@ public class TrialProfileFragment extends DialogFragment {
                     .setNegativeButton("Block Trials", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            listener.onBlacklist(experimenterID);
+                            You you = new You();
+                            if (experimenterID.equals(you.getUser().getID())) {
+                                Toast.makeText(getActivity(), "You cannot blacklist yourself", Toast.LENGTH_LONG).show();
+
+                            } else {
+                                listener.onBlacklist(experimenterID);
+                            }
                         }
                     })
                     .setPositiveButton("View Profile", new DialogInterface.OnClickListener() {

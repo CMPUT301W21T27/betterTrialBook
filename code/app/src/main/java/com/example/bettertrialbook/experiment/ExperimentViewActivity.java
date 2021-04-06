@@ -22,12 +22,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.bettertrialbook.Extras;
-import com.example.bettertrialbook.You;
-import com.example.bettertrialbook.home.MainActivity;
 import com.example.bettertrialbook.R;
+import com.example.bettertrialbook.You;
 import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.forum.ForumActivity;
+import com.example.bettertrialbook.home.MainActivity;
 import com.example.bettertrialbook.models.ExperimentInfo;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.User;
@@ -118,6 +118,21 @@ public class ExperimentViewActivity extends AppCompatActivity
                 }
             });
 
+            ExperimentDAL experimentDAL = new ExperimentDAL();
+            You you = new You();
+
+            experimentDAL.addBlacklistListener(experimentId, You.getUser().getID(), new ExperimentDAL.IsBlacklistedCallback() {
+                @Override
+                public void onCallback(Boolean isBlacklisted) {
+                    Log.d("TEST2", "PEE "+String.valueOf(isBlacklisted));
+                    if (isBlacklisted) {
+                        addTrialButton.setEnabled(false);
+                    } else {
+                        addTrialButton.setEnabled(true);
+                    }
+                }
+            });
+
         } else {
             subscribeButton.setVisibility(View.INVISIBLE);
 
@@ -174,9 +189,9 @@ public class ExperimentViewActivity extends AppCompatActivity
                  new TrialProfileFragment(experimenterID, experimentId, isOwner).show(getSupportFragmentManager(), "PROFILE");
              }
          });
-        ExperimentDAL experimentDAL = new ExperimentDAL();
 
         // create a document snapshot listener in the DAL to update the list of trials
+        ExperimentDAL experimentDAL = new ExperimentDAL();
         experimentDAL.addTrialListener(experimentId, experimentType, trials -> {
             trialDataList.clear();
             trialDataList.addAll(trials);
@@ -242,7 +257,7 @@ public class ExperimentViewActivity extends AppCompatActivity
         } else if (tag.equals("block")) {
             ExperimentDAL experimentDAL = new ExperimentDAL();
             Log.d("TEST2", experimenterID);
-            experimentDAL.modifyExperimentBlacklist(experimentId, "", experimenterID, true);
+            experimentDAL.modifyBlacklist(experimentId, experimenterID, true);
         }
     }
 

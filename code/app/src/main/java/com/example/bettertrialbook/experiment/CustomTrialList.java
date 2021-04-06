@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,7 +18,6 @@ import androidx.annotation.Nullable;
 
 import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.R;
-import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.BinomialTrial;
 import com.example.bettertrialbook.models.CountTrial;
@@ -79,7 +77,12 @@ public class CustomTrialList extends ArrayAdapter<Trial> {
                             experimenterIdText.setText("Experimenter: " + user.getID().substring(0, 8));
                         }
                     } else {
-                        experimenterIdText.setText("Experimenter: " + experimenterId.substring(0, 8));
+                        if (experimenterId.length() >= 8) {
+                            experimenterIdText.setText("Experimenter: " + experimenterId.substring(0, 8));
+                        } else {
+                            experimenterIdText.setText("Experimenter: " + experimenterId);
+                        }
+
                     }
                 }
             });

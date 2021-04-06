@@ -12,15 +12,15 @@ import android.os.Parcelable;
 import androidx.annotation.RequiresApi;
 
 public class ExperimentInfo implements Comparable<ExperimentInfo>, Parcelable {
-    private String description;
-    private String ownerId;
-    public String publishStatus;
-    public String activeStatus;
-    private String id;
-    private String trialType;
-    private Boolean geoLocationRequired;
-    private int minTrials;
-    private String region;
+    private String description = "";
+    private String ownerId = "";
+    public String publishStatus = "";
+    public String activeStatus = "";
+    private String id = "";
+    private String trialType = "";
+    private Boolean geoLocationRequired = false;
+    private int minTrials = 0;
+    private String region = "";
 
     /**
      * Creates an ExperimentInfo object with the following parameters
