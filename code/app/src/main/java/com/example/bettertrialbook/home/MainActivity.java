@@ -107,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             @Override
             public boolean onQueryTextChange(String newText) {
-<<<<<<< HEAD
                 ExperimentDAL experimentDAL = new ExperimentDAL();
                 if (itemSpinner.getSelectedItem().toString().equalsIgnoreCase("Description")) {
                     experimentDAL.searchByDescription(trialInfoList, trialInfoAdapter, newText);
@@ -115,72 +114,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 else if (itemSpinner.getSelectedItem().toString().equalsIgnoreCase("User")) {
                     experimentDAL.searchByUser(trialInfoList, trialInfoAdapter, newText);
                 }
-=======
-                neverSearched = false;
-                reference.addSnapshotListener((queryDocumentSnapshots, error) -> {
-                    trialInfoList.clear();
-                    if (newText.length() > 0) {
-                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                            // Only search for the key words in the description
-                            // Further search method will be refined after
-                            String description = (String) doc.getData().get("Description");
-                            if (description.toLowerCase().contains(newText.toLowerCase())) {
-                                // MinTrials hasn't done yet. Want to wait for further production and then
-                                // decide.
-                                // GeoLocationRequired hasn't done yet. Want to wait for further production and
-                                // then decide.
-                                String ownerId = (String) doc.getData().get("Owner");
-                                String publishStatus = (String) doc.getData().get("PublishStatus");
-                                String activeStatus = (String) doc.getData().get("ActiveStatus");
-                                if ((ownerId != null && You.getUser() != null && ownerId.equals(You.getUser().getID()))
-                                        || (publishStatus != null && !publishStatus.equals("Unpublish"))) {
-                                    String id = doc.getId();
-                                    String region = (String) doc.getData().get("Region");
-                                    String trialType = (String) doc.getData().get("TrialType");
-                                    trialInfoList.add(new ExperimentInfo(description, ownerId, publishStatus, activeStatus,
-                                            id, trialType, false, 0, region));
-                                }
-                            }
-                        }
-
-                    } else if (newText.length() == 0) {
-                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                            String experimentId = (String) doc.getId();
-
-                            uDAL.isSubscribed(experimentId, You.getUser().getID(), new UserDAL.IsSubscribedCallback() {
-                                @Override
-                                public void onCallback(Boolean isSubscribed) {
-                                    if (isSubscribed) {
-                                        // MinTrials hasn't done yet. Want to wait for further production and then
-                                        // decide.
-                                        // GeoLocationRequired hasn't done yet. Want to wait for further production and
-                                        // then decide.
-                                        Log.d("TEST2", String.valueOf(experimentId));
-                                        String ownerId = (String) doc.getData().get("Owner");
-                                        String publishStatus = (String) doc.getData().get("PublishStatus");
-                                        String activeStatus = (String) doc.getData().get("ActiveStatus");
-                                        if ((ownerId != null && ownerId.equals(You.getUser().getID()))
-                                                || (publishStatus != null && !publishStatus.equals("Unpublished"))) {
-                                            String id = doc.getId();
-                                            String description = (String) doc.getData().get("Description");
-                                            String region = (String) doc.getData().get("Region");
-                                            String trialType = (String) doc.getData().get("TrialType");
-                                            trialInfoList.add(new ExperimentInfo(description, ownerId, publishStatus, activeStatus,
-                                                    id, trialType, false, 0, region));
-                                        }
-
-                                        trialInfoAdapter.notifyDataSetChanged();
-                                    }
-                                }
-                            });
-                        }
-
-                    } else {
-                        trialInfoList.clear();
-                    }
-                    trialInfoAdapter.notifyDataSetChanged();
-                });
->>>>>>> nibs
                 return false;
             }
         });

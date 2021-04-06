@@ -44,7 +44,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" />
+            android:value="$AIzaSyD-wLF3-KESrJRcpdEVY_IAZzWw5znCBlQ" />
 
         <activity
             android:name=".experiment.GeolocationActivity"

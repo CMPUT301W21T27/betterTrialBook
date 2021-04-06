@@ -6,7 +6,6 @@
  */
 package com.example.bettertrialbook.experiment;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -17,17 +16,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.bettertrialbook.You;
-import com.example.bettertrialbook.Extras;
-import com.example.bettertrialbook.statistic.Histogram;
-import com.example.bettertrialbook.home.MainActivity;
 import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.You;
@@ -231,7 +224,6 @@ public class ExperimentViewActivity extends AppCompatActivity
         trialDataList = new ArrayList<>();
         trialAdapter = new CustomTrialList(this, trialDataList, experimentId, isOwner);
         trialList.setAdapter(trialAdapter);
-<<<<<<< HEAD
 //        trialList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -247,8 +239,6 @@ public class ExperimentViewActivity extends AppCompatActivity
 //                startActivity(intent);
 //            }
 //        });
-        ExperimentDAL experimentDAL = new ExperimentDAL();
-=======
         trialList.setOnItemClickListener(new OnItemClickListener() {
              @Override
              public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -256,7 +246,6 @@ public class ExperimentViewActivity extends AppCompatActivity
                  new TrialProfileFragment(experimenterID, experimentId, isOwner).show(getSupportFragmentManager(), "PROFILE");
              }
          });
->>>>>>> nibs
 
         // create a document snapshot listener in the DAL to update the list of trials
         ExperimentDAL experimentDAL = new ExperimentDAL();
