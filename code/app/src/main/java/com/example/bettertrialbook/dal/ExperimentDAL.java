@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.You;
@@ -31,9 +30,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -170,82 +171,137 @@ public class ExperimentDAL {
     }
 
     /**
-     * Deletes an experimenter's trials
+     * Adds or removes an experimenter + their trials from a blacklist
      *
      * @param experimentId   the id of the currently selected experiment
-     * @param experimentType the trial to be added//////////////////////////////////
-     * @param experimenterId the blacklisted experimented
+     * @param experimenterId the experimenter to be added or removed
      * @param blacklist      the trial's blacklist
-     *                       status////////////////////////////////////
      */
-    public void modifyExperimentBlacklist(String experimentId, String experimentType, String experimenterId,
-            Boolean blacklist) {
-        collRef.document(experimentId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onSuccess(DocumentSnapshot value) {
-                if (value != null && value.exists()) {
-                    ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData())
-                            .get("Trials");
-                    if (trials != null) {
-                        // trials.removeIf(t -> t.get("experimenterID").equals(experimenterId));
-                        ListIterator<HashMap<Object, Object>> iter = trials.listIterator();
-                        while (iter.hasNext()) {
-                            String temp = (String) iter.next().get("experimenterId");
-                            Log.d("TEST", "blacklist: " + experimenterId);
-                            if (temp != null) {
-                                Log.d("TEST", "trial experimenter: " + temp);
+    public void modifyBlacklist(String experimentId, String experimenterId, Boolean blacklist) {
+        if (blacklist) {
+            blacklistUser(experimentId, experimenterId);
 
-                                if (temp.equals(experimenterId)) {
-                                    iter.remove();
+        } else {
+            unblacklistUser(experimentId, experimenterId);
+        }
+        collRef.document(experimentId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (document.getData()).get("Trials");
+                        if (trials != null) {
+                            ListIterator<HashMap<Object, Object>> iter = trials.listIterator();
+                            ArrayList<HashMap<Object, Object>> updatedTrials = new ArrayList<HashMap<Object, Object>>();
+                            while (iter.hasNext()) {
+                                HashMap<Object, Object> currentIter = iter.next();
+                                String currentID = (String) currentIter.get("experimenterID");
+                                if (currentID != null) {
+                                    if (currentID.equals(experimenterId)) {
+                                        currentIter.put("blacklist", blacklist);
+                                    }
+                                    updatedTrials.add(currentIter);
+                                    Log.d("TEST", "blacklist: " + currentID + " " + String.valueOf(currentIter.get("blacklist")));
+                                }
+                            }
+                            collRef.document(experimentId).update("Trials", updatedTrials);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    public interface IsBlacklistedCallback {
+        void onCallback(Boolean isBlacklisted);
+    }
+
+    public void getBlacklistUser(String experimentId, String experimenterId, IsBlacklistedCallback callback) {
+        collRef.document(experimentId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                boolean isBlacklisted = false;
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        Log.d(TAG, "Document has been loaded");
+                        List<String> blacklist = (List<String>) document.get("Blacklist");
+                        Log.d("TEST2", experimenterId);
+                        if (blacklist != null) {
+                            for (int i = 0; i < blacklist.size(); i++) {
+                                String current = blacklist.get(i);
+                                Log.d("TEST2", current);
+                                if (current.equals(experimenterId)) {
+                                    isBlacklisted = true;
+                                    break;
                                 }
                             }
                         }
-                        /*
-                         * for (HashMap<Object, Object> trial : trials) { if
-                         * (experimenterId.equals(trial.get("experimenterID"))) { trials.remove(trial);
-                         * 
-                         * } }
-                         */
+
+                    } else {
+                        Log.d(TAG, "No such document exists");
                     }
+
+                } else {
+                    Log.d(TAG, "Document could not be loaded");
                 }
-                /*
-                 * if (experimentType.equals(Extras.COUNT_TYPE)) { // kinda jank, from what I
-                 * can tell, a hashmap is returned so need to access values through their keys
-                 * 
-                 * 
-                 * } else if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
-                 * 
-                 * ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object,
-                 * Object>>) (value.getData()).get("Trials"); if (trials != null) { for
-                 * (HashMap<Object, Object> trial : trials) { BinomialTrial binomialTrial = new
-                 * BinomialTrial(Integer.parseInt(String.valueOf(trial.get("passCount"))),
-                 * Integer.parseInt(String.valueOf(trial.get("failCount"))),
-                 * String.valueOf(trial.get("trialID")),
-                 * String.valueOf(trial.get("experimenterID"))); } }
-                 * 
-                 * } else if (experimentType.equals(Extras.NONNEG_TYPE)) {
-                 * 
-                 * ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object,
-                 * Object>>) (value.getData()).get("Trials"); if (trials != null) { for
-                 * (HashMap<Object, Object> trial : trials) { NonNegTrial nonNegTrial = new
-                 * NonNegTrial(Integer.parseInt(String.valueOf(trial.get("count"))),
-                 * String.valueOf(trial.get("trialID")),
-                 * String.valueOf(trial.get("experimenterID"))); } }
-                 * 
-                 * } else {
-                 * 
-                 * ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object,
-                 * Object>>) (value.getData()).get("Trials"); if (trials != null) { for
-                 * (HashMap<Object, Object> trial : trials) { MeasurementTrial measurementTrial
-                 * = new
-                 * MeasurementTrial(Double.parseDouble(String.valueOf(trial.get("measurement")))
-                 * , String.valueOf(trial.get("trialID")),
-                 * String.valueOf(trial.get("experimenterID"))); } } }
-                 */
+                callback.onCallback(isBlacklisted);
             }
         });
+    }
 
+    public void addBlacklistListener(String experimentId, String experimenterId, IsBlacklistedCallback callback) {
+        final DocumentReference docRef = collRef.document(experimentId);
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                boolean isBlacklisted = false;
+                if (value != null && value.exists()) {
+                    List<String> blacklist = (List<String>) value.getData().get("Blacklist");
+                    if (blacklist != null) {
+                        for (int i = 0; i < blacklist.size(); i++) {
+                            String current = blacklist.get(i);
+                            if (current.equals(experimenterId)) {
+                                isBlacklisted = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                callback.onCallback(isBlacklisted);
+            }
+        });
+    }
+
+    public void blacklistUser(String experimentId, String experimenterId) {
+        collRef.document(experimentId).update("Blacklist", FieldValue.arrayUnion(experimenterId))
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data could not be updated" + e.toString());
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Data has been updated");
+            }
+        });
+    }
+
+    public void unblacklistUser(String experimentId, String experimenterId) {
+        collRef.document(experimentId).update("Blacklist", FieldValue.arrayRemove(experimenterId))
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data could not be updated" + e.toString());
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Data has been updated");
+            }
+        });
     }
 
     /**
@@ -272,9 +328,17 @@ public class ExperimentDAL {
                 return;
             }
 
-            for (HashMap<Object, Object> trial : trials) {
-                trialList.add(deserializeTrial(trial, experimentType));
+            // only adds non-blacklisted trials
+            ListIterator<HashMap<Object, Object>> iter = trials.listIterator();
+            ArrayList<HashMap<Object, Object>> updatedTrials = new ArrayList<HashMap<Object, Object>>();
+            while (iter.hasNext()) {
+                HashMap<Object, Object> currentIter = iter.next();
+                Boolean blacklist = (Boolean) currentIter.get("blacklist");
+                if (blacklist != null && !blacklist) {
+                    trialList.add(deserializeTrial(currentIter, experimentType));
+                }
             }
+
             callback.execute(trialList);
         });
     }

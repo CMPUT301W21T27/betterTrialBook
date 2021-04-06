@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,7 +18,6 @@ import androidx.annotation.Nullable;
 
 import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.R;
-import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.BinomialTrial;
 import com.example.bettertrialbook.models.CountTrial;
@@ -79,7 +77,12 @@ public class CustomTrialList extends ArrayAdapter<Trial> {
                             experimenterIdText.setText("Experimenter: " + user.getID().substring(0, 8));
                         }
                     } else {
-                        experimenterIdText.setText("Experimenter: " + experimenterId.substring(0, 8));
+                        if (experimenterId.length() >= 8) {
+                            experimenterIdText.setText("Experimenter: " + experimenterId.substring(0, 8));
+                        } else {
+                            experimenterIdText.setText("Experimenter: " + experimenterId);
+                        }
+
                     }
                 }
             });
@@ -103,32 +106,6 @@ public class CustomTrialList extends ArrayAdapter<Trial> {
             trialResult.setText(String.valueOf(measurementTrial.getMeasurement()));
         }
 
-        Button blacklistButton = view.findViewById(R.id.blacklist_button);
-        // Owner has the right to blacklist the experiment
-        // Experimenter has no right to blacklist the experiment
-        if (!isOwner) {
-            blacklistButton.setVisibility(View.INVISIBLE);
-        }
-
-        blacklistButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: COMPLETE modifyExperimentBlacklist Function and add in confirmation dialog
-                // confirmationDialog((String) blacklistButton.getText());
-                ExperimentDAL experimentDAL = new ExperimentDAL();
-                // experimentDAL.modifyExperimentBlacklist(experimentId, "", experimenterId, true);
-            }
-        });
-
         return view;
     }
-    /*
-    public void confirmationDialog(String tag) {
-        new ConfirmationFragment(tag).show(getSupportFragmentManager(), "BLOCK");
-    }
-
-    @Override
-    public void onOkPressedConfirm(String tag) {
-
-    }*/
 }
