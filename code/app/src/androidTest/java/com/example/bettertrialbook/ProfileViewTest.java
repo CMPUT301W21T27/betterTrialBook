@@ -68,7 +68,7 @@ public class ProfileViewTest {
     public void start(){
         solo.assertCurrentActivity(activityMessage,MainActivity.class);
         solo.sleep(5000);   //wait for database access to finish
-        solo.clickOnImage(1);
+        solo.clickOnView(solo.getCurrentActivity().findViewById(R.id.Profile));
         solo.assertCurrentActivity(activityMessage, ProfileViewActivity.class);
     }
 
@@ -80,7 +80,7 @@ public class ProfileViewTest {
         //Access profile view
         solo.assertCurrentActivity(activityMessage,MainActivity.class);
         solo.sleep(5000);   //wait for database access to finish
-        solo.clickOnImage(1);
+        solo.clickOnView(solo.getCurrentActivity().findViewById(R.id.Profile));
         solo.assertCurrentActivity(activityMessage,ProfileViewActivity.class);
 
         //Return
@@ -295,7 +295,7 @@ public class ProfileViewTest {
         //Access profile view
         solo.assertCurrentActivity(activityMessage,MainActivity.class);
         solo.sleep(5000);   //wait for database access to finish
-        solo.clickOnImage(1);
+        solo.clickOnView(solo.getCurrentActivity().findViewById(R.id.Profile));
         solo.assertCurrentActivity(activityMessage,ProfileViewActivity.class);
 
         //Go to sign up screen

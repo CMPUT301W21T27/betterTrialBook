@@ -62,7 +62,8 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
         geolocation = getIntent().getParcelableExtra("geolocation");
         allGeoLocations = getIntent().getBooleanExtra("allLocations", false);  // if true, display all the trial locations
         Log.d("Geolocation", String.valueOf(allGeoLocations));
-        geoLocations = getIntent().getParcelableArrayListExtra("geoLocations");
+        Bundle bundle = getIntent().getExtras();
+        geoLocations = (ArrayList<Geolocation>) bundle.getSerializable("GeoLocation");
 
         // Button setup
         cancelButton = findViewById(R.id.mapCancel_button);

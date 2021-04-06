@@ -8,11 +8,13 @@ import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Geolocation class stores a location object containing the lat and lon of the trial's geolocation.
  * Can be expanded to include more variables if necessary
  */
-public class Geolocation implements Parcelable, Comparable<Geolocation> {
+public class Geolocation implements Serializable, Comparable<Geolocation> {
 
     Location location;
 
@@ -47,29 +49,6 @@ public class Geolocation implements Parcelable, Comparable<Geolocation> {
     protected Geolocation(Parcel in) {
         location = in.readParcelable(ContactInfo.class.getClassLoader());
     }
-
-    public static final Creator<Geolocation> CREATOR = new Creator<Geolocation>() {
-        @Override
-        public Geolocation createFromParcel(Parcel in) {
-            return new Geolocation(in);
-        }
-
-        @Override
-        public Geolocation[] newArray(int size) {
-            return new Geolocation[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int i) {
-        dest.writeParcelable(location, i);
-    }
-
 
     /**
      * This overrides the compareTo method from Comparable,

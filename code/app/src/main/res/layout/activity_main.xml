@@ -7,13 +7,22 @@
     android:layout_height="match_parent"
     tools:context=".home.MainActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="265dp"
-        android:layout_height="78dp"
-        android:orientation="vertical"
+    <include
+        android:id="@+id/ToolBar"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/SearchMethod"
+        android:layout_width="410dp"
+        android:layout_height="46dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ToolBar">
 
         <SearchView
             android:id="@+id/SearchItem"
@@ -24,15 +33,18 @@
 
     <ListView
         android:id="@+id/Result_ListView"
-        android:layout_width="418dp"
-        android:layout_height="539dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_width="406dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toTopOf="@id/ScanQR_Button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintBottom_toTopOf="@id/ScanQR_Button">
+        app:layout_constraintTop_toBottomOf="@+id/TrialSpinner">
+
     </ListView>
 
     <Button
@@ -42,8 +54,8 @@
         android:layout_marginStart="52dp"
         android:layout_marginBottom="12dp"
         android:text="@string/scanQR_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/CreateQR_Button"
@@ -55,16 +67,44 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <ImageView
-        android:id="@+id/ProfilePicture"
-        android:layout_width="97dp"
-        android:layout_height="72dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="28dp"
-        android:contentDescription="@string/profile_description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/slime"
-        tools:srcCompat="@drawable/slime" />
+    <TextView
+        android:id="@+id/Search_Word"
+        android:layout_width="85dp"
+        android:layout_height="30dp"
+        android:layout_weight="1"
+        android:text="Search: "
+        android:gravity="center"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TrialType_Word" />
+
+    <Spinner
+        android:id="@+id/ItemSpinner"
+        android:layout_width="324dp"
+        android:layout_height="30dp"
+        android:layout_weight="1"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/TrialType_Word"
+        app:layout_constraintTop_toBottomOf="@+id/SearchMethod" />
+
+    <TextView
+        android:id="@+id/TrialType_Word"
+        android:layout_width="85dp"
+        android:layout_height="30dp"
+        android:layout_weight="1"
+        android:text="Type: "
+        android:gravity="center"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/SearchMethod" />
+
+    <Spinner
+        android:id="@+id/TrialSpinner"
+        android:layout_width="324dp"
+        android:layout_height="30dp"
+        android:layout_weight="1"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/Search_Word"
+        app:layout_constraintTop_toBottomOf="@+id/ItemSpinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

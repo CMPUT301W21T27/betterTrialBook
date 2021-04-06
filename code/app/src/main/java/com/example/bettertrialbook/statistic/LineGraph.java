@@ -1,0 +1,166 @@
+package com.example.bettertrialbook.statistic;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+
+import com.example.bettertrialbook.R;
+import com.example.bettertrialbook.models.Trial;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+
+import java.util.ArrayList;
+
+public class LineGraph extends AppCompatActivity {
+    private ArrayList<Trial> trialDataList;
+    private final LineGraphInfo lineGraphInfo = new LineGraphInfo();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_line_graph);
+        Toolbar toolbar = findViewById(R.id.ToolBar);
+        setSupportActionBar(toolbar);
+
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        trialDataList = (ArrayList<Trial>) bundle.getSerializable("Trials");
+
+        Button mean = findViewById(R.id.MeanOverTime);
+        Button median = findViewById(R.id.MedianOverTime);
+        Button stdDev = findViewById(R.id.StdDevOverTime);
+        LineChart lineChart = findViewById(R.id.LineChart);
+
+        // Testing: Plot the Graph
+        lineChartSetting(lineChart, trialDataList.size());
+        mean.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createLineChart(lineChart, "Mean", trialDataList);
+            }
+        });
+
+        median.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createLineChart(lineChart, "Median", trialDataList);
+            }
+        });
+
+        stdDev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createLineChart(lineChart, "StdDev", trialDataList);
+            }
+        });
+    }
+
+    public void createLineChart(LineChart lineChart, String category, ArrayList<Trial> trials) {
+        int index = 0;
+        ArrayList<Double> data;
+        ArrayList<Entry> values = new ArrayList<>();
+        String[] xLabels = new String[trials.size()];
+        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+
+        // Create the labels for x-Axis (Respective number of the trial)
+        for (int i = 0; i < trials.size(); i++) {
+            xLabels[i] = String.valueOf(i);
+        }
+
+        // Create the data corresponding to the
+        if (category.equals("Mean")) {
+            data = lineGraphInfo.MeanOverTime(trials);
+        } else if (category.equals(("Median"))) {
+            data = lineGraphInfo.MedianOverTime(trials);
+        } else if (category.equals("StdDev")) {
+            data = lineGraphInfo.StdDevOverTime(trials, lineGraphInfo.MeanOverTime(trials));
+        } else {
+            data = null;
+        }
+
+        if (data != null) {
+            values.add(new Entry(0, 0));
+            for (int i = 1; i <= data.size(); i++) {
+                values.add(new Entry(i, data.get(index).floatValue()));
+                index += 1;
+            }
+        }
+
+        LineDataSet dataset = new LineDataSet(values, "Trial");
+        dataset.setLineWidth(3f);
+        dataset.setValueTextSize(12f);
+
+        dataSets.add(dataset);
+
+        LineData lineData = new LineData(dataset);
+        lineChart.setData(lineData);
+        lineChart.invalidate();
+    }
+
+
+    public void lineChartSetting(LineChart lineChart, int size) {
+        XAxis xAxis = lineChart.getXAxis();
+        YAxis leftAxis = lineChart.getAxisLeft();
+        YAxis rightAxis = lineChart.getAxisRight();
+
+        lineChart.setDragEnabled(true);
+        lineChart.setScaleEnabled(true);
+        lineChart.setTouchEnabled(true);
+        lineChart.setVisibleXRangeMaximum(65f);
+        lineChart.getLegend().setEnabled(false);
+        lineChart.getDescription().setEnabled(false);
+        lineChart.setExtraBottomOffset(50);
+
+        xAxis.setTextSize(15f);
+        xAxis.setLabelCount(size);
+        xAxis.setAxisMinimum(0);
+        xAxis.setAxisMaximum(size);
+        xAxis.setDrawGridLines(false);
+        xAxis.setYOffset(20);
+        xAxis.setAvoidFirstLastClipping(true);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        rightAxis.setEnabled(false);
+
+        leftAxis.setTextSize(15f);
+        leftAxis.setLabelCount(size);
+        leftAxis.setAxisMinimum(0);
+        leftAxis.setGridLineWidth(1);
+        leftAxis.setDrawZeroLine(false);
+    }
+
+    // -----------------------------------------Used For ToolBar------------------------------------
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.statistic_graph, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.ExperimentOverView) {
+            finish();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+}

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".statistic.LineGraph">
+
+    <include
+        android:id="@+id/ToolBar"
+        layout="@layout/toolbar" />
+
+    <TextView
+        android:id="@+id/StdDev_Result"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="60dp"
+        android:text="Std Dev Result"
+        android:textSize="25sp"
+        app:layout_constraintStart_toEndOf="@+id/StdDev_Display"
+        app:layout_constraintTop_toBottomOf="@+id/Median_Result" />
+
+    <TextView
+        android:id="@+id/Median_Display"
+        android:layout_width="98dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="56dp"
+        android:text="Median:"
+        android:textAlignment="textEnd"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Mean_Display" />
+
+    <TextView
+        android:id="@+id/Mean_Result"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="92dp"
+        android:text="Mean Result"
+        android:textSize="25sp"
+        app:layout_constraintStart_toEndOf="@+id/Mean_Display"
+        app:layout_constraintTop_toBottomOf="@+id/ToolBar" />
+
+    <TextView
+        android:id="@+id/StdDev_Display"
+        android:layout_width="98dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="60dp"
+        android:text="Std Dev:"
+        android:textAlignment="textEnd"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Median_Display" />
+
+    <TextView
+        android:id="@+id/Median_Result"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="56dp"
+        android:text="Median Result"
+        android:textSize="25sp"
+        app:layout_constraintStart_toEndOf="@+id/Median_Display"
+        app:layout_constraintTop_toBottomOf="@+id/Mean_Result" />
+
+    <TextView
+        android:id="@+id/Mean_Display"
+        android:layout_width="98dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="92dp"
+        android:text="Mean:"
+        android:textAlignment="textEnd"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ToolBar" />
+
+    <TextView
+        android:id="@+id/FirstQuartile_Display"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="136dp"
+        android:text="1st Quartile:"
+        android:textAlignment="textEnd"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/StdDev_Display" />
+
+    <TextView
+        android:id="@+id/FirstQuartile_Result"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="136dp"
+        android:text="1st Quartile Result"
+        android:textSize="25sp"
+        app:layout_constraintStart_toEndOf="@+id/FirstQuartile_Display"
+        app:layout_constraintTop_toBottomOf="@+id/StdDev_Result" />
+
+    <TextView
+        android:id="@+id/ThirdQuartile_Display"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="52dp"
+        android:text="3rd Quartile:"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/FirstQuartile_Display" />
+
+    <TextView
+        android:id="@+id/ThirdQuartile_Result"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="52dp"
+        android:text="3rd Quartile Result"
+        android:textSize="25sp"
+        app:layout_constraintStart_toEndOf="@+id/ThirdQuartile_Display"
+        app:layout_constraintTop_toBottomOf="@+id/FirstQuartile_Result" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

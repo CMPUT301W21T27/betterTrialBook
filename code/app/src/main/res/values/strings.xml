@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">betterTrialBook</string>
+    <string name="main_home_screen">BetterTrial Book</string>
+    <string name="subscription_screen">Subscription</string>
+    <string name="statsInformation">Stats Info</string>
+    <string name="title_activity_statisitc_information">Statistic Information</string>
+    <string name="title_activity_statistic_home_page">Statistic</string>
     <string name="title_activity_experiment_view">ExperimentViewActivity</string>
+    <string name="title_activity_line_graph">Line Graph Data</string>
     <string name="first_fragment_label">First Fragment</string>
 
     <!-- Strings used for fragments for navigation -->
@@ -38,5 +44,24 @@
         <item>Non-Negative Integer</item>
         <item>Measurement</item>
     </string-array>
+    <string-array name="SearchTarget">
+        <item>User</item>
+        <item>Description</item>
+    </string-array>
+    <string-array name="TrialTarget">
+        <item>ALL</item>
+        <item>Count Based</item>
+        <item>Non-Negative Based</item>
+        <item>Measurement Based</item>
+        <item>Binomial Based</item>
+    </string-array>
+
+    <string-array name="Options">
+        <item>Data: Mean Over Time</item>
+        <item>Data: Median Over Time</item>
+        <item>Data: StdDev Over Time</item>
+    </string-array>
+
     <string name="title_activity_geolocation">Map</string>
+
 </resources>

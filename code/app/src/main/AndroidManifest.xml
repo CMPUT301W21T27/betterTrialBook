@@ -8,6 +8,7 @@
          location permissions for the "MyLocation" functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -17,7 +18,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BetterTrialBook">
-
+        <activity
+            android:name=".statistic.StatsNumber"
+            android:label="@string/statsInformation"
+            android:theme="@style/Theme.BetterTrialBook.NoActionBar">
+        </activity>
+        <activity
+            android:name=".statistic.LineGraph"
+            android:label="@string/title_activity_line_graph"
+            android:theme="@style/Theme.BetterTrialBook.NoActionBar"></activity>
+        <activity
+            android:name=".home.SubscriptionActivity"
+            android:label="@string/subscription_screen" />
+        <activity
+            android:name=".statistic.Histogram"
+            android:label="@string/title_activity_statisitc_information"
+            android:theme="@style/Theme.BetterTrialBook.NoActionBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -28,7 +44,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" />
+            android:value="$AIzaSyD-wLF3-KESrJRcpdEVY_IAZzWw5znCBlQ" />
 
         <activity
             android:name=".experiment.GeolocationActivity"
@@ -44,6 +60,8 @@
         <activity android:name=".experiment.ExperimentAddActivity" /> <!-- https://stackoverflow.com/questions/4207880/android-how-do-i-prevent-the-soft-keyboard-from-pushing-my-view-up -->
         <activity
             android:name=".home.MainActivity"
+            android:label="@string/main_home_screen"
+            android:theme="@style/Theme.BetterTrialBook.NoActionBar"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
