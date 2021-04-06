@@ -12,7 +12,7 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 
-public abstract class Trial implements Serializable{
+public abstract class Trial implements Parcelable{
     // private Geolocation geolocation;
     private String trialID;
     private String experimenterID;

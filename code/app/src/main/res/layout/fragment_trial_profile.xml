@@ -5,14 +5,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".experiment.ConfirmationFragment">
-
-    <TextView
-        android:id="@+id/trial_profile"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:text="Click outside the dialog to cancel or select an option below for the user"
-        android:textSize="20dp" />
-
 </FrameLayout>

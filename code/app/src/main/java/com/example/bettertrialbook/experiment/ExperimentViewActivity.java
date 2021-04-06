@@ -225,26 +225,12 @@ public class ExperimentViewActivity extends AppCompatActivity
         trialDataList = new ArrayList<>();
         trialAdapter = new CustomTrialList(this, trialDataList, experimentId, isOwner);
         trialList.setAdapter(trialAdapter);
-//        trialList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Trial trial = trialDataList.get(position);
-//                String experimenterId = trial.getExperimenterID();
-//                boolean isTrialOwner = experimenterId.equals(ownerId);
-//
-//                Log.d("view", String.valueOf(trial.getGeolocation().getLocation().getLatitude()));
-//                Log.d("view", String.valueOf(trial.getGeolocation().getLocation().getLongitude()));
-//
-//                Intent intent = new Intent(ExperimentViewActivity.this, GeolocationActivity.class);
-//                intent.putExtra("IsTrialOwner", isTrialOwner);
-//                startActivity(intent);
-//            }
-//        });
         trialList.setOnItemClickListener(new OnItemClickListener() {
              @Override
              public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                  String experimenterID = trialAdapter.getItem(position).getExperimenterID();
-                 new TrialProfileFragment(experimenterID, experimentId, isOwner).show(getSupportFragmentManager(), "PROFILE");
+                 Trial trial = trialAdapter.getItem(position);
+                 new TrialProfileFragment(isOwner,trial).show(getSupportFragmentManager(), "PROFILE");
              }
          });
 
@@ -342,6 +328,7 @@ public class ExperimentViewActivity extends AppCompatActivity
     public void onBlacklist(String experimenterId) {
         confirmationDialog("block", true, experimenterId);
     }
+
 
     // when back button is pressed
     @Override

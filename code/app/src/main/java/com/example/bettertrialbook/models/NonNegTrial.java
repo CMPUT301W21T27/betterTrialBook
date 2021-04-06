@@ -4,6 +4,8 @@ The NonNegTrial class extends the Trial class and represents non-negative intege
 
 package com.example.bettertrialbook.models;
 
+import android.os.Parcel;
+
 import com.example.bettertrialbook.Extras;
 
 public class NonNegTrial extends Trial implements Comparable<NonNegTrial> {
@@ -66,5 +68,15 @@ public class NonNegTrial extends Trial implements Comparable<NonNegTrial> {
         return String.valueOf(this.count).compareTo(String.valueOf(nonNegTrial.getCount()))
                 + this.getTrialType().compareTo(nonNegTrial.getTrialType()) + this.getTrialID().compareTo(nonNegTrial.getTrialID())
                 + this.getGeolocation().compareTo(nonNegTrial.getGeolocation());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

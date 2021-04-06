@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,82 +15,89 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.You;
+import com.example.bettertrialbook.models.Trial;
+import com.example.bettertrialbook.qr.CreateQRActivity;
 
 public class TrialProfileFragment extends DialogFragment {
     private TrialProfileFragment.OnFragmentInteractionListener listener;
     private String experimenterID = "";
     private String experimentID = "";
     private Boolean isOwner = false;
+    private Trial trial;
 
     /* Ok pressed interface */
     public interface OnFragmentInteractionListener {
         void onViewProfile();
+
         void onBlacklist(String experimenterID);
+
     }
 
-    public TrialProfileFragment(String experimenterID, String experimentID, Boolean isOwner) {
+    public TrialProfileFragment( Boolean isOwner, Trial trial) {
         super();
-        this.experimenterID = experimenterID;
+        this.trial = trial;
         this.isOwner = isOwner;
     }
 
     @Override
-    public void onAttach(Context context){
+    public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             listener = (OnFragmentInteractionListener) context;
 
         } else {
             throw new RuntimeException(context.toString()
-                    +" must implement OnFragmentInteractionListener");
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_trial_profile,null);
-        TextView fragmentText = view.findViewById(R.id.trial_profile);
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_trial_profile, null);
 
         // maybe add the current selected userID/username
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        if (isOwner) {
-            return builder
-                    .setView(view)
-                    .setTitle("Profile Options")
-                    .setNegativeButton("Block Trials", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            You you = new You();
-                            if (experimenterID.equals(you.getUser().getID())) {
-                                Toast.makeText(getActivity(), "You cannot blacklist yourself", Toast.LENGTH_LONG).show();
+        return builder
+                .setView(view)
+                .setTitle("Trial Actions")
+                .setItems(availableActions(), (dialog, which) -> onActionClick(which))
+                .create();
+    }
 
-                            } else {
-                                listener.onBlacklist(experimenterID);
-                            }
-                        }
-                    })
-                    .setPositiveButton("View Profile", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            listener.onViewProfile();
-                        }
-                    })
-                    .create();
+    private String[] availableActions() {
+        if (isOwner) {
+            return new String[]{"View Profile", "Create QR Code", "Block Trials"};
+        }
+        return new String[]{"View Profile", "Create QR Code"};
+    }
+
+    private void onActionClick(int actionIndex) {
+        if (actionIndex == 0)
+            listener.onViewProfile();
+        else if (actionIndex == 1)
+            onCreateQRCodeClick();
+        else if (actionIndex == 2)
+            onBlacklistClick();
+    }
+
+    private void onBlacklistClick() {
+        if (experimenterID.equals(You.getUser().getID())) {
+            Toast.makeText(getActivity(), "You cannot blacklist yourself", Toast.LENGTH_LONG).show();
+
         } else {
-            return builder
-                    .setView(view)
-                    .setTitle("Profile Options")
-                    .setPositiveButton("View Profile", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            listener.onViewProfile();
-                        }
-                    })
-                    .create();
+            listener.onBlacklist(experimenterID);
         }
     }
+
+    private void onCreateQRCodeClick(){
+        Intent intent = new Intent(getContext(), CreateQRActivity.class);
+        intent.putExtra(Extras.TRIAL, trial);
+        intent.putExtra(Extras.EXPERIMENT_ID, experimentID);
+        startActivity(intent);
+    }
 }
+
