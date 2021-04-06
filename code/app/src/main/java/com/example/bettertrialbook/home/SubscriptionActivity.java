@@ -6,15 +6,15 @@
 
 package com.example.bettertrialbook.home;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.content.Intent;
-import android.widget.ListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.You;
@@ -23,9 +23,9 @@ import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.experiment.ExperimentViewActivity;
 import com.example.bettertrialbook.models.ExperimentInfo;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class SubscriptionActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private String userID;
@@ -62,12 +62,15 @@ public class SubscriptionActivity extends AppCompatActivity implements AdapterVi
                             experimentDAL.findExperimentByID(subscribed.get(i), new ExperimentDAL.FindExperimentByIDCallback() {
                                @Override
                                public void onCallback(ExperimentInfo experimentInfo) {
-                                   if (experimentInfo != null &&
-                                           (experimentInfo.getPublishStatus().equals("Publish") ||
-                                                   experimentInfo.getOwnerId().equals(You.getUser().getID()))) {
-                                       trialInfoList.add(experimentInfo);
-                                       Collections.sort(trialInfoList);
-                                       trialInfoAdapter.notifyDataSetChanged();
+                                   if (experimentInfo != null) {
+                                       String publishStatus = experimentInfo.getPublishStatus();
+                                       String ownerId = experimentInfo.getOwnerId();
+                                       if (publishStatus != null && publishStatus.equals("Publish") ||
+                                               ownerId != null && ownerId.equals(You.getUser().getID())) {
+                                           trialInfoList.add(experimentInfo);
+                                           Collections.sort(trialInfoList);
+                                           trialInfoAdapter.notifyDataSetChanged();
+                                       }
                                    }
                                }
                             });

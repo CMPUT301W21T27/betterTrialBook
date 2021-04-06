@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bettertrialbook">
+
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the "MyLocation" functionality.
     -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,16 +18,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BetterTrialBook">
-        <activity android:name=".qr.CreateQRActivity"></activity>
-        <activity android:name=".qr.ScanQRActivity" />
         <activity
             android:name=".statistic.StatsNumber"
             android:label="@string/statsInformation"
-            android:theme="@style/Theme.BetterTrialBook.NoActionBar" />
+            android:theme="@style/Theme.BetterTrialBook.NoActionBar">
+        </activity>
         <activity
             android:name=".statistic.LineGraph"
             android:label="@string/title_activity_line_graph"
-            android:theme="@style/Theme.BetterTrialBook.NoActionBar" />
+            android:theme="@style/Theme.BetterTrialBook.NoActionBar"></activity>
         <activity
             android:name=".home.SubscriptionActivity"
             android:label="@string/subscription_screen" />
@@ -38,9 +42,13 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="$AIzaSyD-wLF3-KESrJRcpdEVY_IAZzWw5znCBlQ" />
+
         <activity
             android:name=".experiment.GeolocationActivity"
-            android:label="@string/title_activity_geolocation" />
+            android:label="@string/title_activity_geolocation"></activity>
         <activity android:name=".forum.CreatePostActivity" />
         <activity android:name=".profile.SignUp" />
         <activity
@@ -49,7 +57,7 @@
             android:theme="@style/Theme.BetterTrialBook.NoActionBar" />
         <activity android:name=".forum.ForumActivity" />
         <activity android:name=".profile.ProfileViewActivity" />
-        <activity android:name=".experiment.ExperimentAddActivity" />
+        <activity android:name=".experiment.ExperimentAddActivity" /> <!-- https://stackoverflow.com/questions/4207880/android-how-do-i-prevent-the-soft-keyboard-from-pushing-my-view-up -->
         <activity
             android:name=".home.MainActivity"
             android:label="@string/main_home_screen"
@@ -60,17 +68,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- https://stackoverflow.com/questions/4207880/android-how-do-i-prevent-the-soft-keyboard-from-pushing-my-view-up -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="$AIzaSyD-wLF3-KESrJRcpdEVY_IAZzWw5znCBlQ" />
+        </activity>
     </application>
-
-    <uses-feature android:name="android.hardware.camera.any" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>

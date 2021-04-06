@@ -4,7 +4,10 @@ Unit tests for the BinomialTrial class
 
 package com.example.bettertrialbook;
 
+import android.location.Location;
+
 import com.example.bettertrialbook.models.BinomialTrial;
+import com.example.bettertrialbook.models.Geolocation;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,19 +16,21 @@ import static org.junit.Assert.assertEquals;
 
 public class BinomialTrialTest {
     BinomialTrial testTrial;
+    Geolocation mockGeolocation;
 
     private BinomialTrial mockTrial() {
-        return new BinomialTrial(6, 9, "testid", "testUser");
+        return new BinomialTrial(6, 9, "testid", "testUser", new Geolocation(new Location("")));
     }
 
     @Before
     public void setUp() {
         testTrial = mockTrial();
+        mockGeolocation = new Geolocation(new Location(""));
     }
 
     @Test
     public void createTrialTest() {
-        BinomialTrial comparisonTrial = new BinomialTrial(6, 9, "testid", "testUser");
+        BinomialTrial comparisonTrial = new BinomialTrial(6, 9, "testid", "testUser", mockGeolocation);
         assertEquals(0, comparisonTrial.compareTo(testTrial));
     }
 
@@ -69,5 +74,17 @@ public class BinomialTrialTest {
     public void setTrialIdTest() {
         testTrial.setTrialID("newtestid");
         assertEquals("newtestid", testTrial.getTrialID());
+    }
+
+    @Test
+    public void getGeolocationTest() {
+        testTrial = mockTrial();
+        assertEquals(mockGeolocation, testTrial.getGeolocation());
+    }
+
+    @Test
+    public void setGeolocationTest() {
+        testTrial.setGeolocation(mockGeolocation);
+        assertEquals(mockGeolocation, testTrial.getGeolocation());
     }
 }
