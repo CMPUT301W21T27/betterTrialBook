@@ -15,7 +15,7 @@ public class ExperimentTest {
     ExperimentInfo testInfo;
 
     private ExperimentInfo mockInfo() {
-        return new ExperimentInfo("Test Info", "testUser", "Active", "1234", "Binomial", false, 10, "Alberta");
+        return new ExperimentInfo("Test Info", "testUser", "Active", "Active", "1234", "Binomial", false, 10, "Alberta");
     }
 
     @Before
@@ -25,7 +25,7 @@ public class ExperimentTest {
 
     @Test
     public void createExperimentTest() {
-        ExperimentInfo comparisonInfo = new ExperimentInfo("Test Info", "testUser", "Active", "1234", "Binomial", false, 10, "Alberta");
+        ExperimentInfo comparisonInfo = new ExperimentInfo("Test Info", "testUser", "Active", "Active", "1234", "Binomial", false, 10, "Alberta");
         assertEquals(0, comparisonInfo.compareTo(testInfo));
     }
 
@@ -40,8 +40,13 @@ public class ExperimentTest {
     }
 
     @Test
-    public void getStatusTest() {
-        assertEquals("Active", testInfo.getStatus());
+    public void getPublishStatusTest() {
+        assertEquals("Active", testInfo.getPublishStatus());
+    }
+
+    @Test
+    public void getActiveStatusTest() {
+        assertEquals("Active", testInfo.getActiveStatus());
     }
 
     @Test

@@ -45,7 +45,11 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
+<<<<<<< HEAD
             android:value="${MAP_API_KEY}" />
+=======
+            android:value="${MAPS_API_KEY}" />
+>>>>>>> e1d4f436daf05a1100ebed1f3f1b41bc40e290a8
 
         <activity
             android:name=".experiment.GeolocationActivity"
