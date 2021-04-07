@@ -3,6 +3,7 @@ package com.example.bettertrialbook.statistic;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,17 +13,14 @@ import android.view.MenuInflater;
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.models.Trial;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Histogram extends AppCompatActivity {
@@ -45,13 +43,14 @@ public class Histogram extends AppCompatActivity {
 
         BarChart barChart = findViewById(R.id.Bar_Chart);
 
+        // Histogram Graph plot and setting
         barChartSetting(barChart, labels);
         plotTheGraph(barChart, dataList);
     }
 
+    // This method is used to plot the data of the histogram
     public void plotTheGraph(BarChart barChart, ArrayList<Double> dataList) {
         ArrayList<Integer> binFrequency = histogramInfo.collectFrequency(dataList);
-        ArrayList<String> labels = histogramInfo.getLabels(dataList);
 
         ArrayList<BarEntry> barEntries = new ArrayList<>();
         for (int i = 0; i < binFrequency.size(); i++) {
@@ -60,31 +59,29 @@ public class Histogram extends AppCompatActivity {
 
         BarDataSet barDataSet = new BarDataSet(barEntries, "Frequency");
         barDataSet.setValueTextSize(15f);
+        barDataSet.setColor(Color.RED);
 
         BarData barData = new BarData(barDataSet);
         barChart.setData(barData);
 
-        barChart.setScaleEnabled(true);
-        barChart.setDragEnabled(true);
-        barChart.setTouchEnabled(true);
-
         barChart.invalidate();
     }
 
+    // This method is used to change the setting of the histogram
     public void barChartSetting(BarChart barChart, List<String> labels) {
         XAxis xAxis = barChart.getXAxis();
         YAxis leftAxis = barChart.getAxisLeft();
         YAxis rightAxis = barChart.getAxisRight();
-        float width = barChart.getWidth();
-        float height = barChart.getHeight();
 
-
-        barChart.setExtraBottomOffset(50);
+        barChart.setDragEnabled(true);
+        barChart.setScaleEnabled(true);
+        barChart.setTouchEnabled(true);
+        barChart.setExtraBottomOffset(60);
         barChart.getLegend().setEnabled(false);
         barChart.getDescription().setEnabled(false);
 
-        xAxis.setYOffset(20);
-        xAxis.setTextSize(20f);
+        xAxis.setYOffset(25);
+        xAxis.setTextSize(11f);
         xAxis.setGranularity(1f);
         xAxis.setDrawGridLines(false);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -92,7 +89,7 @@ public class Histogram extends AppCompatActivity {
 
         rightAxis.setEnabled(false);
 
-        leftAxis.setTextSize(20f);
+        leftAxis.setTextSize(15f);
         leftAxis.setGridLineWidth(1);
         leftAxis.setDrawZeroLine(false);
         leftAxis.setAxisMinimum(0);

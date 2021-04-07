@@ -41,14 +41,14 @@ public class StatsNumber extends AppCompatActivity {
         double mean = statistic.Mean(trialDataList);
         double median = statistic.Median(trialDataList);
         double stdDev = statistic.StdDev(trialDataList, mean);
-        //double[] quartiles = statistic.Quartiles(trialDataList);
+        double[] quartiles = statistic.Quartiles(trialDataList);
 
         // Display Statistic Information to the User
         meanResult.setText(String.valueOf(mean));
         medianResult.setText(String.valueOf(median));
         stdDevResult.setText(String.valueOf(stdDev));
-        //quartile1Result.setText(String.valueOf(quartiles[0]));
-        //quartile3Result.setText(String.valueOf(quartiles[1]));
+        quartile1Result.setText(String.valueOf(quartiles[0]));
+        quartile3Result.setText(String.valueOf(quartiles[1]));
     }
 
     @Override
