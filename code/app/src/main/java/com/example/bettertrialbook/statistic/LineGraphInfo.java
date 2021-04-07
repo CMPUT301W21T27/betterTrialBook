@@ -130,7 +130,7 @@ public class LineGraphInfo {
                 for (int j = 0; j <= i; j++) {
                     temporaryArray.add(trials.get(j));
                 }
-                dataList = statistic.SortedArrayList(temporaryArray, experimentType);
+                dataList = statistic.experimentData(temporaryArray);
                 // For Odd Count Data Set
                 if (dataList.size() % 2 == 1) {
                     median = Double.parseDouble(df.format(dataList.get(dataList.size() / 2)));

@@ -37,19 +37,18 @@ public class StatsNumber extends AppCompatActivity {
         TextView quartile1Result = findViewById(R.id.FirstQuartile_Result);
         TextView quartile3Result = findViewById(R.id.ThirdQuartile_Result);
 
-        // Calculate the information
+        // Obtain the Statistic Information of the Experiment
         double mean = statistic.Mean(trialDataList);
         double median = statistic.Median(trialDataList);
         double stdDev = statistic.StdDev(trialDataList, mean);
-        double[] quartiles = statistic.Quartiles(trialDataList);
+        //double[] quartiles = statistic.Quartiles(trialDataList);
 
-        // Display the Statistic Information to the User
+        // Display Statistic Information to the User
         meanResult.setText(String.valueOf(mean));
         medianResult.setText(String.valueOf(median));
         stdDevResult.setText(String.valueOf(stdDev));
-        //There is problem with the Quartile method with 1 trial
-        quartile1Result.setText(String.valueOf(quartiles[0]));
-        quartile3Result.setText(String.valueOf(quartiles[1]));
+        //quartile1Result.setText(String.valueOf(quartiles[0]));
+        //quartile3Result.setText(String.valueOf(quartiles[1]));
     }
 
     @Override
@@ -63,9 +62,11 @@ public class StatsNumber extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.ExperimentOverView:
+                // Clicking the ExperimentOverView image will go back to ExperimentViewActivity
                 finish();
                 return true;
             case R.id.Histogram:
+                // Clicking the Histogram image will go to Histogram Activity
                 Intent intent2 = new Intent(this, Histogram.class);
                 Bundle bundle2 = new Bundle();
                 bundle2.putSerializable("Trials", trialDataList);
@@ -73,6 +74,7 @@ public class StatsNumber extends AppCompatActivity {
                 startActivity(intent2);
                 return true;
             case R.id.PlotOverTime:
+                // Clicking the PlotOverTime will go to LineGraph Activity
                 Intent intent3 = new Intent(this, LineGraph.class);
                 Bundle bundle3 = new Bundle();
                 bundle3.putSerializable("Trials", trialDataList);
