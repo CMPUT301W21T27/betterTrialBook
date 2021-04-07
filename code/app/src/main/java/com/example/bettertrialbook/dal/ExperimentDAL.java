@@ -193,6 +193,46 @@ public class ExperimentDAL {
     }
 
     /**
+     * Update experiment description
+     *
+     * @param experimentId - the unique id of the experiment to be updated
+     * @param description - updated description
+     */
+    public void setExperimentDescription(String experimentId, String description) {
+        collRef.document(experimentId).update("Description", description).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Description could not be updated" + e.toString());
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Description has been updated");
+            }
+        });
+    }
+
+    /**
+     * Update experiment region
+     *
+     * @param experimentId - the unique id of the experiment to be updated
+     * @param region - updated region
+     */
+    public void setExperimentRegion(String experimentId, String region) {
+        collRef.document(experimentId).update("Region", region).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Region could not be updated" + e.toString());
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Region has been updated");
+            }
+        });
+    }
+
+    /**
      * Adds listener to callback with new status of experiment
      *
      * @param experimentId   the id of the currently selected experiment
