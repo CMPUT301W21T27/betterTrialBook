@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 if (itemSpinner.getSelectedItem().toString().equalsIgnoreCase("Description")) {
                     experimentDAL.searchByDescription(trialInfoList, trialInfoAdapter, newText);
                 }
-                else if (itemSpinner.getSelectedItem().toString().equalsIgnoreCase("User")) {
+                else if (itemSpinner.getSelectedItem().toString().equalsIgnoreCase("UserId")) {
                     experimentDAL.searchByUser(trialInfoList, trialInfoAdapter, newText);
                 }
                 return false;
