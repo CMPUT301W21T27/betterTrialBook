@@ -15,10 +15,11 @@
         />
 
     <Button
-        android:id="@+id/generate"
+        android:id="@+id/confirm_qr_code_generation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Generate"
+        android:text="Confirm"
+        android:onClick="onConfirm"
         />
 
 </LinearLayout>

@@ -23,8 +23,8 @@ import com.example.bettertrialbook.qr.CreateQRActivity;
 
 public class TrialProfileFragment extends DialogFragment {
     private TrialProfileFragment.OnFragmentInteractionListener listener;
-    private String experimenterID = "";
-    private String experimentID = "";
+    private String experimenterID;
+    private String experimentID;
     private Boolean isOwner = false;
     private Trial trial;
 
@@ -36,9 +36,11 @@ public class TrialProfileFragment extends DialogFragment {
 
     }
 
-    public TrialProfileFragment( Boolean isOwner, Trial trial) {
+    public TrialProfileFragment( Boolean isOwner, Trial trial, String experimentID) {
         super();
         this.trial = trial;
+        this.experimenterID = trial.getExperimenterID();
+        this.experimentID = experimentID;
         this.isOwner = isOwner;
     }
 
@@ -95,7 +97,7 @@ public class TrialProfileFragment extends DialogFragment {
 
     private void onCreateQRCodeClick(){
         Intent intent = new Intent(getContext(), CreateQRActivity.class);
-        intent.putExtra(Extras.TRIAL, trial);
+        intent.putExtra(Extras.TRIAL_ID, trial.getTrialID());
         intent.putExtra(Extras.EXPERIMENT_ID, experimentID);
         startActivity(intent);
     }

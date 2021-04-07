@@ -15,10 +15,11 @@ public class QRDAL {
     FirebaseFirestore db = Firestore.getInstance();
     CollectionReference collRef = db.collection("QRCodes");
 
+
     public void registerQRCode(QRCode qrCode, Runnable onSuccess) {
         collRef.document(qrCode.getId())
                 .set(qrCode)
-                .addOnSuccessListener(aVoid -> onSuccess.run());
+                .addOnSuccessListener(doc -> onSuccess.run());
     }
 
     public void addQRCodeListener(String id, Callback<QRCode> onSuccess, Runnable onFailure) {
@@ -31,5 +32,9 @@ public class QRDAL {
             QRCode qrCode = value.toObject(QRCode.class);
             onSuccess.execute(qrCode);
         });
+    }
+
+    public String getUnusedId() {
+        return collRef.document().getId();
     }
 }

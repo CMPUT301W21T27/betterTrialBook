@@ -230,7 +230,7 @@ public class ExperimentViewActivity extends AppCompatActivity
              public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                  String experimenterID = trialAdapter.getItem(position).getExperimenterID();
                  Trial trial = trialAdapter.getItem(position);
-                 new TrialProfileFragment(isOwner,trial).show(getSupportFragmentManager(), "PROFILE");
+                 new TrialProfileFragment(isOwner,trial, experimentId).show(getSupportFragmentManager(), "PROFILE");
              }
          });
 
