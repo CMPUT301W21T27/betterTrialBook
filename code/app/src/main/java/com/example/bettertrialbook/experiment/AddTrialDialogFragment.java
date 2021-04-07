@@ -38,7 +38,10 @@ import com.example.bettertrialbook.models.CountTrial;
 import com.example.bettertrialbook.models.Geolocation;
 import com.example.bettertrialbook.models.MeasurementTrial;
 import com.example.bettertrialbook.models.NonNegTrial;
+import com.google.type.DateTime;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 /*
@@ -83,6 +86,7 @@ public class AddTrialDialogFragment extends DialogFragment {
         String trialType = (String) trialBundle.get("trialType");
         String experimentId = (String) trialBundle.get("experimentId");
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        Date timestamp = Calendar.getInstance().getTime();
 
         // access to the array of experiment types (can only be done with a view context so
         // hardcoded in some other classes)
@@ -117,9 +121,8 @@ public class AddTrialDialogFragment extends DialogFragment {
                                 UserDAL userDAL = new UserDAL();
                                 Context context = view.getContext();
                                 String experimenterId = userDAL.getDeviceUserId(context);
-                                CountTrial trial = new CountTrial(Integer.parseInt(String.valueOf(countEditText.getText())),
-                                        UUID.randomUUID().toString(),
-                                        experimenterId, geolocation);
+                                CountTrial trial = new CountTrial(UUID.randomUUID().toString(),
+                                        experimenterId, geolocation, timestamp);
                                 ExperimentDAL experimentDAL = new ExperimentDAL();
                                 // use the dal to add the trial to the db
                                 experimentDAL.addTrial(experimentId, trial);
@@ -131,9 +134,7 @@ public class AddTrialDialogFragment extends DialogFragment {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_binomial_trial, null);
             // use these weird final one element arrays for access in the onClick function
             final int[] successes = {0};
-            final int[] failures = {0};
             TextView successTextView = view.findViewById(R.id.success_textView);
-            TextView failureTextView = view.findViewById(R.id.failure_textView);
             Button successIncrementButton = view.findViewById(R.id.successIncrement_button);
             successIncrementButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -149,24 +150,6 @@ public class AddTrialDialogFragment extends DialogFragment {
                     if (successes[0] > 0) {
                         successes[0] -= 1;
                         successTextView.setText("Successes: " + successes[0]);
-                    }
-                }
-            });
-            Button failureIncrementButton = view.findViewById(R.id.failureIncrement_button);
-            failureIncrementButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    failures[0] += 1;
-                    failureTextView.setText("Failures: " + failures[0]);
-                }
-            });
-            Button failureDecrementButton = view.findViewById(R.id.failureDecrement_button);
-            failureDecrementButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (failures[0] > 0) {
-                        failures[0] -= 1;
-                        failureTextView.setText("Failures: " + failures[0]);
                     }
                 }
             });
@@ -198,8 +181,8 @@ public class AddTrialDialogFragment extends DialogFragment {
                                 UserDAL userDAL = new UserDAL();
                                 Context context = view.getContext();
                                 String experimenterId = userDAL.getDeviceUserId(context);
-                                BinomialTrial trial = new BinomialTrial(successes[0], failures[0],
-                                        UUID.randomUUID().toString(), experimenterId, geolocation);
+                                BinomialTrial trial = new BinomialTrial(true,
+                                        UUID.randomUUID().toString(), experimenterId, geolocation, timestamp);
                                 ExperimentDAL experimentDAL = new ExperimentDAL();
                                 experimentDAL.addTrial(experimentId, trial);
                             }
@@ -238,7 +221,7 @@ public class AddTrialDialogFragment extends DialogFragment {
                                 String experimenterId = userDAL.getDeviceUserId(context);
                                 NonNegTrial trial = new NonNegTrial(Integer.parseInt(String.valueOf(amountEditText.getText())),
                                         UUID.randomUUID().toString(),
-                                        experimenterId, geolocation);
+                                        experimenterId, geolocation, timestamp);
                                 ExperimentDAL experimentDAL = new ExperimentDAL();
                                 experimentDAL.addTrial(experimentId, trial);
                             }
@@ -277,7 +260,7 @@ public class AddTrialDialogFragment extends DialogFragment {
                                 String experimenterId = userDAL.getDeviceUserId(context);
                                 MeasurementTrial trial = new MeasurementTrial(Double.parseDouble(String.valueOf(amountEditText.getText())),
                                         UUID.randomUUID().toString(),
-                                        experimenterId, geolocation);
+                                        experimenterId, geolocation, timestamp);
                                 ExperimentDAL experimentDAL = new ExperimentDAL();
                                 experimentDAL.addTrial(experimentId, trial);
                             }
