@@ -196,8 +196,11 @@ public class AddTrialDialogFragment extends DialogFragment {
                                 Toast toast = new Toast(view.getContext());
                                 toast.setText("Failed to create trial.\nGeolocation Required.");
                                 toast.show();
-                            }
-                            else {
+                            } else if (String.valueOf(amountEditText.getText()).equals("")) {
+                                Toast toast = new Toast(view.getContext());
+                                toast.setText("Failed to create trial.\nNon-Negative Integer Required.");
+                                toast.show();
+                            } else {
 //                                Log.d("trial", String.valueOf(geolocation.getLocation().getLatitude()));
 //                                Log.d("trial", String.valueOf(geolocation.getLocation().getLongitude()));
                                 UserDAL userDAL = new UserDAL();
@@ -235,8 +238,11 @@ public class AddTrialDialogFragment extends DialogFragment {
                                 Toast toast = new Toast(view.getContext());
                                 toast.setText("Failed to create trial.\nGeolocation Required.");
                                 toast.show();
-                            }
-                            else {
+                            } else if (String.valueOf(amountEditText.getText()).equals("")) {
+                                Toast toast = new Toast(view.getContext());
+                                toast.setText("Failed to create trial.\nMeasurement Required.");
+                                toast.show();
+                            } else {
 //                                Log.d("trial", String.valueOf(geolocation.getLocation().getLatitude()));
 //                                Log.d("trial", String.valueOf(geolocation.getLocation().getLongitude()));
                                 UserDAL userDAL = new UserDAL();

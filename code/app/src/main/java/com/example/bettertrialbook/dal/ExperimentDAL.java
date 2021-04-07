@@ -301,6 +301,27 @@ public class ExperimentDAL {
     }
 
     /**
+     * Delete trial from experiment
+     *
+     * @param experimentId the unique id of the experiment
+     * @param trial       trial and its data
+     */
+    public void deleteTrial(String experimentId, Trial trial) {
+        collRef.document(experimentId).update("Trials", FieldValue.arrayRemove(trial))
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data could not be deleted" + e.toString());
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Data has been deleted");
+            }
+        });
+    }
+
+    /**
      * Sets a documentsnapshot listener to update the list of trials for an
      * experiment in real time
      *

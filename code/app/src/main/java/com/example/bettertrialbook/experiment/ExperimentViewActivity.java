@@ -8,6 +8,7 @@ package com.example.bettertrialbook.experiment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -17,7 +18,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.bettertrialbook.Extras;
@@ -59,6 +63,10 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_view);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("View Experiment");
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         // get current experiment information from intent
         isOwner = getIntent().getBooleanExtra("IsOwner", false);
@@ -423,14 +431,15 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
 
     // when back button is pressed
     @Override
-    public void onBackPressed() {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        /* Get return object ready  */
         if (newExperiment) {
             Intent myIntent = new Intent(this, MainActivity.class);
             startActivity(myIntent);
         } else {
-            setResult(0);
             finish();
         }
+        return true;
     }
 
     /**

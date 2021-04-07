@@ -23,6 +23,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.You;
+import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.qr.CreateQRActivity;
 
@@ -32,6 +33,7 @@ public class TrialProfileFragment extends DialogFragment {
     private String experimentID;
     private Boolean isOwner = false;
     private Trial trial;
+    private boolean isExperimenter = false;
 
     /* Ok pressed interface */
     public interface OnFragmentInteractionListener {
@@ -47,6 +49,7 @@ public class TrialProfileFragment extends DialogFragment {
         this.experimenterID = trial.getExperimenterID();
         this.experimentID = experimentID;
         this.isOwner = isOwner;
+        this.isExperimenter = this.experimenterID.equals(You.getUser().getID());
     }
 
     @Override
@@ -72,9 +75,15 @@ public class TrialProfileFragment extends DialogFragment {
 
     private String[] availableActions() {
         if (isOwner) {
+            if (isExperimenter) {
+                return new String[]{"View Profile", "Create QR Code", "Block Trials", "Delete Trial"};
+            }
             return new String[] { "View Profile", "Create QR Code", "Block Trials" };
         }
-        return new String[] { "View Profile", "Create QR Code" };
+        if (isExperimenter) {
+            return new String[]{"View Profile", "Create QR Code", "Delete Trial"};
+        }
+        return new String[]{"View Profile", "Create QR Code"};
     }
 
     private void onActionClick(int actionIndex) {
@@ -83,7 +92,18 @@ public class TrialProfileFragment extends DialogFragment {
         else if (actionIndex == 1)
             onCreateQRCodeClick();
         else if (actionIndex == 2)
-            onBlacklistClick();
+            if (isOwner) {
+                onBlacklistClick();
+            } else {
+                onDeleteClick();
+            }
+        else if (actionIndex == 3)
+            onDeleteClick();
+    }
+
+    private void onDeleteClick() {
+        ExperimentDAL experimentDAL = new ExperimentDAL();
+        experimentDAL.deleteTrial(experimentID, trial);
     }
 
     private void onBlacklistClick() {
