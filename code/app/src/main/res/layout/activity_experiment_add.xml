@@ -11,8 +11,9 @@
     <ScrollView
         android:id="@+id/scrollView3"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,7 +23,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -97,7 +98,7 @@
                         android:id="@+id/geolocation_Text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="44dp"
+                        android:layout_marginStart="0dp"
                         android:layout_marginTop="56dp"
                         android:text="Geo-Location Required: "
                         android:textSize="18sp">
@@ -162,36 +163,39 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="bottom|center"
-                android:orientation="horizontal"
-                android:padding="20dp">
+                android:layout_height="match_parent">
 
                 <Button
-                    android:id="@+id/cancel_button"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/publish_button"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_weight="0"
-                    android:text="Cancel">
+                    android:text="Publish"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/cancel_button"
+                    app:layout_constraintTop_toTopOf="parent">
 
                 </Button>
 
                 <Button
-                    android:id="@+id/publish_button"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/cancel_button"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="117dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_weight="0"
-                    android:text="Publish">
+                    android:text="Cancel"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/publish_button"
+                    app:layout_constraintEnd_toStartOf="@+id/publish_button"
+                    app:layout_constraintStart_toStartOf="parent">
 
                 </Button>
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>
 
