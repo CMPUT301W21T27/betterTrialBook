@@ -36,7 +36,7 @@ public class LineGraphInfo {
                 for (int j = 0; j <= i; j++) {
                     if (trials.get(j).getTrialType().equals(Extras.COUNT_TYPE)) {
                         CountTrial countTrial = (CountTrial) trials.get(j);
-                        value = countTrial.getCount();
+                        // value = countTrial.getCount();
                         size += 1;
                     }
                     if (trials.get(j).getTrialType().equals(Extras.NONNEG_TYPE)) {
@@ -51,8 +51,11 @@ public class LineGraphInfo {
                     }
                     if (trials.get(j).getTrialType().equals(Extras.BINOMIAL_TYPE)) {
                         BinomialTrial binomialTrial = (BinomialTrial) trials.get(j);
+                        /*
                         value = binomialTrial.getPassCount();
                         size += (binomialTrial.getFailCount() + binomialTrial.getPassCount());
+
+                         */
                     }
                     sum += value;
                 }
@@ -81,7 +84,7 @@ public class LineGraphInfo {
                 for (int j = 0; j <= i; j++) {
                     if (trials.get(j).getTrialType().equals(Extras.COUNT_TYPE)) {
                         CountTrial countTrial = (CountTrial) trials.get(j);
-                        value = Math.pow((countTrial.getCount() - meanOverTime.get(i)), 2);
+                        // value = Math.pow((countTrial.getCount() - meanOverTime.get(i)), 2);
                         size += 1;
                     }
                     if (trials.get(j).getTrialType().equals(Extras.NONNEG_TYPE)) {
@@ -96,9 +99,12 @@ public class LineGraphInfo {
                     }
                     if (trials.get(j).getTrialType().equals(Extras.BINOMIAL_TYPE)) {
                         BinomialTrial binomialTrial = (BinomialTrial) trials.get(j);
+                        /*
                         value = binomialTrial.getPassCount() * Math.pow((1 - meanOverTime.get(i)), 2);
                         value += binomialTrial.getFailCount() * Math.pow((0 - meanOverTime.get(i)), 2);
                         size += (binomialTrial.getFailCount() + binomialTrial.getPassCount());
+
+                         */
                     }
                     sum += value;
                 }
