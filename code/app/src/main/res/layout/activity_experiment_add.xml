@@ -8,166 +8,192 @@
     tools:context=".experiment.ExperimentAddActivity">
 
 
-    <TextView
-        android:id="@+id/newExperiment_Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="New Experiment"
-        android:textSize="30sp"
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </TextView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/newExperiment_Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
+                android:gravity="center"
+                android:text="New Experiment"
+                android:textSize="30sp">
 
-    <Spinner
-        android:id="@+id/type_Spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="72dp"
-        app:layout_constraintStart_toEndOf="@+id/type_Text"
-        app:layout_constraintTop_toBottomOf="@+id/newExperiment_Text">
+            </TextView>
 
-    </Spinner>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/type_Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="72dp"
-        android:text="Type: "
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newExperiment_Text">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-    </TextView>
+                    <TextView
+                        android:id="@+id/type_Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="44dp"
+                        android:layout_marginTop="72dp"
+                        android:text="Type: "
+                        android:textSize="18sp">
 
-    <TextView
-        android:id="@+id/region_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="48dp"
-        android:text="Region: "
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mintrials_Text" />
+                    </TextView>
 
-    <EditText
-        android:id="@+id/region_editText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toEndOf="@+id/region_text"
-        app:layout_constraintTop_toBottomOf="@+id/mintrials_editText" />
+                    <TextView
+                        android:id="@+id/description_Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="44dp"
+                        android:layout_marginTop="56dp"
+                        android:text="Description: "
+                        android:textSize="18sp">
 
-    <EditText
-        android:id="@+id/mintrials_editText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="22dp"
-        android:ems="10"
-        android:inputType="number"
-        app:layout_constraintStart_toEndOf="@+id/mintrials_Text"
-        app:layout_constraintTop_toBottomOf="@+id/description_editText">
+                    </TextView>
 
-    </EditText>
+                    <TextView
+                        android:id="@+id/mintrials_Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="44dp"
+                        android:layout_marginTop="44dp"
+                        android:text="Min. Trials: "
+                        android:textSize="18sp">
 
-    <TextView
-        android:id="@+id/description_Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="56dp"
-        android:text="Description: "
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/type_Spinner">
+                    </TextView>
 
-    </TextView>
+                    <TextView
+                        android:id="@+id/region_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="44dp"
+                        android:layout_marginTop="48dp"
+                        android:text="Region: "
+                        android:textSize="18sp" />
 
-    <EditText
-        android:id="@+id/description_editText"
-        android:layout_width="237dp"
-        android:layout_height="47dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="40dp"
-        android:inputType="textMultiLine"
-        app:layout_constraintStart_toEndOf="@+id/description_Text"
-        app:layout_constraintTop_toBottomOf="@+id/type_Spinner">
+                    <TextView
+                        android:id="@+id/geolocation_Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="44dp"
+                        android:layout_marginTop="56dp"
+                        android:text="Geo-Location Required: "
+                        android:textSize="18sp">
 
-    </EditText>
+                    </TextView>
 
-    <TextView
-        android:id="@+id/geolocation_Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="56dp"
-        android:text="Geo-Location Required: "
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/region_text">
+                </LinearLayout>
 
-    </TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/geolocation_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="38dp"
-        android:text="No"
-        app:layout_constraintStart_toEndOf="@+id/geolocation_Text"
-        app:layout_constraintTop_toBottomOf="@+id/region_editText">
+                    <Spinner
+                        android:id="@+id/type_Spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="72dp">
 
-    </Button>
+                    </Spinner>
 
-    <TextView
-        android:id="@+id/mintrials_Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="44dp"
-        android:text="Min. Trials: "
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description_Text">
+                    <EditText
+                        android:id="@+id/description_editText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="40dp"
+                        android:inputType="textMultiLine">
 
-    </TextView>
+                    </EditText>
 
-    <Button
-        android:id="@+id/cancel_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:text="Cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/publish_button"
-        app:layout_constraintStart_toStartOf="parent">
+                    <EditText
+                        android:id="@+id/mintrials_editText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="22dp"
+                        android:ems="10"
+                        android:inputType="number">
 
-    </Button>
+                    </EditText>
 
-    <Button
-        android:id="@+id/publish_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="117dp"
-        android:layout_marginBottom="32dp"
-        android:text="Publish"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cancel_button">
+                    <EditText
+                        android:id="@+id/region_editText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="28dp"
+                        android:ems="10"
+                        android:inputType="textPersonName" />
 
-    </Button>
+                    <Button
+                        android:id="@+id/geolocation_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="38dp"
+                        android:text="No">
+
+                    </Button>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="bottom|center"
+                android:orientation="horizontal"
+                android:padding="20dp">
+
+                <Button
+                    android:id="@+id/cancel_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="0"
+                    android:text="Cancel">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/publish_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="117dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="0"
+                    android:text="Publish">
+
+                </Button>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
