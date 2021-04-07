@@ -35,13 +35,14 @@ import com.example.bettertrialbook.models.ExperimentInfo;
 import com.example.bettertrialbook.models.Geolocation;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.User;
+import com.example.bettertrialbook.profile.InvalidUsernameFragment;
 import com.example.bettertrialbook.profile.ProfileViewActivity;
 import com.example.bettertrialbook.statistic.StatsNumber;
 
 import java.util.ArrayList;
 
 public class ExperimentViewActivity extends AppCompatActivity implements ConfirmationFragment.OnFragmentInteractionListener,
-        TrialProfileFragment.OnFragmentInteractionListener, EditExperimentFragment.OnFragmentInteractionListener {
+        TrialProfileFragment.OnFragmentInteractionListener, EditExperimentFragment.OnFragmentInteractionListener,GeoWarningFragment.OnFragmentInteractionListener {
     Boolean newExperiment;
     Boolean isOwner;
     String experimentId;
@@ -113,9 +114,6 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         String pStatus = experimentInfo.getPublishStatus();
         String aStatus = experimentInfo.getActiveStatus();
         viewMapButton = findViewById(R.id.viewMap_button);
-        if (experimentInfo.getGeoLocationRequired()) {
-            addTrialButton.setText("Add Trial\n(Geolocation\nRequired)");
-        }
 
         ExperimentDAL experimentDAL = new ExperimentDAL();
         if (!isOwner) {
@@ -234,9 +232,15 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         addTrialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment newFragment = AddTrialDialogFragment.newInstance(experimentType, experimentId,
-                        geolocationRequired);
-                newFragment.show(getSupportFragmentManager(), "ADD TRIAL");
+                if (experimentInfo.getGeoLocationRequired()) {
+                    new GeoWarningFragment("WARNING!\nGEOLOCATIONS ARE REQUIRED!").show(getSupportFragmentManager(), "WARNING");
+                }
+
+                else {
+                    DialogFragment newFragment = AddTrialDialogFragment.newInstance(experimentType, experimentId,
+                            geolocationRequired);
+                    newFragment.show(getSupportFragmentManager(), "ADD TRIAL");
+                }
             }
         });
 
@@ -467,5 +471,12 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
                 }
             });
         }
+    }
+    // Action based on confirmation
+    @Override
+    public void onContPressed() {
+        DialogFragment newFragment = AddTrialDialogFragment.newInstance(experimentType, experimentId,
+                geolocationRequired);
+        newFragment.show(getSupportFragmentManager(), "ADD TRIAL");
     }
 }
