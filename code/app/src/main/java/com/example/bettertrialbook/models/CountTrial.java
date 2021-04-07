@@ -29,7 +29,7 @@ public class CountTrial extends Trial implements Comparable<CountTrial> {
         setExperimenterID(experimenterId);
         setGeolocation(geolocation);
     }
-    
+
     /**
      * gets the trial/experiment type of the trial
      * @return
@@ -67,7 +67,11 @@ public class CountTrial extends Trial implements Comparable<CountTrial> {
         return 0;
     }
 
-    public void writeToParcel(Parcel dest, int flags) {}
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+    }
 
-    private CountTrial(Parcel in) {}
+    protected CountTrial(Parcel in) {
+        super(in);
+    }
 }

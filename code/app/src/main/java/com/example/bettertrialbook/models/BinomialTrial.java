@@ -92,10 +92,12 @@ public class BinomialTrial extends Trial implements Comparable<BinomialTrial> {
     }
 
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeBoolean(success);
     }
 
-    private BinomialTrial(Parcel in) {
+    protected BinomialTrial(Parcel in) {
+        super(in);
         success = in.readBoolean();
     }
 }

@@ -92,10 +92,12 @@ public class NonNegTrial extends Trial implements Comparable<NonNegTrial> {
     }
 
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeInt(count);
     }
 
-    private NonNegTrial(Parcel in) {
+    protected NonNegTrial(Parcel in) {
+        super(in);
         count = in.readInt();
     }
 }
