@@ -255,13 +255,13 @@ public class ExperimentViewActivity extends AppCompatActivity implements
         trialAdapter = new CustomTrialList(this, trialDataList, experimentId, isOwner);
         trialList.setAdapter(trialAdapter);
         trialList.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String experimenterID = trialAdapter.getItem(position).getExperimenterID();
-                Trial trial = trialAdapter.getItem(position);
-                new TrialProfileFragment(isOwner, trial).show(getSupportFragmentManager(), "PROFILE");
-            }
-        });
+             @Override
+             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                 String experimenterID = trialAdapter.getItem(position).getExperimenterID();
+                 Trial trial = trialAdapter.getItem(position);
+                 new TrialProfileFragment(isOwner,trial, experimentId).show(getSupportFragmentManager(), "PROFILE");
+             }
+         });
 
         // create a document snapshot listener in the DAL to update the list of trials
         experimentDAL.addTrialListener(experimentId, experimentType, trials -> {

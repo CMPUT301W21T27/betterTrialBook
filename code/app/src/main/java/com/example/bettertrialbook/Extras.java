@@ -16,4 +16,5 @@ public final class Extras {
     public static final String MEASUREMENT_TYPE = "Measurement";
 
     public static final String TRIAL = "Trial";
+    public static final String TRIAL_ID = "Trial id";
 }
