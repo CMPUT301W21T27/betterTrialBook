@@ -12,25 +12,30 @@ import com.example.bettertrialbook.models.NonNegTrial;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 
 public class NonNegTrialTest {
     NonNegTrial testTrial;
     Geolocation mockGeolocation;
+    Date date;
 
     private NonNegTrial mockTrial() {
-        return new NonNegTrial(69, "testid", "testUser", new Geolocation(new Location("")));
+        return new NonNegTrial(69, "testid", "testUser", new Geolocation(new Location("")), date);
     }
 
     @Before
     public void setUp() {
+        date = Calendar.getInstance().getTime();
         testTrial = mockTrial();
         mockGeolocation = new Geolocation(new Location(""));
     }
 
     @Test
     public void createTrialTest() {
-        NonNegTrial comparisonTrial = new NonNegTrial(69, "testid", "testUser", mockGeolocation);
+        NonNegTrial comparisonTrial = new NonNegTrial(69, "testid", "testUser", mockGeolocation, date);
         assertEquals(0, comparisonTrial.compareTo(testTrial));
     }
 

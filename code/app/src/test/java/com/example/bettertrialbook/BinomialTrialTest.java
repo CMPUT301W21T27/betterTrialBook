@@ -12,50 +12,45 @@ import com.example.bettertrialbook.models.Geolocation;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class BinomialTrialTest {
     BinomialTrial testTrial;
     Geolocation mockGeolocation;
+    Date date;
 
     private BinomialTrial mockTrial() {
-        return new BinomialTrial(6, 9, "testid", "testUser", new Geolocation(new Location("")));
+        return new BinomialTrial(true, "testid", "testUser", new Geolocation(new Location("")), date);
     }
 
     @Before
     public void setUp() {
+        date = Calendar.getInstance().getTime();
         testTrial = mockTrial();
         mockGeolocation = new Geolocation(new Location(""));
     }
 
     @Test
     public void createTrialTest() {
-        BinomialTrial comparisonTrial = new BinomialTrial(6, 9, "testid", "testUser", mockGeolocation);
+        BinomialTrial comparisonTrial = new BinomialTrial(true, "testid", "testUser", mockGeolocation, date);
         assertEquals(0, comparisonTrial.compareTo(testTrial));
     }
 
     @Test
-    public void getPassCountTest() {
+    public void getSuccessTest() {
         testTrial = mockTrial();
-        assertEquals(6, testTrial.getPassCount());
+        assertTrue(testTrial.getSuccess());
     }
 
     @Test
-    public void setPassCountTest() {
-        testTrial.setPassCount(1);
-        assertEquals(1, testTrial.getPassCount());
-    }
-
-    @Test
-    public void getFailCountTest() {
-        testTrial = mockTrial();
-        assertEquals(9, testTrial.getFailCount());
-    }
-
-    @Test
-    public void setFailCountTest() {
-        testTrial.setFailCount(1);
-        assertEquals(1, testTrial.getFailCount());
+    public void setSuccessTest() {
+        testTrial.setSuccess(false);
+        assertFalse(testTrial.getSuccess());
     }
 
     @Test
