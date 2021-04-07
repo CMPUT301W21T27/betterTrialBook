@@ -216,7 +216,7 @@ public class Statistic {
                 if (trials.get(0).getTrialType().equals(Extras.COUNT_TYPE)) {
                     CountTrial countTrial = (CountTrial) trials.get(0);
                     quartiles[0] = 1.0;
-                    quartiles[0] = 1.0;
+                    quartiles[1] = 1.0;
                 }
                 if (trials.get(0).getTrialType().equals(Extras.NONNEG_TYPE)) {
                     NonNegTrial nonNegTrial = (NonNegTrial) trials.get(0);
