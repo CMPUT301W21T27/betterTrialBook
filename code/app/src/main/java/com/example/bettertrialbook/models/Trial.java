@@ -19,6 +19,7 @@ public abstract class Trial implements Parcelable{
     private Boolean blacklist = false;
     private Geolocation geolocation;
 
+    protected Trial(){}
     /**
      * gets the geolocation of the Trial
      * @return
@@ -93,4 +94,5 @@ public abstract class Trial implements Parcelable{
     public void setBlacklist(Boolean blacklist) {
         this.blacklist = blacklist;
     }
+
 }

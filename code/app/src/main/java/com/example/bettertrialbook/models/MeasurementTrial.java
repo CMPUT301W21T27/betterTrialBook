@@ -6,6 +6,7 @@ values of the Double type.
 package com.example.bettertrialbook.models;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.example.bettertrialbook.Extras;
 
@@ -71,13 +72,25 @@ public class MeasurementTrial extends Trial implements Comparable<MeasurementTri
                 + this.getGeolocation().compareTo(measurementTrial.getGeolocation());
     }
 
-    @Override
+    public static final Parcelable.Creator<MeasurementTrial> CREATOR = new Parcelable.Creator<MeasurementTrial>() {
+        public MeasurementTrial createFromParcel(Parcel in) {
+            return new MeasurementTrial(in);
+        }
+
+        public MeasurementTrial[] newArray(int size) {
+            return new MeasurementTrial[size];
+        }
+    };
+
     public int describeContents() {
         return 0;
     }
 
-    @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(measurement);
+    }
 
+    private MeasurementTrial(Parcel in) {
+        measurement = in.readDouble();
     }
 }
