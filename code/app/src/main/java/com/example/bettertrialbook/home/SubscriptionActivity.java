@@ -8,7 +8,6 @@ package com.example.bettertrialbook.home;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -110,7 +109,6 @@ public class SubscriptionActivity extends AppCompatActivity implements AdapterVi
                 uDAL.getSubscribed(userID, new UserDAL.GetSubscribedCallback() {
                     @Override
                     public void onCallback(List<String> subscribed) {
-                        Log.d("TEST2", String.valueOf(subscribed));
                         if (subscribed != null) {
                             if (subscribed.size() == 0) {
                                 trialInfoAdapter.notifyDataSetChanged();

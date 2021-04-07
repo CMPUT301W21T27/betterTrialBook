@@ -34,10 +34,8 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.type.DateTime;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -151,6 +149,25 @@ public class ExperimentDAL {
     }
 
     /**
+     * Deletes an experiment from firebase
+     *
+     * @param experimentId - the id of the experiment
+     */
+    public void deleteExperiment(String experimentId) {
+        collRef.document(experimentId).delete().addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Experiment could not be deleted" + e.toString());
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Experiment has been deleted");
+            }
+        });;
+    }
+
+    /**
      * Gets all experiments of a certain status
      *
      * @param status - the status of the desired experiments
@@ -186,12 +203,12 @@ public class ExperimentDAL {
         collRef.document(experimentId).update(status, newStatus).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "Data could not be updated" + e.toString());
+                Log.d(TAG, "Status could not be updated" + e.toString());
             }
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG, "Data has been updated");
+                Log.d(TAG, "Status has been updated");
             }
         });
     }

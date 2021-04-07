@@ -61,20 +61,17 @@ public class UserDAL {
                     User user;
                     if (document.exists()) {
                         // User found, create user object to return
-                        Log.d("TEST", "2. User currently exists");
                         user = new User(id);
                         user.setContact(document.getString("email"), document.getString("phone"));
                         user.setUsername(document.getString("username"));
 
                     } else {
                         // User not found, return null
-                        Log.d("TEST", "User does not exist");
                         user = null;
                     }
                     callback.onCallback(user);
                 } else {
                     // Error occurred
-                    Log.d("TEST", "Failed with:", task.getException());
                 }
             }
         });

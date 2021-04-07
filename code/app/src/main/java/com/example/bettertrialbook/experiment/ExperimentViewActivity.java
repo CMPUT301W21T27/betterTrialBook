@@ -186,19 +186,21 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         }
 
         // all the onClick listeners
-        descriptionText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editExperiment();
-            }
-        });
+        if (isOwner) {
+            descriptionText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editExperiment();
+                }
+            });
 
-        regionText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editExperiment();
-            }
-        });
+            regionText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editExperiment();
+                }
+            });
+        }
 
         unpublishButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -269,7 +271,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
              public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                  String experimenterID = trialAdapter.getItem(position).getExperimenterID();
                  Trial trial = trialAdapter.getItem(position);
-                 new TrialProfileFragment(isOwner,trial, experimentId).show(getSupportFragmentManager(), "PROFILE");
+                 new TrialProfileFragment(isOwner, trial, experimentId).show(getSupportFragmentManager(), "PROFILE");
              }
          });
 
@@ -295,15 +297,20 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
     }
 
     @Override
-    public void onOkPressed(String description, String region) {
-        // update TextView with new description and region
-        descriptionText.setText("Description: " + description);
-        regionText.setText("Region: " + region);
+    public void onOkPressed(String description, String region, Boolean delete) {
+        if (!delete) {
+            // update TextView with new description and region
+            descriptionText.setText("Description: " + description);
+            regionText.setText("Region: " + region);
 
-        // update firebase with new description and region
-        ExperimentDAL experimentDAL = new ExperimentDAL();
-        experimentDAL.setExperimentDescription(experimentId, description);
-        experimentDAL.setExperimentRegion(experimentId, region);
+            // update firebase with new description and region
+            ExperimentDAL experimentDAL = new ExperimentDAL();
+            experimentDAL.setExperimentDescription(experimentId, description);
+            experimentDAL.setExperimentRegion(experimentId, region);
+
+        } else {
+            confirmationDialog("Delete", false, "");
+        }
     }
 
     /**
@@ -363,8 +370,17 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
 
         } else if (tag.equals("block")) {
             ExperimentDAL experimentDAL = new ExperimentDAL();
-            Log.d("TEST2", experimenterID);
             experimentDAL.modifyBlacklist(experimentId, experimenterID, true);
+
+        } else if (tag.equals("Delete")) {
+            ExperimentDAL experimentDAL = new ExperimentDAL();
+            UserDAL userDAL = new UserDAL();
+            experimentDAL.deleteExperiment(experimentId);
+            userDAL.unsubscribeExperiment(experimentId, experimentInfo.getOwnerId());
+            Toast.makeText(getApplicationContext(),
+                    String.format("Experiment %s has been deleted", experimentInfo.getDescription()),
+                    Toast.LENGTH_LONG).show();
+            onBackPressed();
         }
     }
 

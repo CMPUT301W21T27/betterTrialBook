@@ -35,7 +35,7 @@ public class EditExperimentFragment extends DialogFragment {
 
     /* Ok pressed interface */
     public interface OnFragmentInteractionListener{
-        void onOkPressed(String description, String region);
+        void onOkPressed(String description, String region, Boolean delete);
     }
 
     @Override
@@ -52,9 +52,9 @@ public class EditExperimentFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.edit_contact_fragment,null);
-        EditText descriptionInput = view.findViewById(R.id.email_editText);
-        EditText regionInput = view.findViewById(R.id.phone_editText);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_edit_experiment,null);
+        EditText descriptionInput = view.findViewById(R.id.descriptionEdit_editText);
+        EditText regionInput = view.findViewById(R.id.regionEdit_editText);
 
         descriptionInput.setText(description);
         regionInput.setText(region);
@@ -62,10 +62,14 @@ public class EditExperimentFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
-                .setTitle("Edit Contact Info")
+                .setTitle("Edit Details or Delete Experiment")
 
-                .setNegativeButton("Cancel",null)
-                //exit fragment
+                .setNegativeButton("DELETE EXPERIMENT", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        listener.onOkPressed("", "", true);
+                    }
+                })
 
                 .setPositiveButton("Apply", new DialogInterface.OnClickListener() {
                     @Override
@@ -73,7 +77,7 @@ public class EditExperimentFragment extends DialogFragment {
                         String description = descriptionInput.getText().toString();
                         String region = regionInput.getText().toString();
 
-                        listener.onOkPressed(description, region);
+                        listener.onOkPressed(description, region, false);
                     }
                 })
                 .create();

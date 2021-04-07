@@ -180,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 if (user == null) {
                     You.setUser(uDAL.addUser(finalID));
                 } else {
-                    Log.d("TEST", "4. " + user.getID() + user.getUsername());
                     You.setUser(user);
                 }
             }
