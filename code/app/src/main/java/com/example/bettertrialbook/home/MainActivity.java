@@ -35,16 +35,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /**
  * The main activity hosts buttons to create new experiments, view your profile and search experiments.
  */
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-
-
-
     UserDAL uDAL = new UserDAL();
     private ArrayList<ExperimentInfo> trialInfoList;
     private ArrayAdapter<ExperimentInfo> trialInfoAdapter;
@@ -85,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         trialInfoAdapter = new ExperimentList(this, trialInfoList);
         resultList.setAdapter(trialInfoAdapter);
         resultList.setOnItemClickListener(this);
+
+        // populate page with published experiments
+
 
         // Go to Create Experiment Screen
         create.setOnClickListener(new View.OnClickListener() {
@@ -189,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
+        /*
         if (neverSearched) {
             trialInfoList.clear();
             if (userId != null) {
@@ -220,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 });
             }
         }
+         */
     }
 
 
