@@ -36,8 +36,8 @@ import com.example.bettertrialbook.statistic.StatsNumber;
 
 import java.util.ArrayList;
 
-public class ExperimentViewActivity extends AppCompatActivity implements
-        ConfirmationFragment.OnFragmentInteractionListener, TrialProfileFragment.OnFragmentInteractionListener {
+public class ExperimentViewActivity extends AppCompatActivity implements ConfirmationFragment.OnFragmentInteractionListener,
+        TrialProfileFragment.OnFragmentInteractionListener, EditExperimentFragment.OnFragmentInteractionListener {
     Boolean newExperiment;
     Boolean isOwner;
     String experimentId;
@@ -186,6 +186,20 @@ public class ExperimentViewActivity extends AppCompatActivity implements
         }
 
         // all the onClick listeners
+        descriptionText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editExperiment();
+            }
+        });
+
+        regionText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editExperiment();
+            }
+        });
+
         unpublishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -267,6 +281,29 @@ public class ExperimentViewActivity extends AppCompatActivity implements
             trialAdapter.notifyDataSetChanged();
         });
 
+    }
+
+    /**
+     * Edits experiment information like description and region
+     */
+    private void editExperiment() {
+        String description = (String)descriptionText.getText();
+        String region = (String) regionText.getText();
+        description = description.replace("Description: ", "");
+        region = region.replace("Region: ", "");
+        new EditExperimentFragment(description, region).show(getSupportFragmentManager(), "EDITEXP");
+    }
+
+    @Override
+    public void onOkPressed(String description, String region) {
+        // update TextView with new description and region
+        descriptionText.setText("Description: " + description);
+        regionText.setText("Region: " + region);
+
+        // update firebase with new description and region
+        ExperimentDAL experimentDAL = new ExperimentDAL();
+        experimentDAL.setExperimentDescription(experimentId, description);
+        experimentDAL.setExperimentRegion(experimentId, region);
     }
 
     /**
