@@ -35,6 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.type.DateTime;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,6 +71,10 @@ public class ExperimentDAL {
 
     public interface IsOpenCallback {
         void onCallback(String status);
+    }
+
+    public interface GetExperimentsByStatusCallback {
+        void onCallback(List<String> experiments);
     }
 
     /**
@@ -141,6 +146,32 @@ public class ExperimentDAL {
             if (onCreate != null) {
                 experimentInfo.setId(docRef.getId());
                 onCreate.execute(experimentInfo);
+            }
+        });
+    }
+
+    /**
+     * Gets all experiments of a certain status
+     *
+     * @param status - the status of the desired experiments
+     * @param callback - return method for firestore queries
+     */
+    public void getExperiments(String status, GetExperimentsByStatusCallback callback) {
+        final List<String>[] experiments = new List[]{new ArrayList<String>()};
+        collRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<DocumentSnapshot> allExperiments = task.getResult().getDocuments();
+                    for (int i = 0; i < allExperiments.size(); i++) {
+                        String publishStatus = (String) allExperiments.get(i).get("PublishStatus");
+                        if (publishStatus != null && publishStatus.equals(status)) {
+                            String experimentId = (String) allExperiments.get(i).getId();
+                            experiments[0].add(experimentId);
+                        }
+                    }
+                }
+                callback.onCallback(experiments[0]);
             }
         });
     }

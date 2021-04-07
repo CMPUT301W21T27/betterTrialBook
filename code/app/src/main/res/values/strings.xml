@@ -47,7 +47,7 @@
         <item>Measurement</item>
     </string-array>
     <string-array name="SearchTarget">
-        <item>User</item>
+        <item>UserId</item>
         <item>Description</item>
     </string-array>
 
