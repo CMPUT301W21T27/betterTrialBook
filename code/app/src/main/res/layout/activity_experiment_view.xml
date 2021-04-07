@@ -18,14 +18,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-    android:id="@+id/region_text"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="10dp"
-    android:text="Region: "
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/description_text" />
+        android:id="@+id/region_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:text="Region: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/description_text" />
 
     <TextView
         android:id="@+id/ownerId_text"
@@ -82,9 +82,9 @@
         android:id="@+id/subscribe_button"
         android:layout_width="140dp"
         android:layout_height="42dp"
-        android:text="Subscribe"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="32dp"
+        android:layout_marginRight="16dp"
+        android:text="Subscribe"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -103,7 +103,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/viewMap_button"
+        app:layout_constraintBottom_toTopOf="@+id/addTrial_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -111,55 +111,62 @@
 
     <Button
         android:id="@+id/stats_button"
-        android:layout_width="127dp"
-        android:layout_height="42dp"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:layout_marginLeft="32dp"
         android:text="View Stats"
         app:layout_constraintBottom_toTopOf="@+id/createQR_button"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/forum_button"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
     <Button
         android:id="@+id/forum_button"
-        android:layout_width="127dp"
-        android:layout_height="42dp"
-        android:layout_marginRight="28dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="32dp"
         android:onClick="openForum"
         android:text="Forum"
-        app:layout_constraintBottom_toTopOf="@+id/addTrial_button"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/viewMap_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/stats_button" />
 
     <Button
         android:id="@+id/createQR_button"
-        android:layout_width="127dp"
-        android:layout_height="42dp"
-        android:text="Create QR"
-        android:layout_marginLeft="32dp"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="32dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:onClick="createQRCode"
-        />
+        android:text="Create QR"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/viewMap_button"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <Button
         android:id="@+id/addTrial_button"
-        android:layout_width="wrap_content"
+        android:layout_width="184dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="32dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginEnd="140dp"
         android:text="Add Trial"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
+        app:layout_constraintBottom_toTopOf="@+id/forum_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/viewMap_button"
-        android:layout_width="127dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
         android:text="View Map"
-        app:layout_constraintBottom_toTopOf="@+id/stats_button"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/createQR_button" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
