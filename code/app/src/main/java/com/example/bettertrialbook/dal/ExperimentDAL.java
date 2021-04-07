@@ -565,17 +565,17 @@ public class ExperimentDAL {
             Log.d("ExperimentDAL", String.valueOf(timestamp));
         }
         // deserialize the geolocation within the trial
-        Geolocation geolocation;
+        // for trials with no geolocation, set the geolocation's location to null
+        Geolocation geolocation = new Geolocation(null);
         Location newLocation = new Location("");
         if (data.get("geolocation") != null) {
             HashMap<Object, Object> geolocationData = (HashMap<Object, Object>) data.get("geolocation");
-            HashMap<Object, Object> locationData = (HashMap<Object, Object>) geolocationData.get("location");
-            newLocation.setLatitude(Double.parseDouble(String.valueOf(locationData.get("latitude"))));
-            newLocation.setLongitude(Double.parseDouble(String.valueOf(locationData.get("longitude"))));
-            geolocation = new Geolocation(newLocation);
-        } else {
-            // for trials with no geolocation, set the geolocation's location to null
-            geolocation = new Geolocation(null);
+            if (geolocationData.get("location") != null) {
+                HashMap<Object, Object> locationData = (HashMap<Object, Object>) geolocationData.get("location");
+                newLocation.setLatitude(Double.parseDouble(String.valueOf(locationData.get("latitude"))));
+                newLocation.setLongitude(Double.parseDouble(String.valueOf(locationData.get("longitude"))));
+                geolocation = new Geolocation(newLocation);
+            }
         }
         // some trials in firestore don't have an experiment id, this is just so our app
         // doesn't crash
