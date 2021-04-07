@@ -19,6 +19,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.bettertrialbook.R;
+import com.example.bettertrialbook.dal.ExperimentDAL;
+import com.example.bettertrialbook.dal.QRDAL;
+import com.example.bettertrialbook.models.QRCode;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.concurrent.ExecutionException;
@@ -36,6 +39,7 @@ public class ScanQRActivity extends AppCompatActivity {
                 Log.d(tag, "Permission granted");
                 setupCamera();
             });
+    private QRCode qrCode;
 
 
     //https://developer.android.com/training/camerax/preview
@@ -103,5 +107,13 @@ public class ScanQRActivity extends AppCompatActivity {
                 );
         return imageAnalysis;
     }
+
+    private void scanQR(String qrId) {
+        new QRDAL().addQRCodeListener(qrId, qrCode -> {
+            new ExperimentDAL().addTrialListener(qrCode.getExperimentId(), trials -> {
+            });
+        }, null);
+    }
+
 
 }
