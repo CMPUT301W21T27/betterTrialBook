@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -33,8 +34,11 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.type.DateTime;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -484,6 +488,11 @@ public class ExperimentDAL {
     private Trial deserializeTrial(HashMap<Object, Object> data, String experimentType) {
         String trialId = data.get("trialID").toString();
         String experimenterId;
+        Date timestamp = null;
+        if (data.get("timestamp") != null) {
+            timestamp = ((Timestamp) data.get("timestamp")).toDate();
+            Log.d("ExperimentDAL", String.valueOf(timestamp));
+        }
         // deserialize the geolocation within the trial
         Geolocation geolocation;
         Location newLocation = new Location("");
@@ -506,18 +515,16 @@ public class ExperimentDAL {
             experimenterId = data.get("experimenterID").toString();
         switch (experimentType) {
         case Extras.COUNT_TYPE:
-            int count = ((Long) data.get("count")).intValue();
-            return new CountTrial(count, trialId, experimenterId, geolocation);
+            return new CountTrial(trialId, experimenterId, geolocation, timestamp);
         case Extras.BINOMIAL_TYPE:
-            int passCount = ((Long) data.get("passCount")).intValue();
-            int failCount = ((Long) data.get("failCount")).intValue();
-            return new BinomialTrial(passCount, failCount, trialId, experimenterId, geolocation);
+            boolean success = (boolean) data.get("success");
+            return new BinomialTrial(success, trialId, experimenterId, geolocation, timestamp);
         case Extras.NONNEG_TYPE:
-            count = ((Long) data.get("count")).intValue();
-            return new NonNegTrial(count, trialId, experimenterId, geolocation);
+            int count = ((Long) data.get("count")).intValue();
+            return new NonNegTrial(count, trialId, experimenterId, geolocation, timestamp);
         case Extras.MEASUREMENT_TYPE:
             double measurement = (double) data.get("measurement");
-            return new MeasurementTrial(measurement, trialId, experimenterId, geolocation);
+            return new MeasurementTrial(measurement, trialId, experimenterId, geolocation, timestamp);
         default:
             throw new IllegalArgumentException("Invalid experiment type");
         }
