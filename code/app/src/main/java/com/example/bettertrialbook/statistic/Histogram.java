@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.view.MenuInflater;
 
+import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.models.Trial;
 import com.github.mikephil.charting.charts.BarChart;
@@ -37,20 +39,36 @@ public class Histogram extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
+        ArrayList<String> labels;
         trialDataList = (ArrayList<Trial>) bundle.getSerializable("Trials");
-        ArrayList<Double> dataList = statistic.experimentData(trialDataList);
-        List<String> labels = histogramInfo.getLabels(dataList);
 
         BarChart barChart = findViewById(R.id.Bar_Chart);
+        // Histogram Graph Plot and Setting
+        if (trialDataList.size() > 0 && trialDataList != null) {
+            String type = trialDataList.get(0).getTrialType();
+            if (type.equals(Extras.COUNT_TYPE)) {
+                labels = histogramInfo.getLabelsCountTrial(trialDataList);
+            }
+            else {
+                ArrayList<Double> dataList = statistic.experimentData(trialDataList);
+                labels = histogramInfo.getLabels(dataList);
+            }
 
-        // Histogram Graph plot and setting
-        barChartSetting(barChart, labels);
-        plotTheGraph(barChart, dataList);
+            // Histogram Graph plot and setting
+            barChartSetting(barChart, labels);
+            plotTheGraph(barChart, trialDataList);
+        }
     }
 
     // This method is used to plot the data of the histogram
-    public void plotTheGraph(BarChart barChart, ArrayList<Double> dataList) {
-        ArrayList<Integer> binFrequency = histogramInfo.collectFrequency(dataList);
+    public void plotTheGraph(BarChart barChart, ArrayList<Trial> trials) {
+        ArrayList<Integer> binFrequency;
+        if (!trialDataList.get(0).getTrialType().equals(Extras.COUNT_TYPE)) {
+            ArrayList<Double> dataList = statistic.experimentData(trialDataList);
+            binFrequency = histogramInfo.collectFrequency(dataList);
+        } else {
+            binFrequency = histogramInfo.collectFrequencyCountTrial(trials);
+        }
 
         ArrayList<BarEntry> barEntries = new ArrayList<>();
         for (int i = 0; i < binFrequency.size(); i++) {

@@ -1,5 +1,11 @@
 package com.example.bettertrialbook.statistic;
 
+import android.util.Log;
+
+import com.example.bettertrialbook.models.Trial;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,17 +14,15 @@ import java.util.LinkedHashSet;
 public class HistogramInfo {
 
     /**
-     *  An Constructor to initialize the related histogram setting methods
+     * An Constructor to initialize the related histogram setting methods
      */
     public HistogramInfo() { /*Empty Constructor*/}
 
-
     /**
      * Find the frequency for each respective bins
-     * @param data
-     * An sorted arrayList contains the data value for each trials
-     * @return
-     * An arrayList that represents the number frequency of respective bin
+     *
+     * @param data An sorted arrayList contains the data value for each trials
+     * @return An arrayList that represents the number frequency of respective bin
      * in non-decreasing order.
      */
     public ArrayList<Integer> collectFrequency(ArrayList<Double> data) {
@@ -32,8 +36,7 @@ public class HistogramInfo {
             // Get the frequency for each bin depends on the requiredBin
             if (requiredBin >= 5) {
                 binFrequency = getBinFrequencyA(data, requiredBin);
-            }
-            else if (requiredBin > 0 && requiredBin < 5) {
+            } else if (requiredBin > 0 && requiredBin < 5) {
                 binFrequency = getBinFrequencyB(data, requiredBin);
             }
         } else {
@@ -43,13 +46,11 @@ public class HistogramInfo {
         return binFrequency;
     }
 
-
     /**
      * Obtain the name for the bins in the X-Axis for the Histogram
-     * @param data
-     * An sorted arrayList contains the data value for each trials
-     * @return
-     * An arrayList contains the labels( The name for the bin : String ) for each bins
+     *
+     * @param data An sorted arrayList contains the data value for each trials
+     * @return An arrayList contains the labels( The name for the bin : String ) for each bins
      */
     public ArrayList<String> getLabels(ArrayList<Double> data) {
         ArrayList<String> labels = new ArrayList<>();
@@ -82,10 +83,64 @@ public class HistogramInfo {
                 }
             }
             // Used the elements as the name for the bin
-            else if (requiredBin > 0 && requiredBin < 5){
+            else if (requiredBin > 0 && requiredBin < 5) {
                 double[] categoryBin = getCategory(data, requiredBin);
                 for (int i = 0; i < requiredBin; i++) {
                     labels.add(String.valueOf(categoryBin[i]));
+                }
+            }
+        } else {
+            labels = null;
+        }
+
+        return labels;
+    }
+
+    /**
+     * Special Method for Count Trial Type of experiment to collect the occurences for the experiment.
+     * @param trials
+     * The trial data for the experiment
+     * @return
+     * An arrayList that represents the number frequency of respective bin (experimenter ID)
+     */
+    public ArrayList<Integer> collectFrequencyCountTrial(ArrayList<Trial> trials) {
+        int frequency;
+        ArrayList<Integer> binFrequency = new ArrayList<>();
+        ArrayList<String> experimentersID = getDistinctExperimenter(trials);
+
+        if (trials != null && trials.size() > 0 && experimentersID != null) {
+            for (int i = 0; i < experimentersID.size(); i++) {
+                frequency = 0;
+                for (Trial trial : trials) {
+                    String experimenter = trial.getExperimenterID();
+                    if (experimenter != null) {
+                        if (experimenter.equals(experimentersID.get(i))) {
+                            frequency += 1;
+                        }
+                    }
+                }
+                binFrequency.add(frequency);
+            }
+        } else {
+            binFrequency = null;
+        }
+
+        return binFrequency;
+    }
+
+    public ArrayList<String> getLabelsCountTrial(ArrayList<Trial> trials) {
+        ArrayList<String> labels = new ArrayList<>();
+
+        if (trials != null && trials.size() > 0) {
+            ArrayList<String> experimenters = getDistinctExperimenter(trials);
+            Log.d("Checking", "Executed");
+            if (experimenters != null && experimenters.size() > 0) {
+                Log.d("Size of experimenters", String.valueOf(experimenters.size()));
+                for (int i = 0; i < experimenters.size(); i++) {
+                    if (experimenters.get(i) != null) {
+                        String label = experimenters.get(i).substring(0, 3);
+                        labels.add(label);
+                    }
                 }
             }
         } else {
@@ -111,7 +166,7 @@ public class HistogramInfo {
     }
 
     // Obtain the range of the data
-    public Double rangeOfData(ArrayList<Double> data) {
+    public Double rangeOfData(@NotNull ArrayList<Double> data) {
         // Logic: Since the data passed in is a sorted arrayList
         // The first element in the array list is the smallest element
         // The last element in the array list is the largest element
@@ -139,7 +194,7 @@ public class HistogramInfo {
 
         maxForEachBin[0] = diffForBin;
         for (int i = 1; i < requiredBin; i++) {
-            maxForEachBin[i] = maxForEachBin[i-1] + 1 + diffForBin;
+            maxForEachBin[i] = maxForEachBin[i - 1] + 1 + diffForBin;
         }
 
         return maxForEachBin;
@@ -151,7 +206,7 @@ public class HistogramInfo {
 
         minForEachBin[0] = 0;
         for (int i = 1; i < requiredBin; i++) {
-            minForEachBin[i] = maxForEachBin[i-1] + 1;
+            minForEachBin[i] = maxForEachBin[i - 1] + 1;
         }
 
         return minForEachBin;
@@ -227,5 +282,28 @@ public class HistogramInfo {
         return binFrequency;
     }
     // end for methods used for less than 5 distinct elements
+
+    //-------------------------Special Helper Method for Count Trial Type --------------------------
+    // Obtain the arrayList of the experimenter ID used to categorization
+    // This is also the label method for the count trial.
+    // In the sense that, we use the experimenter ID as the bin label
+    public ArrayList<String> getDistinctExperimenter(ArrayList<Trial> trials) {
+        Set<String> set = new LinkedHashSet<>();
+        ArrayList<String> distinctItem = new ArrayList<>();
+        ArrayList<String> nameArrayList = new ArrayList<>();
+
+        if (trials != null && trials.size() > 0) {
+            for (Trial trial : trials) {
+                nameArrayList.add(trial.getExperimenterID());
+            }
+            set.addAll(nameArrayList);
+            distinctItem.addAll(set);
+            Collections.sort(distinctItem);
+        } else {
+            distinctItem = null;
+        }
+
+        return distinctItem;
+    }
 }
 

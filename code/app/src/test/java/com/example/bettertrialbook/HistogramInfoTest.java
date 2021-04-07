@@ -3,12 +3,18 @@
  */
 package com.example.bettertrialbook;
 
+import android.location.Location;
+
+import com.example.bettertrialbook.models.CountTrial;
+import com.example.bettertrialbook.models.Geolocation;
+import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.statistic.HistogramInfo;
 
 import org.junit.Test;
 import org.junit.Before;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertEquals;
@@ -92,9 +98,55 @@ public class HistogramInfoTest {
         assertEquals("2-3", labels2.get(1));
         assertEquals("4-5", labels2.get(2));
         assertEquals("6-7", labels2.get(3));
-        assertEquals("8-9", labels2.get(4));
+        assertEquals("8+", labels2.get(4));
 
         // Results for dataList3 (Empty)
         assertNull(labels3);
+    }
+
+    //-------------------------- Special Test for Count Trial Type ---------------------------------
+    @Test
+    public void testGetNumberOfBinsCountTrial() {
+        ArrayList<Trial> countTrial1 = new ArrayList<>();
+        ArrayList<Trial> countTrial2 = new ArrayList<>();
+
+        countTrial1.add(new CountTrial("1", "Abby", new Geolocation(new Location("")), new Date()));
+        countTrial1.add(new CountTrial("2", "Terence", new Geolocation(new Location("")), new Date()));
+        countTrial1.add(new CountTrial("3", "Terence2", new Geolocation(new Location("")), new Date()));
+        countTrial1.add(new CountTrial("4", "Terence2", new Geolocation(new Location("")), new Date()));
+
+        ArrayList<String> names1 = histogramInfo.getDistinctExperimenter(countTrial1);
+        ArrayList<String> names2 = histogramInfo.getDistinctExperimenter(countTrial2);
+
+        // Results for non-empty arrayList of Trial
+        assertEquals(3, names1.size());
+        assertEquals("Abby", names1.get(0));
+        assertEquals("Terence", names1.get(1));
+        assertEquals("Terence2", names1.get(2));
+
+        // Results for empty arrayList of Trial
+        assertNull(names2);
+    }
+
+    @Test
+    public void testCollectFrequencyCountTrial() {
+        ArrayList<Trial> countTrial1 = new ArrayList<>();
+        ArrayList<Trial> countTrial2 = new ArrayList<>();
+
+        countTrial1.add(new CountTrial("1", "Abby", new Geolocation(new Location("")), new Date()));
+        countTrial1.add(new CountTrial("2", "Terence", new Geolocation(new Location("")), new Date()));
+        countTrial1.add(new CountTrial("3", "Terence2", new Geolocation(new Location("")), new Date()));
+        countTrial1.add(new CountTrial("4", "Terence2", new Geolocation(new Location("")), new Date()));
+
+        ArrayList<Integer> frequency1 = histogramInfo.collectFrequencyCountTrial(countTrial1);
+        ArrayList<Integer> frequency2 = histogramInfo.collectFrequencyCountTrial(countTrial2);
+
+        // Results for non-empty arrayList of Trial
+        assertEquals(1, (int) frequency1.get(0));
+        assertEquals(1, (int) frequency1.get(1));
+        assertEquals(2, (int) frequency1.get(2));
+
+        // Results for empty arrayList of Trial
+        assertNull(frequency2);
     }
 }
