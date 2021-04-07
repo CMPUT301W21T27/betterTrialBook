@@ -1,5 +1,5 @@
 /*
-Unit tests for the NonNegTrial class
+Unit tests for the MeasurementTrial class
  */
 
 package com.example.bettertrialbook;
@@ -7,7 +7,7 @@ package com.example.bettertrialbook;
 import android.location.Location;
 
 import com.example.bettertrialbook.models.Geolocation;
-import com.example.bettertrialbook.models.NonNegTrial;
+import com.example.bettertrialbook.models.MeasurementTrial;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,13 +17,13 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
-public class NonNegTrialTest {
-    NonNegTrial testTrial;
+public class MeasurementTrialTest {
+    MeasurementTrial testTrial;
     Geolocation mockGeolocation;
     Date date;
 
-    private NonNegTrial mockTrial() {
-        return new NonNegTrial(69, "testid", "testUser", new Geolocation(new Location("")), date);
+    private MeasurementTrial mockTrial() {
+        return new MeasurementTrial(420.69, "testid", "testUser", new Geolocation(new Location("")), date);
     }
 
     @Before
@@ -35,26 +35,26 @@ public class NonNegTrialTest {
 
     @Test
     public void createTrialTest() {
-        NonNegTrial comparisonTrial = new NonNegTrial(69, "testid", "testUser", mockGeolocation, date);
+        MeasurementTrial comparisonTrial = new MeasurementTrial(420.69, "testid", "testUser", mockGeolocation, date);
         assertEquals(0, comparisonTrial.compareTo(testTrial));
     }
 
     @Test
-    public void getCountTest() {
+    public void getMeasurementTest() {
         testTrial = mockTrial();
-        assertEquals(69, testTrial.getCount());
+        assertEquals(Double.valueOf(420.69), testTrial.getMeasurement());
     }
 
     @Test
-    public void seCountTest() {
-        testTrial.setCount(1);
-        assertEquals(1, testTrial.getCount());
+    public void setMeasurementTest() {
+        testTrial.setMeasurement(1.01);
+        assertEquals(Double.valueOf(1.01), testTrial.getMeasurement());
     }
 
     @Test
     public void getTrialTypeTest() {
         testTrial = mockTrial();
-        assertEquals("Non-Negative Integer", testTrial.getTrialType());
+        assertEquals("Measurement", testTrial.getTrialType());
     }
 
     @Test
