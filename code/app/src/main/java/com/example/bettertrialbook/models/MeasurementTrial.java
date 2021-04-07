@@ -92,10 +92,12 @@ public class MeasurementTrial extends Trial implements Comparable<MeasurementTri
     }
 
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeDouble(measurement);
     }
 
-    private MeasurementTrial(Parcel in) {
+    protected MeasurementTrial(Parcel in) {
+        super(in);
         measurement = in.readDouble();
     }
 }
