@@ -33,12 +33,13 @@ import com.example.bettertrialbook.models.Geolocation;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.User;
 import com.example.bettertrialbook.profile.ProfileViewActivity;
+import com.example.bettertrialbook.qr.CreateQRActivity;
 import com.example.bettertrialbook.statistic.StatsNumber;
 
 import java.util.ArrayList;
 
-public class ExperimentViewActivity extends AppCompatActivity
-        implements ConfirmationFragment.OnFragmentInteractionListener, TrialProfileFragment.OnFragmentInteractionListener {
+public class ExperimentViewActivity extends AppCompatActivity implements
+        ConfirmationFragment.OnFragmentInteractionListener, TrialProfileFragment.OnFragmentInteractionListener {
     Boolean newExperiment;
     Boolean isOwner;
     String experimentId;
@@ -82,7 +83,7 @@ public class ExperimentViewActivity extends AppCompatActivity
         createQRButton = findViewById(R.id.createQR_button);
 
         regionText.setText("Region: " + experimentInfo.getRegion());
-        setting.setPaintFlags(setting.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        setting.setPaintFlags(setting.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         descriptionText.setText("Description: " + experimentInfo.getDescription());
 
         // get owner name
@@ -133,32 +134,41 @@ public class ExperimentViewActivity extends AppCompatActivity
             });
 
             // adds listener to check in real-time if a user has been blacklisted
-            experimentDAL.addBlacklistListener(experimentId, You.getUser().getID(), new ExperimentDAL.IsBlacklistedCallback() {
-                @Override
-                public void onCallback(Boolean isBlacklisted) {
-                    if (isBlacklisted) {
-                        Toast.makeText(getApplicationContext(), String.format("You can no longer add trials to this experiment", experimentInfo.getDescription()), Toast.LENGTH_LONG).show();
-                        addTrialButton.setEnabled(false);
-                    } else {
-                        addTrialButton.setEnabled(true);
-                    }
-                }
-            });
+            experimentDAL.addBlacklistListener(experimentId, You.getUser().getID(),
+                    new ExperimentDAL.IsBlacklistedCallback() {
+                        @Override
+                        public void onCallback(Boolean isBlacklisted) {
+                            if (isBlacklisted) {
+                                Toast.makeText(getApplicationContext(),
+                                        String.format("You can no longer add trials to this experiment",
+                                                experimentInfo.getDescription()),
+                                        Toast.LENGTH_LONG).show();
+                                addTrialButton.setEnabled(false);
+                            } else {
+                                addTrialButton.setEnabled(true);
+                            }
+                        }
+                    });
 
-            // adds listener to check in real-time for any status changes that affects add trial or experiment visibility
+            // adds listener to check in real-time for any status changes that affects add
+            // trial or experiment visibility
             experimentDAL.addStatusListener(experimentId, new ExperimentDAL.IsOpenCallback() {
                 @Override
                 public void onCallback(String isOpen) {
                     if (isOpen.equals("Unpublish")) {
-                        Toast.makeText(getApplicationContext(), String.format("Experiment %s has been unpublished", experimentInfo.getDescription()), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),
+                                String.format("Experiment %s has been unpublished", experimentInfo.getDescription()),
+                                Toast.LENGTH_LONG).show();
                         onBackPressed();
 
                     } else if (isOpen.equals("Closed")) {
-                        Toast.makeText(getApplicationContext(), "This experiment has been closed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "This experiment has been closed", Toast.LENGTH_SHORT)
+                                .show();
                         addTrialButton.setEnabled(false);
 
                     } else if (isOpen.equals("Active")) {
-                        Toast.makeText(getApplicationContext(), "This experiment has been reopened", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "This experiment has been reopened", Toast.LENGTH_SHORT)
+                                .show();
                         addTrialButton.setEnabled(true);
                     }
                 }
@@ -204,7 +214,8 @@ public class ExperimentViewActivity extends AppCompatActivity
         addTrialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment newFragment = AddTrialDialogFragment.newInstance(experimentType, experimentId, geolocationRequired);
+                DialogFragment newFragment = AddTrialDialogFragment.newInstance(experimentType, experimentId,
+                        geolocationRequired);
                 newFragment.show(getSupportFragmentManager(), "ADD TRIAL");
             }
         });
@@ -215,7 +226,6 @@ public class ExperimentViewActivity extends AppCompatActivity
                 statisticReport();
             }
         });
-
 
         viewMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,7 +244,7 @@ public class ExperimentViewActivity extends AppCompatActivity
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("GeoLocation", geoLocations);
                 intent.putExtras(bundle);
-                intent.putExtra("allLocations", true);  // tell the map activity to display instead of select
+                intent.putExtra("allLocations", true); // tell the map activity to display instead of select
                 startActivity(intent);
             }
         });
@@ -244,26 +254,12 @@ public class ExperimentViewActivity extends AppCompatActivity
         trialDataList = new ArrayList<>();
         trialAdapter = new CustomTrialList(this, trialDataList, experimentId, isOwner);
         trialList.setAdapter(trialAdapter);
-//        trialList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Trial trial = trialDataList.get(position);
-//                String experimenterId = trial.getExperimenterID();
-//                boolean isTrialOwner = experimenterId.equals(ownerId);
-//
-//                Log.d("view", String.valueOf(trial.getGeolocation().getLocation().getLatitude()));
-//                Log.d("view", String.valueOf(trial.getGeolocation().getLocation().getLongitude()));
-//
-//                Intent intent = new Intent(ExperimentViewActivity.this, GeolocationActivity.class);
-//                intent.putExtra("IsTrialOwner", isTrialOwner);
-//                startActivity(intent);
-//            }
-//        });
         trialList.setOnItemClickListener(new OnItemClickListener() {
              @Override
              public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                  String experimenterID = trialAdapter.getItem(position).getExperimenterID();
-                 new TrialProfileFragment(experimenterID, experimentId, isOwner).show(getSupportFragmentManager(), "PROFILE");
+                 Trial trial = trialAdapter.getItem(position);
+                 new TrialProfileFragment(isOwner,trial, experimentId).show(getSupportFragmentManager(), "PROFILE");
              }
          });
 
@@ -280,8 +276,9 @@ public class ExperimentViewActivity extends AppCompatActivity
     /**
      * Opening up confirmation fragment and action on callback
      *
-     * @param tag the tag to determine what text displayed in confirmation
-     * @param blacklist if this is a blacklist fragment or not
+     * @param tag            the tag to determine what text displayed in
+     *                       confirmation
+     * @param blacklist      if this is a blacklist fragment or not
      * @param experimenterID experimenter's id for blacklist logic
      */
     public void confirmationDialog(String tag, Boolean blacklist, String experimenterID) {
@@ -387,20 +384,20 @@ public class ExperimentViewActivity extends AppCompatActivity
         }
     }
 
-
     /**
-     * @param view - When clicking a username from experiment view, open up their profile
+     * @param view - When clicking a username from experiment view, open up their
+     *             profile
      */
-    public void viewProfile(View view){
+    public void viewProfile(View view) {
         Intent intent;
         intent = new Intent(this, ProfileViewActivity.class);
 
         // Are 'You' the owner, send in 'You' object
-        if(isOwner){
-            intent.putExtra("User",You.getUser());
+        if (isOwner) {
+            intent.putExtra("User", You.getUser());
             startActivity(intent);
 
-        //Else, create a user object from the owner's ID and send it in to activity
+            // Else, create a user object from the owner's ID and send it in to activity
         } else {
             UserDAL uDAL = new UserDAL();
             uDAL.findUserByID(experimentInfo.getOwnerId(), new UserDAL.FindUserByIDCallback() {

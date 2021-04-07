@@ -5,6 +5,8 @@ values of the Double type.
 
 package com.example.bettertrialbook.models;
 
+import android.os.Parcel;
+
 import com.example.bettertrialbook.Extras;
 
 public class MeasurementTrial extends Trial implements Comparable<MeasurementTrial> {
@@ -67,5 +69,15 @@ public class MeasurementTrial extends Trial implements Comparable<MeasurementTri
         return String.valueOf(this.measurement).compareTo(String.valueOf(measurementTrial.getMeasurement()))
                 + this.getTrialType().compareTo(measurementTrial.getTrialType()) + this.getTrialID().compareTo(measurementTrial.getTrialID())
                 + this.getGeolocation().compareTo(measurementTrial.getGeolocation());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

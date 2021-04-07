@@ -70,4 +70,14 @@ public class CountTrial extends Trial implements Comparable<CountTrial> {
         return String.valueOf(this.count).compareTo(String.valueOf(countTrial.getCount()))
                 + this.getTrialType().compareTo(countTrial.getTrialType()) + this.getTrialID().compareTo(countTrial.getTrialID()) + this.getGeolocation().compareTo(countTrial.getGeolocation());
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
 }
