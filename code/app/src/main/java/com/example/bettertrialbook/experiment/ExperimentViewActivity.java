@@ -6,7 +6,6 @@
 package com.example.bettertrialbook.experiment;
 
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,7 +32,6 @@ import com.example.bettertrialbook.models.Geolocation;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.User;
 import com.example.bettertrialbook.profile.ProfileViewActivity;
-import com.example.bettertrialbook.qr.CreateQRActivity;
 import com.example.bettertrialbook.statistic.StatsNumber;
 
 import java.util.ArrayList;
@@ -74,7 +72,6 @@ public class ExperimentViewActivity extends AppCompatActivity implements
         Log.d("view", String.valueOf(geolocationRequired));
 
         // Populates experiment page with relevant text
-        setting = findViewById(R.id.setting);
         regionText = findViewById(R.id.region_text);
         statButton = findViewById(R.id.stats_button);
         descriptionText = findViewById(R.id.description_text);
@@ -83,7 +80,6 @@ public class ExperimentViewActivity extends AppCompatActivity implements
         createQRButton = findViewById(R.id.createQR_button);
 
         regionText.setText("Region: " + experimentInfo.getRegion());
-        setting.setPaintFlags(setting.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         descriptionText.setText("Description: " + experimentInfo.getDescription());
 
         // get owner name
