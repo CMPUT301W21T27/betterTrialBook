@@ -5,6 +5,7 @@ The BinomialTrial class extends the Trial class and represents pass-fail trials.
 package com.example.bettertrialbook.models;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.example.bettertrialbook.Extras;
 
@@ -91,13 +92,27 @@ public class BinomialTrial extends Trial implements Comparable<BinomialTrial> {
                 + this.getTrialType().compareTo(binomialTrial.getTrialType()) + this.getTrialID().compareTo(binomialTrial.getTrialID()) + this.getGeolocation().compareTo(binomialTrial.getGeolocation());
     }
 
-    @Override
+    public static final Parcelable.Creator<BinomialTrial> CREATOR = new Parcelable.Creator<BinomialTrial>() {
+        public BinomialTrial createFromParcel(Parcel in) {
+            return new BinomialTrial(in);
+        }
+
+        public BinomialTrial[] newArray(int size) {
+            return new BinomialTrial[size];
+        }
+    };
+
     public int describeContents() {
         return 0;
     }
 
-    @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(passCount);
+        dest.writeInt(failCount);
+    }
 
+    private BinomialTrial(Parcel in) {
+        passCount = in.readInt();
+        passCount = in.readInt();
     }
 }

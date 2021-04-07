@@ -5,6 +5,7 @@ The NonNegTrial class extends the Trial class and represents non-negative intege
 package com.example.bettertrialbook.models;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.example.bettertrialbook.Extras;
 
@@ -70,13 +71,25 @@ public class NonNegTrial extends Trial implements Comparable<NonNegTrial> {
                 + this.getGeolocation().compareTo(nonNegTrial.getGeolocation());
     }
 
-    @Override
+    public static final Parcelable.Creator<NonNegTrial> CREATOR = new Parcelable.Creator<NonNegTrial>() {
+        public NonNegTrial createFromParcel(Parcel in) {
+            return new NonNegTrial(in);
+        }
+
+        public NonNegTrial[] newArray(int size) {
+            return new NonNegTrial[size];
+        }
+    };
+
     public int describeContents() {
         return 0;
     }
 
-    @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(count);
+    }
 
+    private NonNegTrial(Parcel in) {
+        count = in.readInt();
     }
 }

@@ -5,6 +5,7 @@ The CountTrial class extends the Trial class and represents trials with counts.
 package com.example.bettertrialbook.models;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.example.bettertrialbook.Extras;
 
@@ -71,13 +72,25 @@ public class CountTrial extends Trial implements Comparable<CountTrial> {
                 + this.getTrialType().compareTo(countTrial.getTrialType()) + this.getTrialID().compareTo(countTrial.getTrialID()) + this.getGeolocation().compareTo(countTrial.getGeolocation());
     }
 
-    @Override
+    public static final Parcelable.Creator<CountTrial> CREATOR = new Parcelable.Creator<CountTrial>() {
+        public CountTrial createFromParcel(Parcel in) {
+            return new CountTrial(in);
+        }
+
+        public CountTrial[] newArray(int size) {
+            return new CountTrial[size];
+        }
+    };
+
     public int describeContents() {
         return 0;
     }
 
-    @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(count);
+    }
 
+    private CountTrial(Parcel in) {
+        count = in.readInt();
     }
 }
