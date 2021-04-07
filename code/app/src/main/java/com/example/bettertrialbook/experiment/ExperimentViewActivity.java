@@ -8,6 +8,7 @@ package com.example.bettertrialbook.experiment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -17,7 +18,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.bettertrialbook.Extras;
@@ -36,8 +40,8 @@ import com.example.bettertrialbook.statistic.StatsNumber;
 
 import java.util.ArrayList;
 
-public class ExperimentViewActivity extends AppCompatActivity implements
-        ConfirmationFragment.OnFragmentInteractionListener, TrialProfileFragment.OnFragmentInteractionListener {
+public class ExperimentViewActivity extends AppCompatActivity implements ConfirmationFragment.OnFragmentInteractionListener,
+        TrialProfileFragment.OnFragmentInteractionListener, EditExperimentFragment.OnFragmentInteractionListener {
     Boolean newExperiment;
     Boolean isOwner;
     String experimentId;
@@ -59,6 +63,10 @@ public class ExperimentViewActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_view);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("View Experiment");
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         // get current experiment information from intent
         isOwner = getIntent().getBooleanExtra("IsOwner", false);
@@ -186,6 +194,22 @@ public class ExperimentViewActivity extends AppCompatActivity implements
         }
 
         // all the onClick listeners
+        if (isOwner) {
+            descriptionText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editExperiment();
+                }
+            });
+
+            regionText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editExperiment();
+                }
+            });
+        }
+
         unpublishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -255,7 +279,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements
              public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                  String experimenterID = trialAdapter.getItem(position).getExperimenterID();
                  Trial trial = trialAdapter.getItem(position);
-                 new TrialProfileFragment(isOwner,trial, experimentId).show(getSupportFragmentManager(), "PROFILE");
+                 new TrialProfileFragment(isOwner, trial, experimentId).show(getSupportFragmentManager(), "PROFILE");
              }
          });
 
@@ -267,6 +291,34 @@ public class ExperimentViewActivity extends AppCompatActivity implements
             trialAdapter.notifyDataSetChanged();
         });
 
+    }
+
+    /**
+     * Edits experiment information like description and region
+     */
+    private void editExperiment() {
+        String description = (String)descriptionText.getText();
+        String region = (String) regionText.getText();
+        description = description.replace("Description: ", "");
+        region = region.replace("Region: ", "");
+        new EditExperimentFragment(description, region).show(getSupportFragmentManager(), "EDITEXP");
+    }
+
+    @Override
+    public void onOkPressed(String description, String region, Boolean delete) {
+        if (!delete) {
+            // update TextView with new description and region
+            descriptionText.setText("Description: " + description);
+            regionText.setText("Region: " + region);
+
+            // update firebase with new description and region
+            ExperimentDAL experimentDAL = new ExperimentDAL();
+            experimentDAL.setExperimentDescription(experimentId, description);
+            experimentDAL.setExperimentRegion(experimentId, region);
+
+        } else {
+            confirmationDialog("Delete", false, "");
+        }
     }
 
     /**
@@ -326,8 +378,17 @@ public class ExperimentViewActivity extends AppCompatActivity implements
 
         } else if (tag.equals("block")) {
             ExperimentDAL experimentDAL = new ExperimentDAL();
-            Log.d("TEST2", experimenterID);
             experimentDAL.modifyBlacklist(experimentId, experimenterID, true);
+
+        } else if (tag.equals("Delete")) {
+            ExperimentDAL experimentDAL = new ExperimentDAL();
+            UserDAL userDAL = new UserDAL();
+            experimentDAL.deleteExperiment(experimentId);
+            userDAL.unsubscribeExperiment(experimentId, experimentInfo.getOwnerId());
+            Toast.makeText(getApplicationContext(),
+                    String.format("Experiment %s has been deleted", experimentInfo.getDescription()),
+                    Toast.LENGTH_LONG).show();
+            onBackPressed();
         }
     }
 
@@ -370,14 +431,15 @@ public class ExperimentViewActivity extends AppCompatActivity implements
 
     // when back button is pressed
     @Override
-    public void onBackPressed() {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        /* Get return object ready  */
         if (newExperiment) {
             Intent myIntent = new Intent(this, MainActivity.class);
             startActivity(myIntent);
         } else {
-            setResult(0);
             finish();
         }
+        return true;
     }
 
     /**

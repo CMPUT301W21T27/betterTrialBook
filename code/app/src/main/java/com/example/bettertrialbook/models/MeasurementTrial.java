@@ -10,6 +10,8 @@ import android.os.Parcelable;
 
 import com.example.bettertrialbook.Extras;
 
+import java.util.Date;
+
 public class MeasurementTrial extends Trial implements Comparable<MeasurementTrial> {
     private Double measurement;
 
@@ -21,9 +23,12 @@ public class MeasurementTrial extends Trial implements Comparable<MeasurementTri
      *  the id of the trial
      * @param geolocation
      *  the geolocation of the trial
+     * @param timestamp
+     *  the Date when the trial was created
      */
-    public MeasurementTrial(Double measurement, String trialId, String experimenterId, Geolocation geolocation) {
+    public MeasurementTrial(Double measurement, String trialId, String experimenterId, Geolocation geolocation, Date timestamp) {
         this.measurement = measurement;
+        setTimestamp(timestamp);
         setTrialID(trialId);
         setExperimenterID(experimenterId);
         setGeolocation(geolocation);

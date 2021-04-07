@@ -61,20 +61,17 @@ public class UserDAL {
                     User user;
                     if (document.exists()) {
                         // User found, create user object to return
-                        Log.d("TEST", "2. User currently exists");
                         user = new User(id);
                         user.setContact(document.getString("email"), document.getString("phone"));
                         user.setUsername(document.getString("username"));
 
                     } else {
                         // User not found, return null
-                        Log.d("TEST", "User does not exist");
                         user = null;
                     }
                     callback.onCallback(user);
                 } else {
                     // Error occurred
-                    Log.d("TEST", "Failed with:", task.getException());
                 }
             }
         });
@@ -200,6 +197,12 @@ public class UserDAL {
         editor.apply();
     }
 
+    /**
+     * Gets all subscribed experiments of a user
+     *
+     * @param userId for the current user
+     * @param callback - return method for firestore queries
+     */
     public void getSubscribed(String userId, GetSubscribedCallback callback) {
         final List<String>[] subscribed = new List[]{new ArrayList<String>()};
         collRef.document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -223,6 +226,12 @@ public class UserDAL {
         });
     }
 
+    /**
+     * Adds an experiment to a user's subscriptions
+     *
+     * @param experimentId - experiment to subscribe to
+     * @param userId - user's id
+     */
     public void subscribeExperiment(String experimentId, String userId) {
         collRef.document(userId).update("subscribed", FieldValue.arrayUnion(experimentId))
                 .addOnFailureListener(new OnFailureListener() {
@@ -238,6 +247,12 @@ public class UserDAL {
         });
     }
 
+    /**
+     * Removes an experiment from a user's subscriptions
+     *
+     * @param experimentId - experiment to subscribe to
+     * @param userId - user's id
+     */
     public void unsubscribeExperiment(String experimentId, String userId) {
         collRef.document(userId).update("subscribed", FieldValue.arrayRemove(experimentId))
                 .addOnFailureListener(new OnFailureListener() {
@@ -253,6 +268,12 @@ public class UserDAL {
         });
     }
 
+    /**
+     * Checks if a user is subscribed to an experiment
+     *
+     * @param experimentId - experiment to subscribe to
+     * @param userId - user's id
+     */
     public void isSubscribed(String experimentId, String userId, IsSubscribedCallback callback) {
         collRef.document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override

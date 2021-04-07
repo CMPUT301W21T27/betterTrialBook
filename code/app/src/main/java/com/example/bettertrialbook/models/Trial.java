@@ -11,6 +11,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public abstract class Trial implements Parcelable{
     // private Geolocation geolocation;
@@ -18,6 +19,25 @@ public abstract class Trial implements Parcelable{
     private String experimenterID;
     private Boolean blacklist = false;
     private Geolocation geolocation;
+    private Date timestamp;
+
+    /**
+     * gets the timestamp of when the trial was created
+     * @return
+     *  the Date when the trial was created
+     */
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    /**
+     * sets the timestamp of when the trial was created
+     * @param timestamp
+     *  the Date of when the trial was created
+     */
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
 
     protected Trial(){}
     /**

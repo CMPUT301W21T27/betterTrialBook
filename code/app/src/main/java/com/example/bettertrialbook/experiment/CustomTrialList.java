@@ -91,11 +91,15 @@ public class CustomTrialList extends ArrayAdapter<Trial> {
         // Need to set the result to a different format for each kind of trial type
         if (trialType.equals(Extras.COUNT_TYPE)) {
             CountTrial countTrial = (CountTrial) trial;
-            trialResult.setText(String.valueOf(countTrial.getCount()));
+            trialResult.setText("Observed");
 
         } else if (trialType.equals(Extras.BINOMIAL_TYPE)) {
             BinomialTrial binomialTrial = (BinomialTrial) trial;
-            trialResult.setText(binomialTrial.getPassCount() + " " + binomialTrial.getFailCount());
+            if (binomialTrial.getSuccess()) {
+                trialResult.setText("Success");
+            } else {
+                trialResult.setText("Failure");
+            }
 
         } else if (trialType.equals(Extras.NONNEG_TYPE)) {
             NonNegTrial nonNegTrial = (NonNegTrial) trial;

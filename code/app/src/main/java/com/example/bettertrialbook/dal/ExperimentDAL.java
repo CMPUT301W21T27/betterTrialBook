@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -33,8 +34,10 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -66,6 +69,10 @@ public class ExperimentDAL {
 
     public interface IsOpenCallback {
         void onCallback(String status);
+    }
+
+    public interface GetExperimentsByStatusCallback {
+        void onCallback(List<String> experiments);
     }
 
     /**
@@ -142,6 +149,51 @@ public class ExperimentDAL {
     }
 
     /**
+     * Deletes an experiment from firebase
+     *
+     * @param experimentId - the id of the experiment
+     */
+    public void deleteExperiment(String experimentId) {
+        collRef.document(experimentId).delete().addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Experiment could not be deleted" + e.toString());
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Experiment has been deleted");
+            }
+        });;
+    }
+
+    /**
+     * Gets all experiments of a certain status
+     *
+     * @param status - the status of the desired experiments
+     * @param callback - return method for firestore queries
+     */
+    public void getExperiments(String status, GetExperimentsByStatusCallback callback) {
+        final List<String>[] experiments = new List[]{new ArrayList<String>()};
+        collRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<DocumentSnapshot> allExperiments = task.getResult().getDocuments();
+                    for (int i = 0; i < allExperiments.size(); i++) {
+                        String publishStatus = (String) allExperiments.get(i).get("PublishStatus");
+                        if (publishStatus != null && publishStatus.equals(status)) {
+                            String experimentId = (String) allExperiments.get(i).getId();
+                            experiments[0].add(experimentId);
+                        }
+                    }
+                }
+                callback.onCallback(experiments[0]);
+            }
+        });
+    }
+
+    /**
      * Update status of experiment
      *
      * @param experimentId the unique id of the experiment to be updated
@@ -151,12 +203,52 @@ public class ExperimentDAL {
         collRef.document(experimentId).update(status, newStatus).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "Data could not be updated" + e.toString());
+                Log.d(TAG, "Status could not be updated" + e.toString());
             }
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG, "Data has been updated");
+                Log.d(TAG, "Status has been updated");
+            }
+        });
+    }
+
+    /**
+     * Update experiment description
+     *
+     * @param experimentId - the unique id of the experiment to be updated
+     * @param description - updated description
+     */
+    public void setExperimentDescription(String experimentId, String description) {
+        collRef.document(experimentId).update("Description", description).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Description could not be updated" + e.toString());
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Description has been updated");
+            }
+        });
+    }
+
+    /**
+     * Update experiment region
+     *
+     * @param experimentId - the unique id of the experiment to be updated
+     * @param region - updated region
+     */
+    public void setExperimentRegion(String experimentId, String region) {
+        collRef.document(experimentId).update("Region", region).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Region could not be updated" + e.toString());
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Region has been updated");
             }
         });
     }
@@ -206,6 +298,27 @@ public class ExperimentDAL {
                         Log.d(TAG, "Data has been updated");
                     }
                 });
+    }
+
+    /**
+     * Delete trial from experiment
+     *
+     * @param experimentId the unique id of the experiment
+     * @param trial       trial and its data
+     */
+    public void deleteTrial(String experimentId, Trial trial) {
+        collRef.document(experimentId).update("Trials", FieldValue.arrayRemove(trial))
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data could not be deleted" + e.toString());
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Data has been deleted");
+            }
+        });
     }
 
     /**
@@ -484,18 +597,23 @@ public class ExperimentDAL {
     private Trial deserializeTrial(HashMap<Object, Object> data, String experimentType) {
         String trialId = data.get("trialID").toString();
         String experimenterId;
+        Date timestamp = null;
+        if (data.get("timestamp") != null) {
+            timestamp = ((Timestamp) data.get("timestamp")).toDate();
+            Log.d("ExperimentDAL", String.valueOf(timestamp));
+        }
         // deserialize the geolocation within the trial
-        Geolocation geolocation;
+        // for trials with no geolocation, set the geolocation's location to null
+        Geolocation geolocation = new Geolocation(null);
         Location newLocation = new Location("");
         if (data.get("geolocation") != null) {
             HashMap<Object, Object> geolocationData = (HashMap<Object, Object>) data.get("geolocation");
-            HashMap<Object, Object> locationData = (HashMap<Object, Object>) geolocationData.get("location");
-            newLocation.setLatitude(Double.parseDouble(String.valueOf(locationData.get("latitude"))));
-            newLocation.setLongitude(Double.parseDouble(String.valueOf(locationData.get("longitude"))));
-            geolocation = new Geolocation(newLocation);
-        } else {
-            // for trials with no geolocation, set the geolocation's location to null
-            geolocation = new Geolocation(null);
+            if (geolocationData.get("location") != null) {
+                HashMap<Object, Object> locationData = (HashMap<Object, Object>) geolocationData.get("location");
+                newLocation.setLatitude(Double.parseDouble(String.valueOf(locationData.get("latitude"))));
+                newLocation.setLongitude(Double.parseDouble(String.valueOf(locationData.get("longitude"))));
+                geolocation = new Geolocation(newLocation);
+            }
         }
         // some trials in firestore don't have an experiment id, this is just so our app
         // doesn't crash
@@ -506,18 +624,16 @@ public class ExperimentDAL {
             experimenterId = data.get("experimenterID").toString();
         switch (experimentType) {
         case Extras.COUNT_TYPE:
-            int count = ((Long) data.get("count")).intValue();
-            return new CountTrial(count, trialId, experimenterId, geolocation);
+            return new CountTrial(trialId, experimenterId, geolocation, timestamp);
         case Extras.BINOMIAL_TYPE:
-            int passCount = ((Long) data.get("passCount")).intValue();
-            int failCount = ((Long) data.get("failCount")).intValue();
-            return new BinomialTrial(passCount, failCount, trialId, experimenterId, geolocation);
+            boolean success = (boolean) data.get("success");
+            return new BinomialTrial(success, trialId, experimenterId, geolocation, timestamp);
         case Extras.NONNEG_TYPE:
-            count = ((Long) data.get("count")).intValue();
-            return new NonNegTrial(count, trialId, experimenterId, geolocation);
+            int count = ((Long) data.get("count")).intValue();
+            return new NonNegTrial(count, trialId, experimenterId, geolocation, timestamp);
         case Extras.MEASUREMENT_TYPE:
             double measurement = (double) data.get("measurement");
-            return new MeasurementTrial(measurement, trialId, experimenterId, geolocation);
+            return new MeasurementTrial(measurement, trialId, experimenterId, geolocation, timestamp);
         default:
             throw new IllegalArgumentException("Invalid experiment type");
         }

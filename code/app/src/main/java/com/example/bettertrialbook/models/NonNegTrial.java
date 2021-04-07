@@ -8,6 +8,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.bettertrialbook.Extras;
+import com.google.type.DateTime;
+
+import java.util.Date;
 
 public class NonNegTrial extends Trial implements Comparable<NonNegTrial> {
     private int count;
@@ -20,9 +23,12 @@ public class NonNegTrial extends Trial implements Comparable<NonNegTrial> {
      *  the id of the trial
      * @param geolocation
      *  the geolocation of the trial
+     * @param timestamp
+     *  the Date when the trial was created
      */
-    public NonNegTrial(int count, String trialId, String experimenterId, Geolocation geolocation) {
+    public NonNegTrial(int count, String trialId, String experimenterId, Geolocation geolocation, Date timestamp) {
         this.count = count;
+        setTimestamp(timestamp);
         setTrialID(trialId);
         setExperimenterID(experimenterId);
         setGeolocation(geolocation);

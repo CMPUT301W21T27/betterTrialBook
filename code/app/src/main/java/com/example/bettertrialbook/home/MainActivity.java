@@ -42,9 +42,6 @@ import java.util.UUID;
  * The main activity hosts buttons to create new experiments, view your profile and search experiments.
  */
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-
-
-
     UserDAL uDAL = new UserDAL();
     private ArrayList<ExperimentInfo> trialInfoList;
     private ArrayAdapter<ExperimentInfo> trialInfoAdapter;
@@ -86,6 +83,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         resultList.setAdapter(trialInfoAdapter);
         resultList.setOnItemClickListener(this);
 
+        // populate page with published experiments
+        displayDefaultExperiments();
+
         // Go to Create Experiment Screen
         create.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,29 +108,52 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                ExperimentDAL experimentDAL = new ExperimentDAL();
-                if (itemSpinner.getSelectedItem().toString().equalsIgnoreCase("Description")) {
-                    experimentDAL.searchByDescription(trialInfoList, trialInfoAdapter, newText);
-                }
-                else if (itemSpinner.getSelectedItem().toString().equalsIgnoreCase("User")) {
-                    experimentDAL.searchByUser(trialInfoList, trialInfoAdapter, newText);
+                if (newText.equals("")) {
+                    displayDefaultExperiments();
+                } else {
+                    ExperimentDAL experimentDAL = new ExperimentDAL();
+                    if (itemSpinner.getSelectedItem().toString().equalsIgnoreCase("Description")) {
+                        experimentDAL.searchByDescription(trialInfoList, trialInfoAdapter, newText);
+                    } else if (itemSpinner.getSelectedItem().toString().equalsIgnoreCase("UserId")) {
+                        experimentDAL.searchByUser(trialInfoList, trialInfoAdapter, newText);
+                    }
                 }
                 return false;
             }
         });
     }
 
-    public void createExperiment(View view) {
-        Intent intent = new Intent(this, ExperimentAddActivity.class);
-        intent.putExtra("OwnerId", You.getUser().getID());
-        startActivity(intent);
+
+    /**
+     * Displays a list of all published experiments on main page
+     */
+    public void displayDefaultExperiments() {
+        ExperimentDAL experimentDAL = new ExperimentDAL();
+        experimentDAL.getExperiments("Publish", new ExperimentDAL.GetExperimentsByStatusCallback() {
+            @Override
+            public void onCallback(List<String> experiments) {
+                for (int i = 0; i < experiments.size(); i++) {
+                    experimentDAL.findExperimentByID(experiments.get(i), new ExperimentDAL.FindExperimentByIDCallback() {
+                        @Override
+                        public void onCallback(ExperimentInfo experimentInfo) {
+                            trialInfoList.add(experimentInfo);
+                            trialInfoAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+
+            }
+        });
     }
 
+    /**
+     * Generates a unique ID per user Checks if ID is in database Adds ID to DB if
+     * it's not Creates user object "you" to represent you
+     *
+     * @return the existing or new ID
+     */
     public String generateID() {
-        /*
-         * Generates a unique ID per user Checks if ID is in database Adds ID to DB if
-         * it's not Creates user object "you" to represent you
-         */
+
         String userId = "";
         // Generating ID
         String defaultIDValue = uDAL.getDeviceUserId(this);
@@ -157,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 if (user == null) {
                     You.setUser(uDAL.addUser(finalID));
                 } else {
-                    Log.d("TEST", "4. " + user.getID() + user.getUsername());
                     You.setUser(user);
                 }
             }
@@ -184,44 +206,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (neverSearched) {
-            trialInfoList.clear();
-            if (userId != null) {
-                uDAL.getSubscribed(userId, new UserDAL.GetSubscribedCallback() {
-                    @Override
-                    public void onCallback(List<String> subscribed) {
-                        Log.d("TEST2", String.valueOf(subscribed));
-                        if (subscribed != null) {
-                            if (subscribed.size() == 0) {
-                                trialInfoAdapter.notifyDataSetChanged();
-                            } else {
-                                for (int i = 0; i < subscribed.size(); i++) {
-                                    ExperimentDAL experimentDAL = new ExperimentDAL();
-                                    experimentDAL.findExperimentByID(subscribed.get(i), new ExperimentDAL.FindExperimentByIDCallback() {
-                                        @Override
-                                        public void onCallback(ExperimentInfo experimentInfo) {
-                                            if (experimentInfo != null &&
-                                                    (experimentInfo.getPublishStatus().equals("Publish") ||
-                                                            experimentInfo.getOwnerId().equals(You.getUser().getID()))) {
-                                                trialInfoList.add(experimentInfo);
-                                                trialInfoAdapter.notifyDataSetChanged();
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        }
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -255,7 +239,31 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    // opening other activities
+    /**
+     * Opens QR activity
+     *
+     * @param v - view to open
+     */
     public void openQRScanner(View v){
         startActivity(new Intent(this, ScanQRActivity.class));
     }
+
+    /**
+     *  Opens create experiment page
+     *
+     * @param v - view to open
+     */
+    public void createExperiment(View view) {
+        Intent intent = new Intent(this, ExperimentAddActivity.class);
+        intent.putExtra("OwnerId", You.getUser().getID());
+        startActivity(intent);
+    }
+
 }
