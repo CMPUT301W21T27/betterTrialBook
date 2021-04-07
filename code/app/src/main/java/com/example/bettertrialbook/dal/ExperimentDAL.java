@@ -213,10 +213,9 @@ public class ExperimentDAL {
      * experiment in real time
      *
      * @param experimentId   the id of the currently selected experiment
-     * @param experimentType the type of experiment currently selected
      * @param callback       Callback that will be executed with the
      */
-    public void addTrialListener(String experimentId, String experimentType, Callback<List<Trial>> callback) {
+    public void addTrialListener(String experimentId, Callback<List<Trial>> callback) {
         Log.d(TAG, experimentId);
         final DocumentReference docRef = collRef.document(experimentId);
         docRef.addSnapshotListener((value, error) -> {
@@ -225,6 +224,7 @@ public class ExperimentDAL {
                 callback.execute(trialList);
                 return;
             }
+            String trialType = (String) value.get("TrialType");
             ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) (value.getData())
                     .get("Trials");
             if (trials == null) {
@@ -239,7 +239,7 @@ public class ExperimentDAL {
                 HashMap<Object, Object> currentIter = iter.next();
                 Boolean blacklist = (Boolean) currentIter.get("blacklist");
                 if (blacklist != null && !blacklist) {
-                    trialList.add(deserializeTrial(currentIter, experimentType));
+                    trialList.add(deserializeTrial(currentIter, trialType));
                 }
             }
 

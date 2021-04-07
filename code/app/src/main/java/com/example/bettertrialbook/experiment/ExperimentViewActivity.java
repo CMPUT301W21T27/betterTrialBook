@@ -264,7 +264,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements
          });
 
         // create a document snapshot listener in the DAL to update the list of trials
-        experimentDAL.addTrialListener(experimentId, experimentType, trials -> {
+        experimentDAL.addTrialListener(experimentId, trials -> {
             trialDataList.clear();
             trialDataList.addAll(trials);
             totalTrialsText.setText("Total Trials: " + Integer.toString(trialAdapter.getCount()));
