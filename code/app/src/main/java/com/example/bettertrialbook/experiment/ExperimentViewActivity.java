@@ -8,6 +8,7 @@ package com.example.bettertrialbook.experiment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -17,7 +18,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.bettertrialbook.Extras;
@@ -31,13 +35,14 @@ import com.example.bettertrialbook.models.ExperimentInfo;
 import com.example.bettertrialbook.models.Geolocation;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.User;
+import com.example.bettertrialbook.profile.InvalidUsernameFragment;
 import com.example.bettertrialbook.profile.ProfileViewActivity;
 import com.example.bettertrialbook.statistic.StatsNumber;
 
 import java.util.ArrayList;
 
 public class ExperimentViewActivity extends AppCompatActivity implements ConfirmationFragment.OnFragmentInteractionListener,
-        TrialProfileFragment.OnFragmentInteractionListener, EditExperimentFragment.OnFragmentInteractionListener {
+        TrialProfileFragment.OnFragmentInteractionListener, EditExperimentFragment.OnFragmentInteractionListener,GeoWarningFragment.OnFragmentInteractionListener {
     Boolean newExperiment;
     Boolean isOwner;
     String experimentId;
@@ -59,6 +64,10 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_view);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("View Experiment");
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         // get current experiment information from intent
         isOwner = getIntent().getBooleanExtra("IsOwner", false);
@@ -105,9 +114,6 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         String pStatus = experimentInfo.getPublishStatus();
         String aStatus = experimentInfo.getActiveStatus();
         viewMapButton = findViewById(R.id.viewMap_button);
-        if (experimentInfo.getGeoLocationRequired()) {
-            addTrialButton.setText("Add Trial\n(Geolocation\nRequired)");
-        }
 
         ExperimentDAL experimentDAL = new ExperimentDAL();
         if (!isOwner) {
@@ -186,19 +192,21 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         }
 
         // all the onClick listeners
-        descriptionText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editExperiment();
-            }
-        });
+        if (isOwner) {
+            descriptionText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editExperiment();
+                }
+            });
 
-        regionText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editExperiment();
-            }
-        });
+            regionText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editExperiment();
+                }
+            });
+        }
 
         unpublishButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,9 +232,15 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         addTrialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment newFragment = AddTrialDialogFragment.newInstance(experimentType, experimentId,
-                        geolocationRequired);
-                newFragment.show(getSupportFragmentManager(), "ADD TRIAL");
+                if (experimentInfo.getGeoLocationRequired()) {
+                    new GeoWarningFragment("WARNING!\nGEOLOCATIONS ARE REQUIRED!").show(getSupportFragmentManager(), "WARNING");
+                }
+
+                else {
+                    DialogFragment newFragment = AddTrialDialogFragment.newInstance(experimentType, experimentId,
+                            geolocationRequired);
+                    newFragment.show(getSupportFragmentManager(), "ADD TRIAL");
+                }
             }
         });
 
@@ -269,7 +283,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
              public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                  String experimenterID = trialAdapter.getItem(position).getExperimenterID();
                  Trial trial = trialAdapter.getItem(position);
-                 new TrialProfileFragment(isOwner,trial, experimentId).show(getSupportFragmentManager(), "PROFILE");
+                 new TrialProfileFragment(isOwner, trial, experimentId).show(getSupportFragmentManager(), "PROFILE");
              }
          });
 
@@ -295,15 +309,20 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
     }
 
     @Override
-    public void onOkPressed(String description, String region) {
-        // update TextView with new description and region
-        descriptionText.setText("Description: " + description);
-        regionText.setText("Region: " + region);
+    public void onOkPressed(String description, String region, Boolean delete) {
+        if (!delete) {
+            // update TextView with new description and region
+            descriptionText.setText("Description: " + description);
+            regionText.setText("Region: " + region);
 
-        // update firebase with new description and region
-        ExperimentDAL experimentDAL = new ExperimentDAL();
-        experimentDAL.setExperimentDescription(experimentId, description);
-        experimentDAL.setExperimentRegion(experimentId, region);
+            // update firebase with new description and region
+            ExperimentDAL experimentDAL = new ExperimentDAL();
+            experimentDAL.setExperimentDescription(experimentId, description);
+            experimentDAL.setExperimentRegion(experimentId, region);
+
+        } else {
+            confirmationDialog("Delete", false, "");
+        }
     }
 
     /**
@@ -363,8 +382,17 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
 
         } else if (tag.equals("block")) {
             ExperimentDAL experimentDAL = new ExperimentDAL();
-            Log.d("TEST2", experimenterID);
             experimentDAL.modifyBlacklist(experimentId, experimenterID, true);
+
+        } else if (tag.equals("Delete")) {
+            ExperimentDAL experimentDAL = new ExperimentDAL();
+            UserDAL userDAL = new UserDAL();
+            experimentDAL.deleteExperiment(experimentId);
+            userDAL.unsubscribeExperiment(experimentId, experimentInfo.getOwnerId());
+            Toast.makeText(getApplicationContext(),
+                    String.format("Experiment %s has been deleted", experimentInfo.getDescription()),
+                    Toast.LENGTH_LONG).show();
+            onBackPressed();
         }
     }
 
@@ -407,14 +435,15 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
 
     // when back button is pressed
     @Override
-    public void onBackPressed() {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        /* Get return object ready  */
         if (newExperiment) {
             Intent myIntent = new Intent(this, MainActivity.class);
             startActivity(myIntent);
         } else {
-            setResult(0);
             finish();
         }
+        return true;
     }
 
     /**
@@ -442,5 +471,12 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
                 }
             });
         }
+    }
+    // Action based on confirmation
+    @Override
+    public void onContPressed() {
+        DialogFragment newFragment = AddTrialDialogFragment.newInstance(experimentType, experimentId,
+                geolocationRequired);
+        newFragment.show(getSupportFragmentManager(), "ADD TRIAL");
     }
 }

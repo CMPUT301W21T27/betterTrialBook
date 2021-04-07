@@ -55,7 +55,7 @@
         <activity
             android:name=".experiment.ExperimentViewActivity"
             android:label="@string/title_activity_experiment_view"
-            android:theme="@style/Theme.BetterTrialBook.NoActionBar" />
+            android:theme="@style/Theme.BetterTrialBook" />
         <activity android:name=".forum.ForumActivity" />
         <activity android:name=".profile.ProfileViewActivity" />
         <activity android:name=".experiment.ExperimentAddActivity" /> <!-- https://stackoverflow.com/questions/4207880/android-how-do-i-prevent-the-soft-keyboard-from-pushing-my-view-up -->

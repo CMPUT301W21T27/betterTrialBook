@@ -7,6 +7,7 @@ Currently geolocations and blacklisting for trials have yet to be implemented.
 
 package com.example.bettertrialbook.models;
 
+import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -15,11 +16,13 @@ import java.util.Date;
 
 public abstract class Trial implements Parcelable{
     // private Geolocation geolocation;
-    private String trialID;
+    public String trialID;
     private String experimenterID;
     private Boolean blacklist = false;
     private Geolocation geolocation;
     private Date timestamp;
+
+    protected Trial() {}
 
     /**
      * gets the timestamp of when the trial was created
@@ -39,7 +42,6 @@ public abstract class Trial implements Parcelable{
         this.timestamp = timestamp;
     }
 
-    protected Trial(){}
     /**
      * gets the geolocation of the Trial
      * @return
@@ -113,6 +115,23 @@ public abstract class Trial implements Parcelable{
      */
     public void setBlacklist(Boolean blacklist) {
         this.blacklist = blacklist;
+    }
+
+    protected Trial(Parcel in) {
+        trialID = in.readString();
+        experimenterID = in.readString();
+        blacklist = in.readBoolean();
+        geolocation = in.readParcelable(Geolocation.class.getClassLoader());
+        timestamp = (Date) in.readSerializable();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(trialID);
+        dest.writeString(experimenterID);
+        dest.writeBoolean(blacklist);
+        dest.writeParcelable(geolocation, flags);
+        dest.writeSerializable(timestamp);
     }
 
 }

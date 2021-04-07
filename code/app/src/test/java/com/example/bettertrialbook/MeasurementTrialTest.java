@@ -12,25 +12,30 @@ import com.example.bettertrialbook.models.MeasurementTrial;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 
 public class MeasurementTrialTest {
     MeasurementTrial testTrial;
     Geolocation mockGeolocation;
+    Date date;
 
     private MeasurementTrial mockTrial() {
-        return new MeasurementTrial(420.69, "testid", "testUser", new Geolocation(new Location("")));
+        return new MeasurementTrial(420.69, "testid", "testUser", new Geolocation(new Location("")), date);
     }
 
     @Before
     public void setUp() {
+        date = Calendar.getInstance().getTime();
         testTrial = mockTrial();
         mockGeolocation = new Geolocation(new Location(""));
     }
 
     @Test
     public void createTrialTest() {
-        MeasurementTrial comparisonTrial = new MeasurementTrial(420.69, "testid", "testUser", mockGeolocation);
+        MeasurementTrial comparisonTrial = new MeasurementTrial(420.69, "testid", "testUser", mockGeolocation, date);
         assertEquals(0, comparisonTrial.compareTo(testTrial));
     }
 

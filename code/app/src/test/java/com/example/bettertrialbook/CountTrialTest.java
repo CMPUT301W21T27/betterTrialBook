@@ -12,38 +12,31 @@ import com.example.bettertrialbook.models.Geolocation;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 
 public class CountTrialTest {
     CountTrial testTrial;
     Geolocation mockGeolocation;
+    Date date;
 
     private CountTrial mockTrial() {
-        return new CountTrial(69, "testid", "testUser", new Geolocation(new Location("")));
+        return new CountTrial("testid", "testUser", new Geolocation(new Location("")), date);
     }
 
     @Before
     public void setUp() {
+        date = Calendar.getInstance().getTime();
         testTrial = mockTrial();
         mockGeolocation = new Geolocation(new Location(""));
     }
 
     @Test
     public void createTrialTest() {
-        CountTrial comparisonTrial = new CountTrial(69, "testid", "testUser", mockGeolocation);
+        CountTrial comparisonTrial = new CountTrial("testid", "testUser", mockGeolocation, date);
         assertEquals(0, comparisonTrial.compareTo(testTrial));
-    }
-
-    @Test
-    public void getCountTest() {
-        testTrial = mockTrial();
-        assertEquals(69, testTrial.getCount());
-    }
-
-    @Test
-    public void seCountTest() {
-        testTrial.setCount(1);
-        assertEquals(1, testTrial.getCount());
     }
 
     @Test
