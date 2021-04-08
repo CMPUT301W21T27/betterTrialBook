@@ -1,8 +1,3 @@
-/*
-The ExperimentDAL handles all communication with the database regarding experiments and trials.
-Currently blacklisting has yet to be implemented.
- */
-
 package com.example.bettertrialbook.dal;
 
 import android.location.Location;
@@ -43,8 +38,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * Encapsulates access to Experiments and Trials in Firebase. Currently
- * blacklisting has yet to be implemented.
+ * Encapsulates access to Experiments and Trials in Firebase.
+ * ExperimentDAL -> Experiment Data Access Layer
  */
 public class ExperimentDAL {
 
@@ -53,24 +48,40 @@ public class ExperimentDAL {
     FirebaseFirestore db;
     CollectionReference collRef;
 
+    /**
+     * Constructor for DAL, initializes the db access
+     */
     public ExperimentDAL() {
         db = Firestore.getInstance();
         collRef = db.collection("Experiments");
     }
 
     // Interfaces for callbacks
+
+    /**
+     * Callback for finding experiments
+     */
     public interface FindExperimentByIDCallback {
         void onCallback(ExperimentInfo experimentInfo);
     }
 
+    /**
+     * callback for checking if blacklisted
+     */
     public interface IsBlacklistedCallback {
         void onCallback(Boolean isBlacklisted);
     }
 
+    /**
+     * callback for checking if experiment is open
+     */
     public interface IsOpenCallback {
         void onCallback(String status);
     }
 
+    /**
+     * callback for getting the experiment based on status
+     */
     public interface GetExperimentsByStatusCallback {
         void onCallback(List<String> experiments);
     }
@@ -594,6 +605,15 @@ public class ExperimentDAL {
         });
     }
 
+    /**
+     * Deserializes a trial from firestore which contains various attributes and objects
+     * @param data
+     *  A HashMap of the trial as it was stored in firestore
+     * @param experimentType
+     *  the type of trial/experiment being processed
+     * @return
+     *  the Trial object once it has been deserialized
+     */
     private Trial deserializeTrial(HashMap<Object, Object> data, String experimentType) {
         String trialId = data.get("trialID").toString();
         String experimenterId;
