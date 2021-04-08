@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.text.DecimalFormat;
 
-
 public class Statistic {
 
     DecimalFormat df = new DecimalFormat("#.###");
@@ -23,7 +22,7 @@ public class Statistic {
     public Statistic() { }
 
     /**
-     *
+     * Sorted the trials' data of the experiment
      * @param trials
      * The trial data for the experiment
      * @return
@@ -36,32 +35,27 @@ public class Statistic {
             for (Trial trial : trials) {
                 if (trial.getTrialType().equals(Extras.COUNT_TYPE)) {
                     CountTrial countTrial = (CountTrial) trial;
-                    // change this to count the total number of trials attached to this experiment instead
-                    // data.add((double) countTrial.getCount());
+                    data.add(1.0);
                 }
                 if (trial.getTrialType().equals(Extras.NONNEG_TYPE)) {
                     NonNegTrial nonNegTrial = (NonNegTrial) trial;
                     data.add((double) nonNegTrial.getCount());
                 }
-                // change this to call binomialTrial.getSuccess() and if true,
-                // add 1.0, if false, add 0.0
                 if (trial.getTrialType().equals(Extras.BINOMIAL_TYPE)) {
                     BinomialTrial binomialTrial = (BinomialTrial) trial;
-                    /*
-                    for (int i = 0; i < binomialTrial.getPassCount(); i++) {
+                    // Success : True ; Failure : False
+                    if (binomialTrial.getSuccess()) {
                         data.add(1.0);
-                    }
-                    for (int j = 0; j < binomialTrial.getFailCount(); j++) {
+                    } else {
                         data.add(0.0);
                     }
-
-                     */
                 }
                 if (trial.getTrialType().equals(Extras.MEASUREMENT_TYPE)) {
                     MeasurementTrial measurementTrial = (MeasurementTrial) trial;
                     data.add(measurementTrial.getMeasurement());
                 }
             }
+
             Collections.sort(data);
         }
 
@@ -77,39 +71,35 @@ public class Statistic {
      */
     public double Mean(ArrayList<Trial> trials) {
         double mean;
-        double sum = 0;
-        double size = 0;
-        double value = 0;
+        double sum = 0;            // Represent the summation of the data
+        double value = 0;          // Temporary holder for the data value
 
-        for (Trial trial: trials) {
-            if (trial.getTrialType().equals(Extras.COUNT_TYPE)) {
-                CountTrial countTrial = (CountTrial) trial;
-                // value = countTrial.getCount();
-                size += 1;
+        if (trials != null && trials.size() != 0) {
+            for (Trial trial : trials) {
+                if (trial.getTrialType().equals(Extras.COUNT_TYPE)) {
+                    CountTrial countTrial = (CountTrial) trial;
+                    value = 1;
+                }
+                if (trial.getTrialType().equals(Extras.NONNEG_TYPE)) {
+                    NonNegTrial nonNegTrial = (NonNegTrial) trial;
+                    value = nonNegTrial.getCount();
+                }
+                if (trial.getTrialType().equals(Extras.MEASUREMENT_TYPE)) {
+                    MeasurementTrial measurementTrial = (MeasurementTrial) trial;
+                    value = measurementTrial.getMeasurement();
+                }
+                if (trial.getTrialType().equals(Extras.BINOMIAL_TYPE)) {
+                    BinomialTrial binomialTrial = (BinomialTrial) trial;
+                    if (binomialTrial.getSuccess()) {
+                        value = 1;
+                    } else {
+                        value = 0;
+                    }
+                }
+                // Adding the current trial's data into the summation
+                sum += value;
             }
-            if (trial.getTrialType().equals(Extras.NONNEG_TYPE)) {
-                NonNegTrial nonNegTrial = (NonNegTrial) trial;
-                value = nonNegTrial.getCount();
-                size += 1;
-            }
-            if (trial.getTrialType().equals(Extras.MEASUREMENT_TYPE)) {
-                MeasurementTrial measurementTrial = (MeasurementTrial) trial;
-                value = measurementTrial.getMeasurement();
-                size += 1;
-            }
-            if (trial.getTrialType().equals(Extras.BINOMIAL_TYPE)) {
-                BinomialTrial binomialTrial = (BinomialTrial) trial;
-                /*
-                value = binomialTrial.getPassCount();
-                size += (binomialTrial.getPassCount() + binomialTrial.getFailCount());
-
-                 */
-            }
-            sum += value;
-        }
-
-        if (trials.size() != 0) {
-            mean = Double.parseDouble(df.format(sum / size));
+            mean = Double.parseDouble(df.format(sum / trials.size()));
         } else {
             mean = 0;
         }
@@ -128,40 +118,35 @@ public class Statistic {
      */
     public double StdDev(ArrayList<Trial> trials, double mean) {
         double stdDev;
-        double sum = 0;
-        double size = 0;
-        double value = 0;               // Used to store the immediate value
+        double sum = 0;         // Represents the summation of the data
+        double value = 0;       // Used to store the immediate value
 
-        for (Trial trial: trials) {
-            if (trial.getTrialType().equals(Extras.COUNT_TYPE)) {
-                CountTrial countTrial = (CountTrial) trial;
-                // value = Math.pow((countTrial.getCount() - mean), 2);
-                size += 1;
+        if (trials != null && trials.size() != 0) {
+            for (Trial trial : trials) {
+                if (trial.getTrialType().equals(Extras.COUNT_TYPE)) {
+                    CountTrial countTrial = (CountTrial) trial;
+                    value = Math.pow((1.0 - mean), 2);
+                }
+                if (trial.getTrialType().equals(Extras.NONNEG_TYPE)) {
+                    NonNegTrial nonNegTrial = (NonNegTrial) trial;
+                    value = Math.pow((nonNegTrial.getCount() - mean), 2);
+                }
+                if (trial.getTrialType().equals(Extras.MEASUREMENT_TYPE)) {
+                    MeasurementTrial measurementTrial = (MeasurementTrial) trial;
+                    value = Math.pow((measurementTrial.getMeasurement() - mean), 2);
+                }
+                if (trial.getTrialType().equals(Extras.BINOMIAL_TYPE)) {
+                    BinomialTrial binomialTrial = (BinomialTrial) trial;
+                    if (binomialTrial.getSuccess()) {
+                        value = Math.pow((1 - mean), 2);
+                    } else {
+                        value = Math.pow((0 - mean), 2);
+                    }
+                }
+                // Adding the current value into the summation
+                sum += value;
             }
-            if (trial.getTrialType().equals(Extras.NONNEG_TYPE)) {
-                NonNegTrial nonNegTrial = (NonNegTrial) trial;
-                value = Math.pow((nonNegTrial.getCount() - mean), 2);
-                size += 1;
-            }
-            if (trial.getTrialType().equals(Extras.MEASUREMENT_TYPE)) {
-                MeasurementTrial measurementTrial = (MeasurementTrial) trial;
-                value = Math.pow((measurementTrial.getMeasurement() - mean), 2);
-                size += 1;
-            }
-            if (trial.getTrialType().equals(Extras.BINOMIAL_TYPE)) {
-                BinomialTrial binomialTrial = (BinomialTrial) trial;
-                /*
-                value = binomialTrial.getPassCount() * Math.pow((1 - mean), 2);
-                value += binomialTrial.getFailCount() * Math.pow((0 - mean), 2);
-                size += binomialTrial.getPassCount() + binomialTrial.getFailCount();
-
-                 */
-            }
-            sum += value;
-        }
-
-        if (trials.size() != 0) {
-            stdDev = Double.parseDouble(df.format(Math.sqrt(sum / size)));
+            stdDev = Double.parseDouble(df.format(Math.sqrt(sum / trials.size())));
         } else {
             stdDev = 0;
         }
@@ -178,18 +163,18 @@ public class Statistic {
      */
     public double Median(ArrayList<Trial> trials) {
         double median;
-        ArrayList<Double> dataList;             // Temporary ArrayList used to Sort the data
+        ArrayList<Double> dataList;     // Represents the sorted arrayList data
 
-        if (trials.size() > 0) {
-            String experimentType = trials.get(0).getTrialType();
-            dataList = SortedArrayList(trials, experimentType);
-            // For Odd Count Data Set
+        if (trials != null && trials.size() > 0) {
+            // Obtain the data of the experiment in sorted (non-decreasing) order
+            dataList = experimentData(trials);
+            // Obtain the median in Odd Count data set
             if (dataList.size() % 2 == 1) {
                 median = Double.parseDouble(df.format(dataList.get(dataList.size() / 2)));
             }
-            // For Even Count Data Set
+            // Obtain the median in Even Count data set
             else {
-                median = ( dataList.get(dataList.size() / 2) + (dataList.get(dataList.size() / 2 - 1)) ) / 2;
+                median = (dataList.get(dataList.size() / 2) + (dataList.get(dataList.size() / 2 - 1))) / 2;
                 median = Double.parseDouble(df.format(median));
             }
         } else {
@@ -211,59 +196,50 @@ public class Statistic {
         int medianIndex;
         double firstQuartile;
         double thirdQuartile;
-        double[] quartiles = new double[2];
-        ArrayList<Double> dataList;             // Temporary ArrayList used to Sort the data
+        double[] quartiles = new double[2];     // Contains the firstQuartile and thirdQuartile value
+        ArrayList<Double> dataList;             // Sorted ArrayList
 
-        if (trials.size() > 1) {
-            String experimentType = trials.get(0).getTrialType();
-            dataList = SortedArrayList(trials, experimentType);
-            // For Odd DataSet , Median Index is the exact Medina Index
-            // For Even DataSet, Median Index is the upper index
-            medianIndex = dataList.size() / 2 ;
-            firstQuartile = firstQuartile(dataList, medianIndex);
-            thirdQuartile = thirdQuartile(dataList, medianIndex);
-            quartiles[0] = Double.parseDouble(df.format(firstQuartile));
-            quartiles[1] = Double.parseDouble(df.format(thirdQuartile));
-        }
-        else if (trials.size() == 1) {
-            if (trials.get(0).getTrialType().equals(Extras.COUNT_TYPE)) {
-                CountTrial countTrial = (CountTrial) trials.get(0);
-                /*
-                quartiles[0] = Double.parseDouble(df.format(countTrial.getCount()));
-                quartiles[1] = Double.parseDouble(df.format(countTrial.getCount()));
-                */
+        if (trials != null && trials.size() >= 1) {
+            if (trials.size() > 1) {
+                dataList = experimentData(trials);
+                // For Odd DataSet , Median Index is the exact Medina Index
+                // For Even DataSet, Median Index is the upper index
+                medianIndex = dataList.size() / 2;
+                firstQuartile = firstQuartile(dataList, medianIndex);
+                thirdQuartile = thirdQuartile(dataList, medianIndex);
+                quartiles[0] = Double.parseDouble(df.format(firstQuartile));
+                quartiles[1] = Double.parseDouble(df.format(thirdQuartile));
             }
-            if (trials.get(0).getTrialType().equals(Extras.NONNEG_TYPE)) {
-                NonNegTrial nonNegTrial = (NonNegTrial) trials.get(0);
-                quartiles[0] = Double.parseDouble(df.format(nonNegTrial.getCount()));
-                quartiles[1] = Double.parseDouble(df.format(nonNegTrial.getCount()));
-            }
-            if (trials.get(0).getTrialType().equals(Extras.MEASUREMENT_TYPE)) {
-                MeasurementTrial measurementTrial = (MeasurementTrial) trials.get(0);
-                quartiles[0] = Double.parseDouble(df.format(measurementTrial.getMeasurement()));
-                quartiles[1] = Double.parseDouble(df.format(measurementTrial.getMeasurement()));
-            }
-            if (trials.get(0).getTrialType().equals(Extras.BINOMIAL_TYPE)) {
-                BinomialTrial binomialTrial = (BinomialTrial) trials.get(0);
-                /*
-                if (binomialTrial.getPassCount() + binomialTrial.getFailCount() == 1) {
-                    quartiles[0] = Double.parseDouble(df.format(binomialTrial.getFailCount() + binomialTrial.getPassCount()));
-                    quartiles[0] = Double.parseDouble(df.format(binomialTrial.getFailCount() + binomialTrial.getPassCount()));
+            // Although Quartile information will become meaningless,
+            // Use the first data value to represent both first Quartile and third Quartile
+            else if (trials.size() == 1) {
+                if (trials.get(0).getTrialType().equals(Extras.COUNT_TYPE)) {
+                    CountTrial countTrial = (CountTrial) trials.get(0);
+                    quartiles[0] = 1.0;
+                    quartiles[1] = 1.0;
                 }
-                // Regular Method
-                else {
-                    dataList = SortedArrayList(trials, "BINOMIAL_TYPE");
-                    medianIndex = dataList.size() / 2 ;
-                    firstQuartile = firstQuartile(dataList, medianIndex);
-                    thirdQuartile = thirdQuartile(dataList, medianIndex);
-                    quartiles[0] = Double.parseDouble(df.format(firstQuartile));
-                    quartiles[1] = Double.parseDouble(df.format(thirdQuartile));
+                if (trials.get(0).getTrialType().equals(Extras.NONNEG_TYPE)) {
+                    NonNegTrial nonNegTrial = (NonNegTrial) trials.get(0);
+                    quartiles[0] = Double.parseDouble(df.format(nonNegTrial.getCount()));
+                    quartiles[1] = Double.parseDouble(df.format(nonNegTrial.getCount()));
                 }
-
-                 */
+                if (trials.get(0).getTrialType().equals(Extras.MEASUREMENT_TYPE)) {
+                    MeasurementTrial measurementTrial = (MeasurementTrial) trials.get(0);
+                    quartiles[0] = Double.parseDouble(df.format(measurementTrial.getMeasurement()));
+                    quartiles[1] = Double.parseDouble(df.format(measurementTrial.getMeasurement()));
+                }
+                if (trials.get(0).getTrialType().equals(Extras.BINOMIAL_TYPE)) {
+                    BinomialTrial binomialTrial = (BinomialTrial) trials.get(0);
+                    if (binomialTrial.getSuccess()) {
+                        quartiles[0] = 1.0;
+                        quartiles[1] = 1.0;
+                    } else {
+                        quartiles[0] = 0.0;
+                        quartiles[1] = 0.0;
+                    }
+                }
             }
-        }
-        else {
+        } else {
             quartiles[0] = 0.0;
             quartiles[1] = 0.0;
         }
@@ -315,42 +291,5 @@ public class Statistic {
         }
 
         return quartile;
-    }
-
-    // Sorted the data of the experiment in ascending order
-    public ArrayList<Double> SortedArrayList (ArrayList<Trial> trials, String experimentType) {
-        ArrayList<Double> dataList = new ArrayList<>();
-        for (Trial trial: trials) {
-            if (experimentType.equals(Extras.COUNT_TYPE)) {
-                CountTrial countTrial = (CountTrial) trial;
-                // dataList.add((double) countTrial.getCount());
-            }
-            if (experimentType.equals(Extras.NONNEG_TYPE)) {
-                NonNegTrial nonNegTrial = (NonNegTrial) trial;
-                dataList.add((double) nonNegTrial.getCount());
-            }
-            if (experimentType.equals(Extras.MEASUREMENT_TYPE)) {
-                MeasurementTrial measurementTrial = (MeasurementTrial) trial;
-                dataList.add(measurementTrial.getMeasurement());
-            }
-            if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
-                BinomialTrial binomialTrial = (BinomialTrial) trial;
-                // Add the Successful trials
-                /*
-                for (int i = 0; i < binomialTrial.getFailCount(); i++) {
-                    dataList.add(0.0);
-                }
-                // Add the Fail trials
-                for (int j = 0; j < binomialTrial.getPassCount(); j++) {
-                    dataList.add(1.0);
-                }
-
-                 */
-            }
-        }
-
-        Collections.sort(dataList);
-
-        return dataList;
     }
 }

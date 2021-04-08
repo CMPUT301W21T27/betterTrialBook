@@ -7,6 +7,8 @@ package com.example.bettertrialbook.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.Nullable;
+
 import com.example.bettertrialbook.Extras;
 
 import java.util.Date;
