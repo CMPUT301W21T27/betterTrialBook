@@ -17,13 +17,20 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.bettertrialbook.R;
+import com.example.bettertrialbook.You;
+import com.example.bettertrialbook.dal.Callback;
 import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.dal.QRDAL;
 import com.example.bettertrialbook.models.QRCode;
+import com.example.bettertrialbook.models.Trial;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
@@ -39,7 +46,9 @@ public class ScanQRActivity extends AppCompatActivity {
                 Log.d(tag, "Permission granted");
                 setupCamera();
             });
-    private QRCode qrCode;
+    private QRCode scannedQRCode;
+    private Trial trialToCopy;
+    private Button addTrialButton;
 
 
     //https://developer.android.com/training/camerax/preview
@@ -50,6 +59,7 @@ public class ScanQRActivity extends AppCompatActivity {
 
         handlePermission();
         setupCamera();
+        addTrialButton = findViewById(R.id.add_scanned_trial);
     }
 
     private void handlePermission() {
@@ -62,12 +72,21 @@ public class ScanQRActivity extends AppCompatActivity {
 
 
     private void setupCamera() {
+        addCameraProviderListener(processCameraProvider -> bind(processCameraProvider));
+    }
+
+    private void tearDownCamera() {
+        addCameraProviderListener(processCameraProvider -> processCameraProvider.unbindAll());
+    }
+
+    // gets Camera provider and performs the specified callback
+    private void addCameraProviderListener(Callback<ProcessCameraProvider> callback) {
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         Executor cameraExecutor = ContextCompat.getMainExecutor(this);
         cameraProviderFuture.addListener(() -> {
             try {
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-                bind(cameraProvider);
+                callback.execute(cameraProvider);
             } catch (ExecutionException | InterruptedException e) {
                 // No errors need to be handled for this Future.
                 // This should never be reached.
@@ -102,7 +121,7 @@ public class ScanQRActivity extends AppCompatActivity {
                 .setAnalyzer(
                         ContextCompat.getMainExecutor(this),
                         new BarcodeAnalyzer(
-                                barcode -> Log.d(tag, "Scanned the following barcode: " + barcode.getRawValue())
+                                barcode -> scanQR(barcode.getRawValue())
                         )
                 );
         return imageAnalysis;
@@ -110,10 +129,45 @@ public class ScanQRActivity extends AppCompatActivity {
 
     private void scanQR(String qrId) {
         new QRDAL().addQRCodeListener(qrId, qrCode -> {
+            scannedQRCode = qrCode;
             new ExperimentDAL().addTrialListener(qrCode.getExperimentId(), trials -> {
+                for (Trial trial : trials) {
+                    Log.d("QR", "QRCode: " + qrCode.toString() + "\n Trial: " + trial.getTrialID());
+                    if (trial.getTrialID().equals(qrCode.getTrialId())) {
+                        setTrialToCopy(trial);
+                        tearDownCamera();
+                        break;
+                    }
+                }
             });
         }, null);
     }
 
+    // called once we find a trial that matches the given qr code.
+    private void foundTrial(Trial t){
+
+    }
+
+    private void setTrialToCopy(Trial t) {
+        addTrialButton.setClickable(true);
+        trialToCopy = t;
+        findViewById(R.id.camera_container).setVisibility(View.INVISIBLE);
+        t.setExperimenterID(You.getUser().getID());
+        makeToast("QR code recognized");
+    }
+
+    public void addScannedTrial(View v) {
+        if (trialToCopy == null)
+            return;
+
+        trialToCopy.setTrialID(UUID.randomUUID().toString());
+        new ExperimentDAL().addTrial(scannedQRCode.getExperimentId(), trialToCopy);
+        makeToast("Added trial");
+    }
+
+    private void makeToast(String msg) {
+        Toast toast = Toast.makeText(this,msg, Toast.LENGTH_SHORT);
+        toast.show();
+    }
 
 }
