@@ -21,13 +21,25 @@
             />
     </FrameLayout>
 
-    <Button
-        android:id="@+id/button"
+    <TextView
+        android:id="@+id/trial_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/scan_qr_button"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/camera_container"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         />
+
+    <Button
+        android:id="@+id/add_scanned_trial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_scanned_trial"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:clickable="false"
+        android:onClick="addScannedTrial"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

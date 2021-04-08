@@ -17,13 +17,19 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.bettertrialbook.R;
+import com.example.bettertrialbook.You;
 import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.dal.QRDAL;
 import com.example.bettertrialbook.models.QRCode;
+import com.example.bettertrialbook.models.Trial;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
@@ -40,6 +46,8 @@ public class ScanQRActivity extends AppCompatActivity {
                 setupCamera();
             });
     private QRCode qrCode;
+    private Trial trialToCopy;
+    private Button addTrialButton;
 
 
     //https://developer.android.com/training/camerax/preview
@@ -50,6 +58,7 @@ public class ScanQRActivity extends AppCompatActivity {
 
         handlePermission();
         setupCamera();
+        addTrialButton = findViewById(R.id.add_scanned_trial);
     }
 
     private void handlePermission() {
@@ -102,7 +111,7 @@ public class ScanQRActivity extends AppCompatActivity {
                 .setAnalyzer(
                         ContextCompat.getMainExecutor(this),
                         new BarcodeAnalyzer(
-                                barcode -> Log.d(tag, "Scanned the following barcode: " + barcode.getRawValue())
+                                barcode -> scanQR(barcode.getRawValue())
                         )
                 );
         return imageAnalysis;
@@ -111,9 +120,32 @@ public class ScanQRActivity extends AppCompatActivity {
     private void scanQR(String qrId) {
         new QRDAL().addQRCodeListener(qrId, qrCode -> {
             new ExperimentDAL().addTrialListener(qrCode.getExperimentId(), trials -> {
+                for (Trial trial : trials) {
+                    if (trial.getTrialID() == qrCode.getTrialId()) {
+                        setTrialToCopy(trial);
+                        break;
+                    }
+                }
             });
         }, null);
     }
 
+    private void setTrialToCopy(Trial t) {
+        addTrialButton.setClickable(true);
+        trialToCopy = t;
+        findViewById(R.id.camera_container).setVisibility(View.INVISIBLE);
+        t.setExperimenterID(You.getUser().getID());
+        Toast toast = new Toast(this);
+        toast.setText("QR code recognized");
+        toast.show();
+    }
+
+    public void addScannedTrial(View v){
+        if (trialToCopy == null)
+            return;
+
+        trialToCopy.setTrialID(UUID.randomUUID().toString());
+        new ExperimentDAL().addTrial(qrCode.getExperimentId(), trialToCopy);
+    }
 
 }
