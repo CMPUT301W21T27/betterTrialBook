@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.view.MenuInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.R;
@@ -26,9 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Histogram extends AppCompatActivity {
+    String experimentType;
+    private HistogramInfo histogramInfo;
     private ArrayList<Trial> trialDataList;
-    private final Statistic statistic = new Statistic();
-    private final HistogramInfo histogramInfo = new HistogramInfo();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,50 +41,50 @@ public class Histogram extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        ArrayList<String> labels;
+        experimentType = intent.getStringExtra("Type");
         trialDataList = (ArrayList<Trial>) bundle.getSerializable("Trials");
 
-        BarChart barChart = findViewById(R.id.Bar_Chart);
-        // Histogram Graph Plot and Setting
-        if (trialDataList.size() > 0 && trialDataList != null) {
-            String type = trialDataList.get(0).getTrialType();
-            if (type.equals(Extras.COUNT_TYPE)) {
-                labels = histogramInfo.getLabelsCountTrial(trialDataList);
-            }
-            else {
-                ArrayList<Double> dataList = statistic.experimentData(trialDataList);
-                labels = histogramInfo.getLabels(dataList);
-            }
+        // Variables
+        Log.d("Checking", experimentType);
+        histogramInfo = new HistogramInfo(trialDataList, experimentType);
+        ArrayList<String> labels = histogramInfo.getLabels();
 
-            // Histogram Graph plot and setting
-            barChartSetting(barChart, labels);
-            plotTheGraph(barChart, trialDataList);
+        // Layout Variables
+        BarChart barChart = findViewById(R.id.Bar_Chart);
+        TextView binDisplay = findViewById(R.id.Bin_Display);
+
+        // Layout setting
+        if (experimentType.equals(Extras.COUNT_TYPE)) {
+            binDisplay.setVisibility(View.INVISIBLE);
         }
+        else if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
+            binDisplay.setVisibility(View.INVISIBLE);
+        }
+
+        // Histogram Graph plot and setting
+        barChartSetting(barChart, labels);
+        plotTheGraph(barChart);
+
     }
 
     // This method is used to plot the data of the histogram
-    public void plotTheGraph(BarChart barChart, ArrayList<Trial> trials) {
+    public void plotTheGraph(BarChart barChart) {
         ArrayList<Integer> binFrequency;
-        if (!trialDataList.get(0).getTrialType().equals(Extras.COUNT_TYPE)) {
-            ArrayList<Double> dataList = statistic.experimentData(trialDataList);
-            binFrequency = histogramInfo.collectFrequency(dataList);
-        } else {
-            binFrequency = histogramInfo.collectFrequencyCountTrial(trials);
-        }
+        binFrequency = histogramInfo.collectFrequency();
 
         ArrayList<BarEntry> barEntries = new ArrayList<>();
         for (int i = 0; i < binFrequency.size(); i++) {
             barEntries.add(new BarEntry(i, binFrequency.get(i)));
         }
 
+        // BarDataSet Settings
         BarDataSet barDataSet = new BarDataSet(barEntries, "Frequency");
         barDataSet.setValueTextSize(15f);
         barDataSet.setColor(Color.RED);
 
+        // BarData Settings
         BarData barData = new BarData(barDataSet);
         barChart.setData(barData);
-
-        barChart.invalidate();
     }
 
     // This method is used to change the setting of the histogram
@@ -108,9 +110,9 @@ public class Histogram extends AppCompatActivity {
         rightAxis.setEnabled(false);
 
         leftAxis.setTextSize(15f);
+        leftAxis.setAxisMinimum(0);
         leftAxis.setGridLineWidth(1);
         leftAxis.setDrawZeroLine(false);
-        leftAxis.setAxisMinimum(0);
     }
 
     @Override

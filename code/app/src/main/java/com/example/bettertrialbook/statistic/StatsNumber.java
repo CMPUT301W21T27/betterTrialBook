@@ -16,6 +16,7 @@ import com.example.bettertrialbook.models.Trial;
 import java.util.ArrayList;
 
 public class StatsNumber extends AppCompatActivity {
+    String experimentType;
     private ArrayList<Trial> trialDataList;
     private final Statistic statistic = new Statistic();
 
@@ -29,6 +30,7 @@ public class StatsNumber extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
 
+        experimentType = intent.getStringExtra("TrialType");
         trialDataList = (ArrayList<Trial>) bundle.getSerializable("Trials");
 
         TextView meanResult = findViewById(R.id.Mean_Result);
@@ -71,6 +73,7 @@ public class StatsNumber extends AppCompatActivity {
                 Bundle bundle2 = new Bundle();
                 bundle2.putSerializable("Trials", trialDataList);
                 intent2.putExtras(bundle2);
+                intent2.putExtra("Type", experimentType);
                 startActivity(intent2);
                 return true;
             case R.id.PlotOverTime:
@@ -79,6 +82,7 @@ public class StatsNumber extends AppCompatActivity {
                 Bundle bundle3 = new Bundle();
                 bundle3.putSerializable("Trials", trialDataList);
                 intent3.putExtras(bundle3);
+                intent3.putExtra("Type", experimentType);
                 startActivity(intent3);
                 return true;
             default:
