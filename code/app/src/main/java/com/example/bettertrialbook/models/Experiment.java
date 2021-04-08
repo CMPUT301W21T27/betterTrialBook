@@ -1,51 +1,26 @@
-/*
-The Experiment class contains a list of trials and information contained in an ExperimentInfo
-class. This is used to encapsulate information regarding an experiment when retrieving data from
-the database.
-Subscribers and blacklisting has yet to be implemented.
- */
-
 package com.example.bettertrialbook.models;
 
-import com.example.bettertrialbook.dal.ExperimentDAL;
-
-import java.util.List;
-
+/**
+ * The Experiment class contains an ExperimentInfo object for an Experiment
+ */
 public class Experiment {
     private ExperimentInfo info;
-    private List<Trial> trials;
-    // private List<User> subscribers;
-    // private List<User> blackList;
-    // private List<Question> questions;
-    // private CollectionReference collectionRef;
 
+    /**
+     * Constructor for an Experiment
+     * @param info
+     *  The ExperimentInfo included in the experiment
+     */
     public Experiment(ExperimentInfo info) {
         this.info = info;
     }
 
+    /**
+     * gets the associated ExperimentInfo
+     * @return
+     *  the experiment's information
+     */
     public ExperimentInfo getInfo() {
         return info;
     }
-
-    public List<Trial> getTrials() {
-        return trials;
-    }
-
-    /*
-    public List<User> getSubscribers() {
-        return subscribers;
-    }
-
-    public List<User> getBlackList() {
-        return blackList;
-    }
-
-    public List<Question> getQuestions() {
-        return questions;
-    }
-
-    public CollectionReference getCollectionRef() {
-        return collectionRef;
-    }
-    */
 }

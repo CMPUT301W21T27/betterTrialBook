@@ -1,7 +1,3 @@
-/*
-Contains the Firestore class which is used to encapsulate Firestore instances
- */
-
 package com.example.bettertrialbook.dal;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,7 +34,7 @@ public class Firestore {
 
             if (usingEmulator) {
                 // Connecting app to firestore emulator
-                // https://firebase.google.com/docs/emulator-suite/connect_and_prototype
+                // Google Firebase, 2021-04-08, Apache 2.0, https://firebase.google.com/docs/emulator-suite/connect_and_prototype
                 // 10.0.2.2 is the special IP address to connect to the 'localhost' of
                 // the host computer from an Android emulator.
                 firestore.useEmulator("10.0.2.2", 8080);

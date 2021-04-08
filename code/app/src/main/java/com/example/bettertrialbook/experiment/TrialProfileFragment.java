@@ -1,19 +1,12 @@
-/*
-    Fragment for choosing an option after clicking on a trial/user. The owner can blacklist them
-    which hides all their trials and doesn't allow them to add additional trials. Everyone can
-    view someone else's profile
- */
 package com.example.bettertrialbook.experiment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,6 +20,11 @@ import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.qr.CreateQRActivity;
 
+/*
+    Fragment for choosing an option after clicking on a trial/user. The owner can blacklist them
+    which hides all their trials and doesn't allow them to add additional trials. Everyone can
+    view someone else's profile
+ */
 public class TrialProfileFragment extends DialogFragment {
     private TrialProfileFragment.OnFragmentInteractionListener listener;
     private String experimenterID;
@@ -40,7 +38,6 @@ public class TrialProfileFragment extends DialogFragment {
         void onViewProfile();
 
         void onBlacklist(String experimenterID);
-
     }
 
     public TrialProfileFragment( Boolean isOwner, Trial trial, String experimentID) {
@@ -101,11 +98,13 @@ public class TrialProfileFragment extends DialogFragment {
             onDeleteClick();
     }
 
+    // delete the trial from the experiment
     private void onDeleteClick() {
         ExperimentDAL experimentDAL = new ExperimentDAL();
         experimentDAL.deleteTrial(experimentID, trial);
     }
 
+    // blacklist the user from the experiment
     private void onBlacklistClick() {
         if (experimenterID.equals(You.getUser().getID())) {
             Toast.makeText(getActivity(), "You cannot blacklist yourself", Toast.LENGTH_LONG).show();
@@ -115,6 +114,7 @@ public class TrialProfileFragment extends DialogFragment {
         }
     }
 
+    // create a qr code for the experiment
     private void onCreateQRCodeClick() {
         Intent intent = new Intent(getContext(), CreateQRActivity.class);
         intent.putExtra(Extras.TRIAL_ID, trial.getTrialID());

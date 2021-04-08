@@ -36,7 +36,8 @@ import java.util.Date;
 import java.util.UUID;
 
 /*
- * https://developer.android.com/reference/android/app/DialogFragment
+Fragment for adding a new trial to an experiment. Uses the ExperimentDAL to add the new trial to the database.
+Based on: Android Developer, 2021-02-24, Apache 2.0, https://developer.android.com/reference/android/app/DialogFragment
  */
 public class AddTrialDialogFragment extends DialogFragment {
     Geolocation geolocation = new Geolocation(null);
@@ -106,8 +107,6 @@ public class AddTrialDialogFragment extends DialogFragment {
                                 toast.setText("Failed to create trial.\nGeolocation Required.");
                                 toast.show();
                             } else {
-//                                Log.d("trial", String.valueOf(geolocation.getLocation().getLatitude()));
-//                                Log.d("trial", String.valueOf(geolocation.getLocation().getLongitude()));
                                 UserDAL userDAL = new UserDAL();
                                 Context context = view.getContext();
                                 String experimenterId = userDAL.getDeviceUserId(context);
@@ -160,8 +159,6 @@ public class AddTrialDialogFragment extends DialogFragment {
                                 toast.show();
                             }
                             else {
-//                                Log.d("trial", String.valueOf(geolocation.getLocation().getLatitude()));
-//                                Log.d("trial", String.valueOf(geolocation.getLocation().getLongitude()));
                                 UserDAL userDAL = new UserDAL();
                                 Context context = view.getContext();
                                 String experimenterId = userDAL.getDeviceUserId(context);
@@ -201,8 +198,6 @@ public class AddTrialDialogFragment extends DialogFragment {
                                 toast.setText("Failed to create trial.\nNon-Negative Integer Required.");
                                 toast.show();
                             } else {
-//                                Log.d("trial", String.valueOf(geolocation.getLocation().getLatitude()));
-//                                Log.d("trial", String.valueOf(geolocation.getLocation().getLongitude()));
                                 UserDAL userDAL = new UserDAL();
                                 Context context = view.getContext();
                                 String experimenterId = userDAL.getDeviceUserId(context);
@@ -243,8 +238,6 @@ public class AddTrialDialogFragment extends DialogFragment {
                                 toast.setText("Failed to create trial.\nMeasurement Required.");
                                 toast.show();
                             } else {
-//                                Log.d("trial", String.valueOf(geolocation.getLocation().getLatitude()));
-//                                Log.d("trial", String.valueOf(geolocation.getLocation().getLongitude()));
                                 UserDAL userDAL = new UserDAL();
                                 Context context = view.getContext();
                                 String experimenterId = userDAL.getDeviceUserId(context);

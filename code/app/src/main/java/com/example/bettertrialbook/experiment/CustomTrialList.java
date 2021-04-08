@@ -1,8 +1,3 @@
-/*
-    A CustomList for displaying trials in an experiment view
-    Blacklisting has yet to be implemented.
-*/
-
 package com.example.bettertrialbook.experiment;
 
 import android.content.Context;
@@ -27,7 +22,10 @@ import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.User;
 
 import java.util.ArrayList;
-//  implements ConfirmationFragment.OnFragmentInteractionListener
+
+/*
+A CustomList for displaying trials in an experiment view.
+ */
 public class CustomTrialList extends ArrayAdapter<Trial> {
 
     private boolean isOwner;
