@@ -5,66 +5,50 @@ The BinomialTrial class extends the Trial class and represents pass-fail trials.
 package com.example.bettertrialbook.models;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.example.bettertrialbook.Extras;
 
+import java.util.Date;
+
 public class BinomialTrial extends Trial implements Comparable<BinomialTrial> {
-    private int passCount;
-    private int failCount;
+    private boolean success;
 
     /**
      * Creates a binomial trial
-     * @param passCount
-     *  the number of recorded passes
-     * @param failCount
-     *  the number of recorded failures
+     * @param success
+     *  whether it was a success or failure
      * @param trialId
      *  the id of the trial
      * @param geolocation
      *  the geolocation of the trial
+     * @param timestamp
+     *  the Date when it was created
      */
-    public BinomialTrial(int passCount, int failCount, String trialId, String experimenterId, Geolocation geolocation) {
-        this.passCount = passCount;
-        this.failCount = failCount;
+    public BinomialTrial(boolean success, String trialId, String experimenterId, Geolocation geolocation, Date timestamp) {
+        this.success = success;
+        setTimestamp(timestamp);
         setGeolocation(geolocation);
         setTrialID(trialId);
         setExperimenterID(experimenterId);
     }
 
     /**
-     * get the number of passes recorded for the trial
+     * get whether it was a success or failure
      * @return
-     *  the number of passes for the trial
+     *  whether it was a success or failure
      */
-    public int getPassCount() {
-        return passCount;
+    public boolean getSuccess() {
+        return success;
     }
 
     /**
-     * set the number of passes recorded for the trial
-     * @param passCount
-     *  the number of passes for the trial
+     * set whether it was a success or failure
+     * @param success
+     *  whether it was a success or failure
      */
-    public void setPassCount(int passCount) {
-        this.passCount = passCount;
-    }
-
-    /**
-     * get the number of failures recorded for the trial
-     * @return
-     *  the number of failures for the trial
-     */
-    public int getFailCount() {
-        return failCount;
-    }
-
-    /**
-     * set the number of failures recorded for the trial
-     * @param failCount
-     *  the number of failures for the trial
-     */
-    public void setFailCount(int failCount) {
-        this.failCount = failCount;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     /**
@@ -87,17 +71,31 @@ public class BinomialTrial extends Trial implements Comparable<BinomialTrial> {
      */
     @Override
     public int compareTo(BinomialTrial binomialTrial) {
-        return String.valueOf(this.passCount).compareTo(String.valueOf(binomialTrial.getPassCount())) + String.valueOf(this.failCount).compareTo(String.valueOf(binomialTrial.getFailCount()))
-                + this.getTrialType().compareTo(binomialTrial.getTrialType()) + this.getTrialID().compareTo(binomialTrial.getTrialID()) + this.getGeolocation().compareTo(binomialTrial.getGeolocation());
+        return String.valueOf(this.success).compareTo(String.valueOf(binomialTrial.getSuccess())) + this.getTrialType().compareTo(binomialTrial.getTrialType())
+                + this.getTrialID().compareTo(binomialTrial.getTrialID()) + this.getGeolocation().compareTo(binomialTrial.getGeolocation());
     }
 
-    @Override
+    public static final Parcelable.Creator<BinomialTrial> CREATOR = new Parcelable.Creator<BinomialTrial>() {
+        public BinomialTrial createFromParcel(Parcel in) {
+            return new BinomialTrial(in);
+        }
+
+        public BinomialTrial[] newArray(int size) {
+            return new BinomialTrial[size];
+        }
+    };
+
     public int describeContents() {
         return 0;
     }
 
-    @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeBoolean(success);
+    }
 
+    protected BinomialTrial(Parcel in) {
+        super(in);
+        success = in.readBoolean();
     }
 }

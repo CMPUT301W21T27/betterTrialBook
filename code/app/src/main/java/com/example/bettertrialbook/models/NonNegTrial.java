@@ -5,8 +5,12 @@ The NonNegTrial class extends the Trial class and represents non-negative intege
 package com.example.bettertrialbook.models;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.example.bettertrialbook.Extras;
+import com.google.type.DateTime;
+
+import java.util.Date;
 
 public class NonNegTrial extends Trial implements Comparable<NonNegTrial> {
     private int count;
@@ -19,9 +23,12 @@ public class NonNegTrial extends Trial implements Comparable<NonNegTrial> {
      *  the id of the trial
      * @param geolocation
      *  the geolocation of the trial
+     * @param timestamp
+     *  the Date when the trial was created
      */
-    public NonNegTrial(int count, String trialId, String experimenterId, Geolocation geolocation) {
+    public NonNegTrial(int count, String trialId, String experimenterId, Geolocation geolocation, Date timestamp) {
         this.count = count;
+        setTimestamp(timestamp);
         setTrialID(trialId);
         setExperimenterID(experimenterId);
         setGeolocation(geolocation);
@@ -70,13 +77,27 @@ public class NonNegTrial extends Trial implements Comparable<NonNegTrial> {
                 + this.getGeolocation().compareTo(nonNegTrial.getGeolocation());
     }
 
-    @Override
+    public static final Parcelable.Creator<NonNegTrial> CREATOR = new Parcelable.Creator<NonNegTrial>() {
+        public NonNegTrial createFromParcel(Parcel in) {
+            return new NonNegTrial(in);
+        }
+
+        public NonNegTrial[] newArray(int size) {
+            return new NonNegTrial[size];
+        }
+    };
+
     public int describeContents() {
         return 0;
     }
 
-    @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeInt(count);
+    }
 
+    protected NonNegTrial(Parcel in) {
+        super(in);
+        count = in.readInt();
     }
 }

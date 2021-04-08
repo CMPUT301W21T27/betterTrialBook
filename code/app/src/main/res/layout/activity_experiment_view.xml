@@ -18,14 +18,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-    android:id="@+id/region_text"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="10dp"
-    android:text="Region: "
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/description_text" />
+        android:id="@+id/region_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:text="Region: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/description_text" />
 
     <TextView
         android:id="@+id/ownerId_text"
@@ -82,9 +82,9 @@
         android:id="@+id/subscribe_button"
         android:layout_width="140dp"
         android:layout_height="42dp"
-        android:text="Subscribe"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="32dp"
+        android:layout_marginRight="16dp"
+        android:text="Subscribe"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -101,9 +101,7 @@
         android:id="@+id/trial_listView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/viewMap_button"
+        app:layout_constraintBottom_toTopOf="@+id/addTrial_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -111,67 +109,68 @@
 
     <Button
         android:id="@+id/stats_button"
-        android:layout_width="127dp"
-        android:layout_height="42dp"
-        android:layout_marginLeft="32dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="16dp"
         android:text="View Stats"
-        app:layout_constraintBottom_toTopOf="@+id/createQR_button"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/forum_button"
+        app:layout_constraintEnd_toStartOf="@+id/forum_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
     <Button
         android:id="@+id/forum_button"
-        android:layout_width="127dp"
-        android:layout_height="42dp"
-        android:text="Forum"
-        android:layout_marginRight="32dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/addTrial_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="32dp"
         android:onClick="openForum"
-        />
+        android:text="Forum"
+        app:layout_constraintBottom_toTopOf="@+id/viewMap_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/stats_button"
+        app:layout_constraintTop_toBottomOf="@+id/addTrial_button" />
 
     <Button
         android:id="@+id/createQR_button"
-        android:layout_width="127dp"
-        android:layout_height="42dp"
-        android:text="Create QR"
-        android:layout_marginLeft="32dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="16dp"
         android:onClick="createQRCode"
-        />
+        android:text="Create QR"
+        app:layout_constraintBaseline_toBaselineOf="@+id/viewMap_button"
+        app:layout_constraintEnd_toStartOf="@+id/viewMap_button"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <Button
         android:id="@+id/addTrial_button"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="32dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:text="Add Trial"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <TextView
-        android:id="@+id/setting"
-        android:layout_width="113dp"
-        android:layout_height="27dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="12dp"
-        android:text="Setting"
-        android:textAlignment="textEnd"
-        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/forum_button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/trial_listView" />
 
     <Button
         android:id="@+id/viewMap_button"
-        android:layout_width="127dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
         android:text="View Map"
-        app:layout_constraintBottom_toTopOf="@+id/stats_button"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/createQR_button"
+        app:layout_constraintTop_toBottomOf="@+id/forum_button" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

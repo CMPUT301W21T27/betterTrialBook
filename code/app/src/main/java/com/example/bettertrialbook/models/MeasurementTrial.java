@@ -6,8 +6,11 @@ values of the Double type.
 package com.example.bettertrialbook.models;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.example.bettertrialbook.Extras;
+
+import java.util.Date;
 
 public class MeasurementTrial extends Trial implements Comparable<MeasurementTrial> {
     private Double measurement;
@@ -20,9 +23,12 @@ public class MeasurementTrial extends Trial implements Comparable<MeasurementTri
      *  the id of the trial
      * @param geolocation
      *  the geolocation of the trial
+     * @param timestamp
+     *  the Date when the trial was created
      */
-    public MeasurementTrial(Double measurement, String trialId, String experimenterId, Geolocation geolocation) {
+    public MeasurementTrial(Double measurement, String trialId, String experimenterId, Geolocation geolocation, Date timestamp) {
         this.measurement = measurement;
+        setTimestamp(timestamp);
         setTrialID(trialId);
         setExperimenterID(experimenterId);
         setGeolocation(geolocation);
@@ -71,13 +77,27 @@ public class MeasurementTrial extends Trial implements Comparable<MeasurementTri
                 + this.getGeolocation().compareTo(measurementTrial.getGeolocation());
     }
 
-    @Override
+    public static final Parcelable.Creator<MeasurementTrial> CREATOR = new Parcelable.Creator<MeasurementTrial>() {
+        public MeasurementTrial createFromParcel(Parcel in) {
+            return new MeasurementTrial(in);
+        }
+
+        public MeasurementTrial[] newArray(int size) {
+            return new MeasurementTrial[size];
+        }
+    };
+
     public int describeContents() {
         return 0;
     }
 
-    @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeDouble(measurement);
+    }
 
+    protected MeasurementTrial(Parcel in) {
+        super(in);
+        measurement = in.readDouble();
     }
 }
