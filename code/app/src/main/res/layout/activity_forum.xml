@@ -32,6 +32,8 @@
         android:contentDescription="@string/post_question"
         android:clickable="true"
         android:onClick="openCreateQuestionActivity"
+        app:backgroundTint="@color/Pink"
+        app:rippleColor="@color/DarkPink"
         app:srcCompat="@android:drawable/ic_input_add" />
 
 </LinearLayout>
