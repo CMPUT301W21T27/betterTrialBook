@@ -7,3 +7,5 @@ Citations:
 Android Developers, 2020-11-18, Apache 2.0, https://developer.android.com/guide/topics/ui/controls/spinner
 
 Google Firebase, 2021-04-08, Apache 2.0, https://firebase.google.com/docs/emulator-suite/connect_and_prototype
+
+Google Maps Platform, 2021-04-07, Apache 2.0, https://developers.google.com/maps/documentation/android-sdk/current-place-tutorial
