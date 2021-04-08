@@ -41,7 +41,6 @@ public class BarcodeAnalyzer implements ImageAnalysis.Analyzer {
         Task<List<Barcode>> result = scanner
                 .process(image)
                 .addOnSuccessListener(barcodes -> {
-                    Log.d(tag, "Scanned successfully " + barcodes.size());
                     for (Barcode barcode : barcodes) {
                         barcodeCallback.execute(barcode);
                     }
