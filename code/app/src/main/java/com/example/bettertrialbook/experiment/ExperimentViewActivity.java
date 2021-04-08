@@ -85,7 +85,6 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         descriptionText = findViewById(R.id.description_text);
         ownerIdText = findViewById(R.id.ownerId_text);
         totalTrialsText = findViewById(R.id.totalTrials_text);
-        createQRButton = findViewById(R.id.createQR_button);
 
         regionText.setText("Region: " + experimentInfo.getRegion());
         descriptionText.setText("Description: " + experimentInfo.getDescription());
