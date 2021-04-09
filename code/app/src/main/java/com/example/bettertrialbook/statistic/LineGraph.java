@@ -74,41 +74,41 @@ public class LineGraph extends AppCompatActivity {
             resultOverTime.setVisibility(View.INVISIBLE);
         }
 
-        lineChartSetting(lineChart, trialDataList.size());
+        if (trialDataList.size() > 0) {
+            lineChartSetting(lineChart, trialDataList.size());
 
-        mean.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createLineChart(lineChart, "Mean", trialDataList);
-                lineChart.invalidate();
-            }
-        });
+            mean.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    createLineChart(lineChart, "Mean", trialDataList);
+                    lineChart.invalidate();
+                }
+            });
 
-        median.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createLineChart(lineChart, "Median", trialDataList);
-                lineChart.invalidate();
-            }
-        });
+            median.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    createLineChart(lineChart, "Median", trialDataList);
+                    lineChart.invalidate();
+                }
+            });
 
-        stdDev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createLineChart(lineChart, "StdDev", trialDataList);
-                lineChart.invalidate();
-            }
-        });
+            stdDev.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    createLineChart(lineChart, "StdDev", trialDataList);
+                    lineChart.invalidate();
+                }
+            });
 
-        resultOverTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createLineChart(lineChart, "Result", trialDataList);
-                lineChart.invalidate();
-            }
-        });
-
-
+            resultOverTime.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    createLineChart(lineChart, "Result", trialDataList);
+                    lineChart.invalidate();
+                }
+            });
+        }
     }
 
     public void createLineChart(LineChart lineChart, String category, ArrayList<Trial> trials) {

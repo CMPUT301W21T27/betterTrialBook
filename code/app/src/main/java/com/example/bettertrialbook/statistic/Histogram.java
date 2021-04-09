@@ -69,8 +69,10 @@ public class Histogram extends AppCompatActivity {
         }
 
         // Histogram Graph plot and setting
-        barChartSetting(barChart, labels);
-        plotTheGraph(barChart);
+        if (trialDataList.size() > 0) {
+            barChartSetting(barChart, labels);
+            plotTheGraph(barChart);
+        }
     }
 
     // This method is used to handle the plotting the data of the histogram
