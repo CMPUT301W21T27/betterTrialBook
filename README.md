@@ -1,7 +1,20 @@
 # betterTrialBook
 This android application was developed for CMPUT 301 - Introduction to Software Engineering. BetterTrialbook is a collaborative application where users can interact with each other's experiments and results can be collectively collected and reviewed. This repo's Wiki includes additional information on user requirements fulfilled and full documentation.
 
+# Firebase Emulator
 How to set up emulator for UI testing: https://firebase.google.com/docs/emulator-suite/connect_and_prototype
+
+- make sure CLI is in the code folder
+
+- Before initializing (firebase init):
+    - Firebase should already be initialized, so just run - ( firebase emulators:start )
+    
+    - Else, run ( firebase init ):
+        - Choose features "Firestore" and "Emulators"
+        - Use default file name for rules and indexes
+        - Choose Firestore emulator
+        - Use default Port (8080) 
+        - Enable UI
 
 # Team Members
 
