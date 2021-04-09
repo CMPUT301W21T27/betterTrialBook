@@ -1,8 +1,3 @@
-/*
-    Activity for viewing experiment details. Uses the ExperimentDAL to get the data
-    from the database. Uses the UserDAL to get the id of the user so that owner functions can
-    be hidden from non-owners.
- */
 package com.example.bettertrialbook.experiment;
 
 import android.content.Intent;
@@ -21,7 +16,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.bettertrialbook.Extras;
@@ -35,12 +29,16 @@ import com.example.bettertrialbook.models.ExperimentInfo;
 import com.example.bettertrialbook.models.Geolocation;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.User;
-import com.example.bettertrialbook.profile.InvalidUsernameFragment;
 import com.example.bettertrialbook.profile.ProfileViewActivity;
 import com.example.bettertrialbook.statistic.StatsNumber;
 
 import java.util.ArrayList;
 
+/*
+    Activity for viewing experiment details. Uses the ExperimentDAL to get the data
+    from the database. Uses the UserDAL to get the id of the user so that owner functions can
+    be hidden from non-owners.
+ */
 public class ExperimentViewActivity extends AppCompatActivity implements ConfirmationFragment.OnFragmentInteractionListener,
         TrialProfileFragment.OnFragmentInteractionListener, EditExperimentFragment.OnFragmentInteractionListener,GeoWarningFragment.OnFragmentInteractionListener {
     Boolean newExperiment;
@@ -65,6 +63,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_view);
 
+        // set back button on actionbar
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("View Experiment");
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -86,7 +85,6 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
         descriptionText = findViewById(R.id.description_text);
         ownerIdText = findViewById(R.id.ownerId_text);
         totalTrialsText = findViewById(R.id.totalTrials_text);
-        createQRButton = findViewById(R.id.createQR_button);
 
         regionText.setText("Region: " + experimentInfo.getRegion());
         descriptionText.setText("Description: " + experimentInfo.getDescription());
@@ -268,7 +266,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Confirm
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("GeoLocation", geoLocations);
                 intent.putExtras(bundle);
-                intent.putExtra("allLocations", true); // tell the map activity to display instead of select
+                intent.putExtra("allLocations", true); // tell the map activity to display geolocations instead of allowing selection
                 startActivity(intent);
             }
         });

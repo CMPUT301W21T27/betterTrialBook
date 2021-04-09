@@ -1,7 +1,3 @@
-/*
-    Activity for adding a new experiment. Uses the ExperimentDAL to write the new experiment
-    to the database.
- */
 package com.example.bettertrialbook.experiment;
 
 import android.content.Intent;
@@ -20,13 +16,10 @@ import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.ExperimentInfo;
 
-
-// TODO:
 /*
-- Testing
-- Add the experiment to the database, delete from the database
+    Activity for adding a new experiment. Uses the ExperimentDAL to write the new experiment
+    to the database.
  */
-
 public class ExperimentAddActivity extends AppCompatActivity {
     String ownerId;
 
@@ -35,7 +28,8 @@ public class ExperimentAddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_add);
 
-        // based on https://developer.android.com/guide/topics/ui/controls/spinner
+        // Spinner based on:
+        // Android Developers, 2020-11-18, Apache 2.0, https://developer.android.com/guide/topics/ui/controls/spinner
         Spinner typeSpinner = findViewById(R.id.type_Spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.experimentTypes, android.R.layout.simple_spinner_item);
@@ -101,6 +95,9 @@ public class ExperimentAddActivity extends AppCompatActivity {
         });
     }
 
+    /*
+    Return to the experiment view activity
+     */
     public void openExperimentViewActivity(ExperimentInfo experimentInfo) {
         UserDAL userDAL = new UserDAL();
         userDAL.subscribeExperiment(experimentInfo.getId(), experimentInfo.getOwnerId());

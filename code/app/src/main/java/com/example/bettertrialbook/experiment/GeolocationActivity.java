@@ -1,13 +1,10 @@
 package com.example.bettertrialbook.experiment;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +16,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.bettertrialbook.R;
-import com.example.bettertrialbook.models.ExperimentInfo;
 import com.example.bettertrialbook.models.Geolocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -27,18 +23,18 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
-import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import java.util.ArrayList;
 
+/*
+Handles the displaying of a map using Google Maps API
+Set up done using: Google Maps Platform, 2021-04-07, Apache 2.0, https://developers.google.com/maps/documentation/android-sdk/current-place-tutorial
+ */
 public class GeolocationActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final int REQUEST_CODE_ASK_PERMISSIONS = 1;
@@ -47,7 +43,6 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
     Button cancelButton, selectButton;
     Marker marker = null;
 
-    // Boolean isTrialOwner;
     Geolocation geolocation;
     Boolean allGeoLocations;
     ArrayList<Geolocation> geoLocations;
@@ -58,7 +53,6 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
         setContentView(R.layout.activity_geolocation);
 
         // Fetch extra info
-        // isTrialOwner = getIntent().getBooleanExtra("IsTrialOwner", true);
         geolocation = getIntent().getParcelableExtra("geolocation");
         allGeoLocations = getIntent().getBooleanExtra("allLocations", false);  // if true, display all the trial locations
         Log.d("Geolocation", String.valueOf(allGeoLocations));
@@ -89,19 +83,6 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
             selectButton.setVisibility(View.INVISIBLE);
         }
 
-//        if (isTrialOwner) {
-//            selectButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    finish();
-//                }
-//            });
-//        }
-//        else {
-//            selectButton.setAlpha(.5f);
-//        }
-
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -128,14 +109,8 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Log.d("Geolocation", "Granted1");
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             if (mMap != null) {
+                // displays an error, but compiles fine, permissions are also correctly checked for
                 mMap.setMyLocationEnabled(true);
                 getLocation();
             }
@@ -147,6 +122,7 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
         }
     }
 
+    // displays an error, but compiles fine, permissions are also correctly checked for
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode != REQUEST_CODE_ASK_PERMISSIONS) {
@@ -170,6 +146,7 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
                     == PackageManager.PERMISSION_GRANTED) {
                 Log.d("Geolocation", "Granted2");
                 if (mMap != null) {
+                    // displays an error, but compiles fine, permissions are also correctly checked for
                     mMap.setMyLocationEnabled(true);
                     getLocation();
                 }
@@ -189,6 +166,7 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
         if (!allGeoLocations) {
             // selecting a location
             if (geolocation != null && geolocation.getLocation() == null) {
+                // displays an error, but compiles fine, permissions are also correctly checked for
                 fusedLocationClient.getLastLocation()
                         .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                             @Override
@@ -258,31 +236,6 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
             }
 
         }
-
-//        if (isTrialOwner) {
-//            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-//                @Override
-//                public void onMapClick(LatLng point) {
-//                    if (marker != null) {
-//                        marker.remove();
-//                    }
-//
-//                    if (point != null) {
-//                        marker = mMap.addMarker(new MarkerOptions().position(point).title("Marker in Selected Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-//                        Location newLocation = new Location("");
-//                        newLocation.setLatitude(point.latitude);
-//                        newLocation.setLongitude(point.longitude);
-//                        geolocation.setLocation(newLocation);
-//                        sendLocation(geolocation);
-//                        Log.d("Geolocation", String.valueOf(geolocation.getLocation().getLatitude()));
-//                        Log.d("Geolocation", String.valueOf(geolocation.getLocation().getLongitude()));
-//                        Log.d("Geolocation", "selected location");
-//                    } else {
-//                        Log.d("Geolocation", "null selected location");
-//                    }
-//                }
-//            });
-//        }
     }
 
     /*
