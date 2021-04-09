@@ -36,7 +36,7 @@ public class AddExperimentTest {
         return rule;
     }
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
     }
 
