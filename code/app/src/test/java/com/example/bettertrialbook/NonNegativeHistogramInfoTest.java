@@ -6,19 +6,19 @@ package com.example.bettertrialbook;
 
 import android.location.Location;
 
+import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.Geolocation;
 import com.example.bettertrialbook.models.NonNegTrial;
-import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.statistic.HistogramInfo;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.Before;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.ArrayList;
 
-import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertEquals;
 
 public class NonNegativeHistogramInfoTest {
     private ArrayList<Trial> nonNegOddTrials;
@@ -35,20 +35,20 @@ public class NonNegativeHistogramInfoTest {
 
     private ArrayList<Trial> mockOddNonNegTrials() {
         ArrayList<Trial> nonNeg = new ArrayList<>();
-        nonNeg.add(new NonNegTrial(1, "NonNegTestID1", "Person1", new Geolocation(new Location("")), new Date()));
-        nonNeg.add(new NonNegTrial(3, "NonNegTestID2", "Person2", new Geolocation(new Location("")), new Date()));
-        nonNeg.add(new NonNegTrial(3, "NonNegTestID3", "Person3", new Geolocation(new Location("")), new Date()));
+        nonNeg.add(new NonNegTrial(15, "NonNegTestID1", "Person1", new Geolocation(new Location("")), new Date()));
+        nonNeg.add(new NonNegTrial(12, "NonNegTestID2", "Person2", new Geolocation(new Location("")), new Date()));
+        nonNeg.add(new NonNegTrial(25, "NonNegTestID3", "Person3", new Geolocation(new Location("")), new Date()));
+        nonNeg.add(new NonNegTrial(8, "NonNegTestID4", "Person4", new Geolocation(new Location("")), new Date()));
+        nonNeg.add(new NonNegTrial(11, "NonNegTestID5", "Person5", new Geolocation(new Location("")), new Date()));
         return nonNeg;
     }
 
     private ArrayList<Trial> mockEvenNonNegTrials() {
         ArrayList<Trial> nonNeg = new ArrayList<>();
-        nonNeg.add(new NonNegTrial(1, "NonNegTestID1", "Person1", new Geolocation(new Location("")), new Date()));
-        nonNeg.add(new NonNegTrial(2, "NonNegTestID2", "Person2", new Geolocation(new Location("")), new Date()));
-        nonNeg.add(new NonNegTrial(3, "NonNegTestID3", "Person3", new Geolocation(new Location("")), new Date()));
-        nonNeg.add(new NonNegTrial(4, "NonNegTestID4", "Person4", new Geolocation(new Location("")), new Date()));
-        nonNeg.add(new NonNegTrial(4, "NonNegTestID6", "Person4", new Geolocation(new Location("")), new Date()));
-        nonNeg.add(new NonNegTrial(5, "NonNegTestID5", "Person5", new Geolocation(new Location("")), new Date()));
+        nonNeg.add(new NonNegTrial(7, "NonNegTestID1", "Person1", new Geolocation(new Location("")), new Date()));
+        nonNeg.add(new NonNegTrial(9, "NonNegTestID2", "Person2", new Geolocation(new Location("")), new Date()));
+        nonNeg.add(new NonNegTrial(4, "NonNegTestID3", "Person3", new Geolocation(new Location("")), new Date()));
+        nonNeg.add(new NonNegTrial(5, "NonNegTestID4", "Person4", new Geolocation(new Location("")), new Date()));
         return nonNeg;
     }
 
@@ -69,16 +69,18 @@ public class NonNegativeHistogramInfoTest {
         ArrayList<Integer> result2 = histogramInfo2.collectFrequency();
         ArrayList<Integer> result3 = histogramInfo3.collectFrequency();
 
-        // Result for odd, smaller than 5
-        assertEquals(1, (int) result1.get(0));
-        assertEquals(2, (int) result1.get(1));
-        // Result for even, larger or equal to 5
-        assertEquals(0, (int) result2.get(0));
+        // Result for distinct items >= 5 in the data list
+        assertEquals(0, (int) result1.get(0));
+        assertEquals(0, (int) result1.get(1));
+        assertEquals(2, (int) result1.get(2));
+        assertEquals(2, (int) result1.get(3));
+        assertEquals(1, (int) result1.get(4));
+        // Result for distinct items < 5 in the data list
+        assertEquals(1, (int) result2.get(0));
         assertEquals(1, (int) result2.get(1));
         assertEquals(1, (int) result2.get(2));
         assertEquals(1, (int) result2.get(3));
-        assertEquals(3, (int) result2.get(4));
-        // Result for Empty
+        // Result for Empty in the data list.
         assertNull(result3);
     }
 
@@ -88,16 +90,18 @@ public class NonNegativeHistogramInfoTest {
         ArrayList<String> label2 = histogramInfo2.getLabels();
         ArrayList<String> label3 = histogramInfo3.getLabels();
 
-        // Result for odd, distinct item smaller than 5
-        assertEquals("1.0", label1.get(0));
-        assertEquals("3.0", label1.get(1));
-        // Result for even, distinct item larger than or equal to 5
-        assertEquals("0-0", label2.get(0));
-        assertEquals("1-1", label2.get(1));
-        assertEquals("2-2", label2.get(2));
-        assertEquals("3-3", label2.get(3));
-        assertEquals("4+", label2.get(4));
-        // Result for empty
+        // Result for distinct items >= 5 in the data list
+        assertEquals("0-3", label1.get(0));
+        assertEquals("4-7", label1.get(1));
+        assertEquals("8-11", label1.get(2));
+        assertEquals("12-15", label1.get(3));
+        assertEquals("16+", label1.get(4));
+        // Result for distinct items < 5 in the data list
+        assertEquals("4.0", label2.get(0));
+        assertEquals("5.0", label2.get(1));
+        assertEquals("7.0", label2.get(2));
+        assertEquals("9.0", label2.get(3));
+        // Result for Empty in the data list.
         assertNull(label3);
     }
 

@@ -6,19 +6,19 @@ package com.example.bettertrialbook;
 
 import android.location.Location;
 
-import com.example.bettertrialbook.models.BinomialTrial;
-import com.example.bettertrialbook.models.Geolocation;
 import com.example.bettertrialbook.models.Trial;
+import com.example.bettertrialbook.models.Geolocation;
+import com.example.bettertrialbook.models.BinomialTrial;
 import com.example.bettertrialbook.statistic.HistogramInfo;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.Before;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.ArrayList;
 
-import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertEquals;
 
 public class BinomialTrialHistogramInfoTest {
     private ArrayList<Trial> binomialTrialsOdd;
@@ -72,13 +72,13 @@ public class BinomialTrialHistogramInfoTest {
         ArrayList<Integer> result3 = histogramInfo3.collectFrequency();
 
 
-        // Result for odd, distinct item smaller than 5
+        // Result for distinct item < 5 in the data list
         assertEquals(1, (int) result1.get(0));
         assertEquals(2, (int) result1.get(1));
-        // Result for even, distinct item larger than or equal to 5
+        // Result for distinct item >= 5 in the data List
         assertEquals(3, (int) result2.get(0));
         assertEquals(3, (int) result2.get(1));
-        // Result for Empty
+        // Result for Empty data List
         assertNull(result3);
     }
 
@@ -88,13 +88,13 @@ public class BinomialTrialHistogramInfoTest {
         ArrayList<String> label2 = histogramInfo2.getLabels();
         ArrayList<String> label3 = histogramInfo3.getLabels();
 
-        // Result for odd, distinct item smaller than 5
+        // Result for distinct items < 5 in the dataList
         assertEquals("Failure", label1.get(0));
         assertEquals("Success", label1.get(1));
-        // Result for even, distinct item larger than or equal to 5
+        // Result for distinct items >= 5 in the dataList
         assertEquals("Failure", label2.get(0));
         assertEquals("Success", label2.get(1));
-        // Result for empty
+        // Result for empty data list
         assertNull(label3);
     }
 }
