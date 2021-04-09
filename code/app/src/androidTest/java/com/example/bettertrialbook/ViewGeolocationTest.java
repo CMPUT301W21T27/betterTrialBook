@@ -42,7 +42,9 @@ import java.util.Map;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertNotNull;
 
-
+/**
+* UI Test for testing geolocation functionality and visibility
+ */
 public class ViewGeolocationTest {
     private Solo solo;
     public ActivityTestRule<MainActivity> rule;
