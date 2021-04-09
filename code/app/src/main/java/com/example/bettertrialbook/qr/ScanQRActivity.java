@@ -161,7 +161,8 @@ public class ScanQRActivity extends AppCompatActivity {
                 .setAnalyzer(
                         ContextCompat.getMainExecutor(this),
                         new BarcodeAnalyzer(
-                                barcode -> scanQR(barcode.getRawValue())
+                                // bar code strings shouldn't have / in them so as not to confuse Firestore
+                                barcode -> scanQR(barcode.getRawValue().replace('/', 'a'))
                         )
                 );
         return imageAnalysis;
