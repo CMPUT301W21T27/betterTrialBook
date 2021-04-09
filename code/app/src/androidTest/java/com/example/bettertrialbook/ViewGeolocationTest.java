@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.util.Log;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -88,8 +89,6 @@ public class ViewGeolocationTest {
      */
     @Test
     public void start() {
-        solo.assertCurrentActivity("Wrong Activity", ExperimentViewActivity.class);
-        solo.sleep(2000);
         solo.clickOnButton("View Map");
 
         // Check to make sure class switched
@@ -107,26 +106,26 @@ public class ViewGeolocationTest {
      */
     @Test
     public void addTrialMap() {
-        solo.assertCurrentActivity("Wrong Activity", ExperimentViewActivity.class);
-        solo.sleep(2000);
-
-        // Go to the geolocation activity for adding a trial
+        //Add a Trial and handle the warning popup
         solo.clickOnButton("Add Trial");
-        solo.sleep(1000);
-        solo.clickOnButton("CONTINUE");
-        solo.sleep(1000);
-        solo.clickOnButton("ADD GEOLOCATION");
-        solo.sleep(1000);
+        solo.waitForText("Continue");
+        solo.clickOnButton("Continue");
+
+        //Fill out the trial information
+        solo.waitForText("Non-Negative Integer");
+        solo.enterText((EditText) solo.getView(R.id.intamount_editText),"42");
+
+        //Add a geolocation to the trial
+        solo.clickOnButton("Add Geolocation");
+        solo.waitForActivity(GeolocationActivity.class);
 
         // If location permissions are required, select "Only this time"
         if (solo.searchText("Only this time")) {
             solo.clickOnText("Only this time");
-            solo.sleep(1000);
         }
 
         // Check if the geolocation activity properly loaded
         solo.assertCurrentActivity("Wrong Activity", GeolocationActivity.class);
-        solo.sleep(2000);
     }
 
 
@@ -135,33 +134,39 @@ public class ViewGeolocationTest {
      */
     @Test
     public void storeTrialGeolocation() {
-        solo.assertCurrentActivity("Wrong Activity", GeolocationActivity.class);
-
-        solo.assertCurrentActivity("Wrong Activity", ExperimentViewActivity.class);
-        solo.sleep(2000);
-
-        // Go to the geolocation activity for adding a trial
+        //Add a Trial and handle the warning popup
         solo.clickOnButton("Add Trial");
-        solo.sleep(1000);
-        solo.clickOnButton("CONTINUE");
-        solo.sleep(1000);
-        solo.clickOnButton("ADD GEOLOCATION");
-        solo.sleep(1000);
+        solo.waitForText("Continue");
+        solo.clickOnButton("Continue");
+
+        //Fill out the trial information
+        solo.waitForText("Non-Negative Integer");
+        solo.enterText((EditText) solo.getView(R.id.intamount_editText),"42");
+
+        //Add a geolocation to the trial
+        solo.clickOnButton("Add Geolocation");
+        solo.waitForActivity(GeolocationActivity.class);
 
         // If location permissions are required, select "Only this time"
         if (solo.searchText("Only this time")) {
             solo.clickOnText("Only this time");
-            solo.sleep(1000);
         }
 
         solo.assertCurrentActivity("Wrong Activity", GeolocationActivity.class);
         solo.sleep(2000);
 
+
         // Add the trial to the experiment
         solo.clickOnButton("SELECT");
-        solo.assertCurrentActivity("Wrong Activity", ExperimentViewActivity.class);
-        solo.sleep(1000);
+
+        solo.waitForText("OK");
         solo.clickOnButton("OK");
+
+        solo.waitForActivity(ExperimentViewActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", ExperimentViewActivity.class);
+
+        //Wait for database to update
+        solo.sleep(2000);
 
         // Check if the geolocation exists in the Firestore database
         db.collection("Experiments").whereEqualTo("Description", experimentName)
