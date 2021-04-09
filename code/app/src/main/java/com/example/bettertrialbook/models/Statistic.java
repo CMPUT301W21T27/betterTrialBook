@@ -8,7 +8,7 @@ import java.text.DecimalFormat;
 
 public class Statistic {
 
-    DecimalFormat df = new DecimalFormat("#.###");
+    DecimalFormat df = new DecimalFormat("#.######");
 
     /**
      * Initialize the calculation methods related to Statistic

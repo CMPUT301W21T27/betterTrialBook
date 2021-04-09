@@ -96,8 +96,8 @@ public class StatisticMeasurementTrialTest {
         double stdDevForEven = statistic.StdDev(mmEvenTrials, statistic.Mean(mmEvenTrials));
         double stdDevForEmpty = statistic.StdDev(mmEmptyTrials, statistic.Mean(mmEmptyTrials));
 
-        assertEquals(1.557, stdDevForOdd);
-        assertEquals(0.634, stdDevForEven);
+        assertEquals(1.557477, stdDevForOdd);
+        assertEquals(0.634128, stdDevForEven);
         assertEquals(0.0, stdDevForEmpty);
     }
 

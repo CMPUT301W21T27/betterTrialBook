@@ -76,7 +76,7 @@ public class StatisticBinomialTrialTest {
 
         assertEquals(0.5, mean1);
         assertEquals(0.0, mean2);
-        assertEquals(0.667, mean3);
+        assertEquals(0.666667, mean3);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class StatisticBinomialTrialTest {
 
         assertEquals(0.5, stdDev1);
         assertEquals(0.0, stdDev2);
-        assertEquals(0.471, stdDev3);
+        assertEquals(0.471405, stdDev3);
     }
 
     @Test

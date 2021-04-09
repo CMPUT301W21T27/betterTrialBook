@@ -95,8 +95,8 @@ public class StatisticNonNegTest {
         double stdDevForEven = statistic.StdDev(nonNegEvenTrials, statistic.Mean(nonNegEvenTrials));
         double stdDevForEmpty = statistic.StdDev(nonNegEmptyTrials, statistic.Mean(nonNegEmptyTrials));
 
-        assertEquals(5.845, stdDevForOdd);
-        assertEquals(1.92, stdDevForEven);
+        assertEquals(5.844656, stdDevForOdd);
+        assertEquals(1.920286, stdDevForEven);
         assertEquals(0.0, stdDevForEmpty);
     }
 
