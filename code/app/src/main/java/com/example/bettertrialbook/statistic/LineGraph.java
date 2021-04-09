@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -36,8 +37,6 @@ import java.util.ArrayList;
  */
 public class LineGraph extends AppCompatActivity {
     private String experimentType;
-    private ArrayList<String> label;
-    private ArrayList<String> timeList;
     private ArrayList<Trial> trialDataList;
     private LineGraphInfo lineGraphInfo;
 
@@ -61,6 +60,7 @@ public class LineGraph extends AppCompatActivity {
         Button median = findViewById(R.id.MedianOverTime);
         Button stdDev = findViewById(R.id.StdDevOverTime);
         LineChart lineChart = findViewById(R.id.LineChart);
+        TextView trialDisplay = findViewById(R.id.Trial_Display);
         Button resultOverTime = findViewById(R.id.ResultOverTime);
 
         // Layout Settings
@@ -69,6 +69,7 @@ public class LineGraph extends AppCompatActivity {
             mean.setVisibility(View.INVISIBLE);
             median.setVisibility(View.INVISIBLE);
             stdDev.setVisibility(View.INVISIBLE);
+            trialDisplay.setVisibility(View.INVISIBLE);
         } else {
             resultOverTime.setVisibility(View.INVISIBLE);
         }
@@ -185,23 +186,17 @@ public class LineGraph extends AppCompatActivity {
         lineChart.getDescription().setEnabled(false);
 
         // x-axis setting
-        xAxis.setTextSize(10f);
-        xAxis.setAxisMinimum(0);
-        xAxis.setLabelCount(size);
-        xAxis.setAxisMaximum(size);
-        xAxis.setDrawGridLines(false);
-        xAxis.setYOffset(20);
-        xAxis.setAvoidFirstLastClipping(true);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        // For Count Trials, the labels become the date
-        if (experimentType.equals(Extras.COUNT_TYPE)) {
-            // Used Date as the label for the x-axis
-            ArrayList<String> labels = new ArrayList<>();
-            ArrayList<String> theDate = lineGraphInfo.getTheDates();
-            for (String date : theDate) {
-                labels.add(date);
-            }
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+        if (!experimentType.equals(Extras.COUNT_TYPE)) {
+            xAxis.setAxisMinimum(0);
+            xAxis.setAxisMaximum(size);
+            xAxis.setTextSize(10f);
+            xAxis.setLabelCount(size);
+            xAxis.setDrawGridLines(false);
+            xAxis.setYOffset(20);
+            xAxis.setAvoidFirstLastClipping(true);
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        } else {
+            xAxis.setEnabled(false);
         }
 
         // Right y-axis setting
