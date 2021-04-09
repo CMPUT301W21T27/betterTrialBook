@@ -16,6 +16,11 @@ How to set up emulator for UI testing: https://firebase.google.com/docs/emulator
         - Use default Port (8080) 
         - Enable UI
 
+# Running Unit Tests
+If you encounter an error when running the unit tests (Command line is too long), please follow the link provided in the
+error popup in android studio and change the Shorten Command Line entry to the Classpath entry. This is due to a bug
+in Android Studio with JUnit tests.
+
 # Team Members
 
 - Yash Bhandari: Yash-Bhandari
