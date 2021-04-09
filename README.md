@@ -13,6 +13,12 @@ How to set up emulator for UI testing: https://firebase.google.com/docs/emulator
 - Shasta Johnsen-Sollos: Spazdaa
 
 # Citations:
+Alexander Oleynikov, 2010-11-17, Creative Commons, https://stackoverflow.com/questions/4207880/android-how-do-i-prevent-the-soft-keyboard-from-pushing-my-view-up
+
+naikus, 2010-09-02, Creative Commons, https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+
+Alex Mamo, 2018-02-27, Creative Commons, https://www.youtube.com/watch?v=0ofkvm97i0s
+
 androidmads, 2020-07-26, MIT License, https://github.com/androidmads/QRGenerator
 
 Android Developers, 2020-11-18, Apache 2.0, https://developer.android.com/guide/topics/ui/controls/spinner
@@ -32,8 +38,3 @@ Google ML Kit, 2021-03-31, Apache 2.0, https://developers.google.com/ml-kit/visi
 Google Maps Platform, 2021-04-07, Apache 2.0, https://developers.google.com/maps/documentation/android-sdk/current-place-tutorial
 
 Google Firebase, 2021-04-08, Apache 2.0, https://firebase.google.com/docs/emulator-suite/connect_and_prototype
-
-
-
-
-
