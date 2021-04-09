@@ -1,5 +1,5 @@
 # betterTrialBook
-This android application was developed for CMPUT 301 - Introduction to Software Engineering. BetterTrialbook is a collaborative application where users can interact with each other's experiments and results can be collectively collected and reviewed. This repo's Wiki includes additional information on user requirements fulfilled and lots of documentation.
+This android application was developed for CMPUT 301 - Introduction to Software Engineering. BetterTrialbook is a collaborative application where users can interact with each other's experiments and results can be collectively collected and reviewed. This repo's Wiki includes additional information on user requirements fulfilled and full documentation.
 
 How to set up emulator for UI testing: https://firebase.google.com/docs/emulator-suite/connect_and_prototype
 
