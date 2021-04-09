@@ -4,7 +4,7 @@ This android application was developed for CMPUT 301 - Introduction to Software 
 # Firebase Emulator
 How to set up emulator for UI testing: https://firebase.google.com/docs/emulator-suite/connect_and_prototype
 
-- make sure CLI is in the code folder
+- Ensure CLI is in the code folder
 
 - Before initializing (firebase init):
     - Firebase should already be initialized, so just run - ( firebase emulators:start )
