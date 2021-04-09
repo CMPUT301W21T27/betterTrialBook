@@ -13,9 +13,9 @@ How to set up emulator for UI testing: https://firebase.google.com/docs/emulator
 - Shasta Johnsen-Sollos: Spazdaa
 
 # Citations:
-Alexander Oleynikov, 2010-11-17, Creative Commons, https://stackoverflow.com/questions/4207880/android-how-do-i-prevent-the-soft-keyboard-from-pushing-my-view-up
-
 naikus, 2010-09-02, Creative Commons, https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+
+Alexander Oleynikov, 2010-11-17, Creative Commons, https://stackoverflow.com/questions/4207880/android-how-do-i-prevent-the-soft-keyboard-from-pushing-my-view-up
 
 Alex Mamo, 2018-02-27, Creative Commons, https://www.youtube.com/watch?v=0ofkvm97i0s
 
