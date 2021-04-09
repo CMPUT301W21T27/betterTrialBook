@@ -318,7 +318,7 @@ public class HistogramInfo {
                                 frequency += 1;
                             }
                         } else {
-                            if (experimentData.get(j) >= minForEachBin[i] && experimentData.get(j) < maxForEachBin[i]) {
+                            if (experimentData.get(j) >= minForEachBin[i] && experimentData.get(j) <= maxForEachBin[i]) {
                                 frequency += 1;
                             }
                         }
