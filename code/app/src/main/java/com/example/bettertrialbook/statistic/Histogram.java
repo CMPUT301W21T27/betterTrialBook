@@ -105,7 +105,11 @@ public class Histogram extends AppCompatActivity {
 
         // x-axis setting
         xAxis.setYOffset(25);
-        xAxis.setTextSize(11f);
+        if (experimentType.equals(Extras.COUNT_TYPE) || experimentType.equals(Extras.BINOMIAL_TYPE)) {
+            xAxis.setTextSize(25f);
+        } else {
+            xAxis.setTextSize(11f);
+        }
         xAxis.setGranularity(1f);
         xAxis.setDrawGridLines(false);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);

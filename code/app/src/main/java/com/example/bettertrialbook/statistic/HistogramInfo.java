@@ -10,11 +10,10 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 
 public class HistogramInfo {
-
+    private Statistic statistic;
     private String experimentType;
     private ArrayList<Trial> trials;
     private ArrayList<Double> experimentData;
-    private Statistic statistic = new Statistic();
 
     /**
      * An constructor to initialize the methods related to the Histogram
@@ -26,6 +25,7 @@ public class HistogramInfo {
     public HistogramInfo(ArrayList<Trial> trials, String experimentType) {
         this.trials = trials;
         this.experimentType = experimentType;
+        this.statistic = new Statistic();
         this.experimentData = statistic.experimentData(this.trials);
     }
 
@@ -119,9 +119,8 @@ public class HistogramInfo {
         return labels;
     }
 
-    //------------------------------------Helper Method Below---------------------------------------
     /**
-     * Obtain the distinct value in the experiment
+     * Helper Method: Obtain the distinct value in the experiment
      * @return
      * An arrayList of distinct value in the experiment in ascending order
      */
@@ -139,6 +138,7 @@ public class HistogramInfo {
     }
 
     /**
+     * Helper Method
      * @return
      * The difference between the max value and the min value
      */
@@ -150,7 +150,7 @@ public class HistogramInfo {
     }
 
     /**
-     * Calculate the maximum value for each bin
+     * Helper Method: Calculate the maximum value for each bin
      * @param diffForBin
      * The difference within the bin
      * @param requiredBin
@@ -181,7 +181,7 @@ public class HistogramInfo {
     }
 
     /**
-     * Calculate the minimum value for each bin
+     * Helper Method: Calculate the minimum value for each bin
      * @param maxForEachBin
      * A list of integer contains the maximum value for each bin
      * @param requiredBin
@@ -220,7 +220,7 @@ public class HistogramInfo {
     }
 
     /**
-     * Collect the frequency for each bins (At least equal or more than 5 bins)
+     * Helper Method: Collect the frequency for each bins (At least equal or more than 5 bins)
      * @param noOfBin
      * The number of bins we are going to created for the Histogram
      * @return
@@ -261,7 +261,7 @@ public class HistogramInfo {
     }
 
     /**
-     * Obtain the category (label) for each bin which are used to plot the histogram
+     * Helper Method: Obtain the category (label) for each bin which are used to plot the histogram
      * @param requiredBin
      * The number of bins we are going to created for the Histogram
      * @return
@@ -279,7 +279,7 @@ public class HistogramInfo {
     }
 
     /**
-     * Collect the frequency for each bins (Less than 5 bins)
+     * Helper Method: Collect the frequency for each bins (Less than 5 bins)
      * @param noOfBin
      * The number of bins we are going to created for the Histogram
      * @return

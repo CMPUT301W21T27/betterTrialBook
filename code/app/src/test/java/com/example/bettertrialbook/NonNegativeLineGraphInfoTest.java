@@ -61,7 +61,7 @@ public class NonNegativeLineGraphInfoTest {
         assertEquals(2.0, result1.get(2));
         assertEquals(2.5, result1.get(3));
         assertEquals(2.8, result1.get(4));
-        assertEquals(3.167, result1.get(5));
+        assertEquals(3.1667, result1.get(5));
 
         assertNull(result2);
     }
@@ -88,10 +88,10 @@ public class NonNegativeLineGraphInfoTest {
 
         assertEquals(0.0, result1.get(0));
         assertEquals(0.5, result1.get(1));
-        assertEquals(0.816, result1.get(2));
+        assertEquals(0.8165, result1.get(2));
         assertEquals(1.118, result1.get(3));
-        assertEquals(1.166, result1.get(4));
-        assertEquals(1.344, result1.get(5));
+        assertEquals(1.1662, result1.get(4));
+        assertEquals(1.3437, result1.get(5));
 
         assertNull(result2);
     }

@@ -1,23 +1,28 @@
 /*
     Test Unit for LineGraph.java (Count-Based trial)
+
+    Remarks:
+    1) Since mean, median and std dev is meaningless in Count-Based trial
+       Count-Based Trial will not use any methods related to the mean, median and std dev
+       in the lineGraphInfo.java
 */
 package com.example.bettertrialbook;
 
 import android.location.Location;
 
+import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.CountTrial;
 import com.example.bettertrialbook.models.Geolocation;
-import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.statistic.LineGraphInfo;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.Before;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.ArrayList;
 
-import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertEquals;
 
 public class CountTrialLineGraphInfoTest {
     private ArrayList<Trial> countTrial;
