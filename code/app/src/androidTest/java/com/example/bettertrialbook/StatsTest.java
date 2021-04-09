@@ -125,7 +125,7 @@ public class StatsTest {
         //Check if Standard Deviation is correct
         display = (TextView) solo.getView(R.id.StdDev_Result);
         result = display.getText().toString();
-        assertEquals(result,"13.336");
+        assertEquals(result,"13.335666");
 
         //Check if Mean is correct
         display = (TextView) solo.getView(R.id.Mean_Result);

@@ -73,8 +73,10 @@ public class HistogramInfo {
         if (experimentData != null && experimentData.size() > 0) {
             int requiredBin = Math.min(distinctExperimentData().size(), 5);
 
-            // Depends on the experiment Type, there are different ways to create the labels.
-            // When the required Bin is larger or equal to 5, get the range as the name for the bin
+            /* Depends on the experiment Type, there are different ways to create the labels.
+             * Count-Based Trial will always have 1 bin. (Count)
+             * Binomial Trail will always have 1 or 2 bins. (Failure and Success)
+             */
             if (requiredBin >= 5) {
                 Double diffForBins = rangeOfData() / requiredBin;
                 int diffForBin = diffForBins.intValue();
@@ -82,12 +84,7 @@ public class HistogramInfo {
                 int[] maxForEachBin = getMaxForEachBin(diffForBin, requiredBin);
                 int[] minForEachBin = getMinForEachBin(maxForEachBin, requiredBin);
 
-                if (experimentType.equals(Extras.COUNT_TYPE)) {
-                    labels.add("Count");
-                } else if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
-                    labels.add("Failure");
-                    labels.add("Success");
-                } else if (experimentType.equals(Extras.MEASUREMENT_TYPE) && diffForBin < 1) {
+                if (experimentType.equals(Extras.MEASUREMENT_TYPE) && diffForBin < 1) {
                     // Handle the special case for the range of the bin here
                     double[] mins = new double[requiredBin];
                     double[] maxs = new double[requiredBin];
@@ -139,8 +136,12 @@ public class HistogramInfo {
                 if (experimentType.equals(Extras.COUNT_TYPE)) {
                     labels.add("Count");
                 } else if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
-                    labels.add("Failure");
-                    labels.add("Success");
+                    if (experimentData.contains(0.0)) {
+                        labels.add("Failure");
+                    }
+                    if (experimentData.contains(1.0)) {
+                        labels.add("Success");
+                    }
                 }
                     for (int i = 0; i < requiredBin; i++) {
                     labels.add(String.valueOf(categoryBin[i]));
