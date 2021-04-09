@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * The abstract Trial class is a parent class for the four kinds of trials.
  * This holds the id of the trial and the experimenter, information common to all types of trials
- * such as a geolocation and a timestamp. It also contains
+ * such as a geolocation, a timestamp, and whether it is blacklisted. It also contains
  * an abstract method getTrialType() to be implemented by each child class.
  *
  * Trial implements Parcelable so that it can be passed through intents between activities.
@@ -16,6 +16,7 @@ import java.util.Date;
 public abstract class Trial implements Parcelable {
     private String trialID;
     private String experimenterID;
+    private Boolean blacklist = false;
     private Geolocation geolocation;
     private Date timestamp;
 
@@ -89,6 +90,24 @@ public abstract class Trial implements Parcelable {
      */
     public void setExperimenterID(String experimenterID) {
         this.experimenterID = experimenterID;
+    }
+
+    /**
+     * gets whether the trial is blacklisted or not
+     * @return
+     *  whether the trial is blacklisted or not
+     */
+    public Boolean getBlacklist() {
+        return blacklist;
+    }
+
+    /**
+     * sets whether the trial is blacklisted or not
+     * @param blacklist
+     *  whether the trial is blacklisted or not
+     */
+    public void setBlacklist(Boolean blacklist) {
+        this.blacklist = blacklist;
     }
 
     /**
