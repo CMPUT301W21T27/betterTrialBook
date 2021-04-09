@@ -22,14 +22,15 @@ public class MeasurementTrialTest {
     Date date;
 
     private MeasurementTrial mockTrial() {
-        return new MeasurementTrial(420.69, "testid", "testUser", new Geolocation(new Location("")), date);
+        return new MeasurementTrial(420.69, "testid", "testUser", mockGeolocation, date);
     }
 
     @Before
     public void setUp() {
+        mockGeolocation = new Geolocation(new Location(""));
         date = Calendar.getInstance().getTime();
         testTrial = mockTrial();
-        mockGeolocation = new Geolocation(new Location(""));
+
     }
 
     @Test

@@ -24,14 +24,15 @@ public class BinomialTrialTest {
     Date date;
 
     private BinomialTrial mockTrial() {
-        return new BinomialTrial(true, "testid", "testUser", new Geolocation(new Location("")), date);
+        return new BinomialTrial(true, "testid", "testUser", mockGeolocation, date);
     }
 
     @Before
     public void setUp() {
+        mockGeolocation = new Geolocation(new Location(""));
         date = Calendar.getInstance().getTime();
         testTrial = mockTrial();
-        mockGeolocation = new Geolocation(new Location(""));
+
     }
 
     @Test
