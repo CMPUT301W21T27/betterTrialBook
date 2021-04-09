@@ -1,25 +1,28 @@
 package com.example.bettertrialbook;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.uiautomator.UiDevice;
-import androidx.test.uiautomator.UiObject;
-import androidx.test.uiautomator.UiObjectNotFoundException;
-import androidx.test.uiautomator.UiSelector;
 
 import com.example.bettertrialbook.dal.Firestore;
 import com.example.bettertrialbook.experiment.ExperimentAddActivity;
 import com.example.bettertrialbook.experiment.ExperimentViewActivity;
 import com.example.bettertrialbook.experiment.GeolocationActivity;
 import com.example.bettertrialbook.home.MainActivity;
+import com.example.bettertrialbook.models.Experiment;
 import com.example.bettertrialbook.models.Geolocation;
+import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.profile.ProfileViewActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -31,10 +34,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static org.junit.Assert.assertNotNull;
+
 
 public class ViewGeolocationTest {
     private Solo solo;
@@ -83,12 +89,16 @@ public class ViewGeolocationTest {
     @Test
     public void start() {
         solo.assertCurrentActivity("Wrong Activity", ExperimentViewActivity.class);
-        solo.sleep(5000);
+        solo.sleep(2000);
         solo.clickOnButton("View Map");
+
+        // Check to make sure class switched
         solo.assertCurrentActivity("Wrong Activity", GeolocationActivity.class);
         solo.sleep(2000);
 
-        // Check to make sure that the class switched
+        solo.clickOnButton("Back");
+        solo.assertCurrentActivity("Wrong Activity", ExperimentViewActivity.class);
+        solo.sleep(2000);
     }
 
 
@@ -96,26 +106,79 @@ public class ViewGeolocationTest {
      * Test to see if adding a trial brings you to the GeolocationActivity activity
      */
     @Test
-    public void addTrialMap() throws UiObjectNotFoundException {
-        solo.assertCurrentActivity("Wrong Activity", GeolocationActivity.class);
-        solo.sleep(5000);
-        solo.clickOnButton("CANCEL");
+    public void addTrialMap() {
         solo.assertCurrentActivity("Wrong Activity", ExperimentViewActivity.class);
+        solo.sleep(2000);
 
-        solo.clickOnText("CONTINUE");
-        solo.sleep(2000);
+        // Go to the geolocation activity for adding a trial
+        solo.clickOnButton("Add Trial");
+        solo.sleep(1000);
+        solo.clickOnButton("CONTINUE");
+        solo.sleep(1000);
         solo.clickOnButton("ADD GEOLOCATION");
+        solo.sleep(1000);
+
+        // If location permissions are required, select "Only this time"
+        if (solo.searchText("Only this time")) {
+            solo.clickOnText("Only this time");
+            solo.sleep(1000);
+        }
+
+        // Check if the geolocation activity properly loaded
+        solo.assertCurrentActivity("Wrong Activity", GeolocationActivity.class);
         solo.sleep(2000);
-        solo.clickOnText("Only this time");
-        solo.sleep(5000);
+    }
+
+
+    /**
+     * Add a trial and see if the geolocation gets stored properly
+     */
+    @Test
+    public void storeTrialGeolocation() {
         solo.assertCurrentActivity("Wrong Activity", GeolocationActivity.class);
 
-        solo.clickOnButton(0);
-        solo.sleep(5000);
+        solo.assertCurrentActivity("Wrong Activity", ExperimentViewActivity.class);
+        solo.sleep(2000);
 
-        UiDevice device = UiDevice.getInstance(getInstrumentation());
-        UiObject marker = device.findObject(new UiSelector().descriptionContains("Marker in Your Location"));
-        marker.click();
+        // Go to the geolocation activity for adding a trial
+        solo.clickOnButton("Add Trial");
+        solo.sleep(1000);
+        solo.clickOnButton("CONTINUE");
+        solo.sleep(1000);
+        solo.clickOnButton("ADD GEOLOCATION");
+        solo.sleep(1000);
+
+        // If location permissions are required, select "Only this time"
+        if (solo.searchText("Only this time")) {
+            solo.clickOnText("Only this time");
+            solo.sleep(1000);
+        }
+
+        solo.assertCurrentActivity("Wrong Activity", GeolocationActivity.class);
+        solo.sleep(2000);
+
+        // Add the trial to the experiment
+        solo.clickOnButton("SELECT");
+        solo.assertCurrentActivity("Wrong Activity", ExperimentViewActivity.class);
+        solo.sleep(1000);
+        solo.clickOnButton("OK");
+
+        // Check if the geolocation exists in the Firestore database
+        db.collection("Experiments").whereEqualTo("Description", experimentName)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                ArrayList<HashMap<Object, Object>> trials = (ArrayList<HashMap<Object, Object>>) document.getData().get("Trials");
+                                assertNotNull(trials.get(0).get("geolocation"));
+                            }
+                        } else {
+                            Log.d("TEST", "Error getting documents to check for geolocation: ", task.getException());
+                        }
+                    }
+                });
     }
 
 
