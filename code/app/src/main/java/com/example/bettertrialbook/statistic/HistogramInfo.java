@@ -1,6 +1,7 @@
 package com.example.bettertrialbook.statistic;
 
 import com.example.bettertrialbook.Extras;
+import com.example.bettertrialbook.models.Statistic;
 import com.example.bettertrialbook.models.Trial;
 
 import java.util.Set;

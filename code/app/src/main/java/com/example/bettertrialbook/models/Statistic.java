@@ -1,11 +1,6 @@
-package com.example.bettertrialbook.statistic;
+package com.example.bettertrialbook.models;
 
 import com.example.bettertrialbook.Extras;
-import com.example.bettertrialbook.models.Trial;
-import com.example.bettertrialbook.models.CountTrial;
-import com.example.bettertrialbook.models.NonNegTrial;
-import com.example.bettertrialbook.models.BinomialTrial;
-import com.example.bettertrialbook.models.MeasurementTrial;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +29,6 @@ public class Statistic {
         if (trials.size() > 0) {
             for (Trial trial : trials) {
                 if (trial.getTrialType().equals(Extras.COUNT_TYPE)) {
-                    CountTrial countTrial = (CountTrial) trial;
                     data.add(1.0);
                 }
                 if (trial.getTrialType().equals(Extras.NONNEG_TYPE)) {
@@ -43,7 +37,7 @@ public class Statistic {
                 }
                 if (trial.getTrialType().equals(Extras.BINOMIAL_TYPE)) {
                     BinomialTrial binomialTrial = (BinomialTrial) trial;
-                    // Success : True ; Failure : False
+                    // Success : 1.0 ; Failure : 0.0
                     if (binomialTrial.getSuccess()) {
                         data.add(1.0);
                     } else {
@@ -77,7 +71,6 @@ public class Statistic {
         if (trials != null && trials.size() != 0) {
             for (Trial trial : trials) {
                 if (trial.getTrialType().equals(Extras.COUNT_TYPE)) {
-                    CountTrial countTrial = (CountTrial) trial;
                     value = 1;
                 }
                 if (trial.getTrialType().equals(Extras.NONNEG_TYPE)) {
@@ -124,7 +117,6 @@ public class Statistic {
         if (trials != null && trials.size() != 0) {
             for (Trial trial : trials) {
                 if (trial.getTrialType().equals(Extras.COUNT_TYPE)) {
-                    CountTrial countTrial = (CountTrial) trial;
                     value = Math.pow((1.0 - mean), 2);
                 }
                 if (trial.getTrialType().equals(Extras.NONNEG_TYPE)) {
@@ -210,7 +202,7 @@ public class Statistic {
                 quartiles[0] = Double.parseDouble(df.format(firstQuartile));
                 quartiles[1] = Double.parseDouble(df.format(thirdQuartile));
             }
-            // Although Quartile information will become meaningless,
+            // Although Quartile information will become meaningless for single item
             // Use the first data value to represent both first Quartile and third Quartile
             else if (trials.size() == 1) {
                 if (trials.get(0).getTrialType().equals(Extras.COUNT_TYPE)) {
@@ -247,8 +239,15 @@ public class Statistic {
         return quartiles;
     }
 
-    //  ----------------------------Helper Methods Below-----------------------------------------
-    // Calculate the value of the 1st Quartile
+    /**
+     * Helper Methods: Calculate the first Quartile in the dataSet
+     * @param dataList
+     * The data for each trial in the experiment
+     * @param medianIndex
+     * The index in the dataList that is the median of the dataList
+     * @return
+     * The value of the first Quartile
+     */
     public double firstQuartile (ArrayList<Double> dataList, int medianIndex) {
         double quartile = 0;
         ArrayList<Double> quartileDataSet = new ArrayList<>();
@@ -257,9 +256,11 @@ public class Statistic {
             quartileDataSet.add(dataList.get(i));
         }
 
+        // For Even count data set obtained above
         if (quartileDataSet.size() % 2 == 0) {
             quartile = ((quartileDataSet.get(quartileDataSet.size() / 2) + quartileDataSet.get(quartileDataSet.size() / 2 - 1)) / 2);
         }
+        // For Odd count data set obtained above
         else {
             quartile = ((quartileDataSet.get(quartileDataSet.size() / 2)));
         }
@@ -267,25 +268,37 @@ public class Statistic {
         return quartile;
     }
 
-    // Calculate the value of the 3rd Quartile
+    /**
+     * Helper Methods: Calculate the third Quartile in the dataSet
+     * @param dataList
+     * The data for each trial in the experiment
+     * @param medianIndex
+     * The index in the dataList that is the median of the dataList
+     * @return
+     * The value of the third Quartile
+     */
     public double thirdQuartile (ArrayList<Double> dataList, int medianIndex) {
         double quartile = 0;
         ArrayList<Double> quartileDataSet = new ArrayList<>();
 
+        // For Odd Count data set
         if (dataList.size() % 2 == 1) {
             for (int i = medianIndex + 1; i < dataList.size(); i++) {
                 quartileDataSet.add(dataList.get(i));
             }
         }
+        // For Even Count data set
         else {
             for (int i = medianIndex; i < dataList.size(); i++) {
                 quartileDataSet.add(dataList.get(i));
             }
         }
 
+        // For Even Count sub data set obtained above
         if (quartileDataSet.size() % 2 == 0) {
             quartile = ((quartileDataSet.get(quartileDataSet.size() / 2) + quartileDataSet.get(quartileDataSet.size() / 2 - 1)) / 2);
         }
+        // For Odd Count sub data set obtained above
         else {
             quartile = ((quartileDataSet.get(quartileDataSet.size() / 2)));
         }

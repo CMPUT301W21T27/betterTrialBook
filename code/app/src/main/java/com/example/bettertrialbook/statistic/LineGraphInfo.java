@@ -3,21 +3,15 @@
  */
 package com.example.bettertrialbook.statistic;
 
-import android.util.Log;
-
 import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.models.BinomialTrial;
-import com.example.bettertrialbook.models.CountTrial;
 import com.example.bettertrialbook.models.MeasurementTrial;
 import com.example.bettertrialbook.models.NonNegTrial;
+import com.example.bettertrialbook.models.Statistic;
 import com.example.bettertrialbook.models.Trial;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
