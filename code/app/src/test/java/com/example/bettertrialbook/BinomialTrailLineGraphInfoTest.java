@@ -1,6 +1,3 @@
-/*
-    Test Unit for LineGraphInfo.java (Binomial Trial)
- */
 package com.example.bettertrialbook;
 
 import android.location.Location;
@@ -8,7 +5,6 @@ import android.location.Location;
 import com.example.bettertrialbook.models.BinomialTrial;
 import com.example.bettertrialbook.models.Geolocation;
 import com.example.bettertrialbook.models.Trial;
-import com.example.bettertrialbook.statistic.HistogramInfo;
 import com.example.bettertrialbook.statistic.LineGraphInfo;
 
 import org.junit.Before;
@@ -20,6 +16,9 @@ import java.util.Date;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
 
+/**
+ * Test Unit for LineGraphInfo.java (Binomial Trial)
+ */
 public class BinomialTrailLineGraphInfoTest {
     private ArrayList<Trial> binomialTrials;
     private ArrayList<Trial> binomialTrialsEmpty;

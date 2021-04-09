@@ -23,8 +23,8 @@ import com.example.bettertrialbook.models.User;
 
 import java.util.ArrayList;
 
-/*
-A CustomList for displaying trials in an experiment view.
+/**
+ * A CustomList for displaying trials in an experiment view.
  */
 public class CustomTrialList extends ArrayAdapter<Trial> {
 

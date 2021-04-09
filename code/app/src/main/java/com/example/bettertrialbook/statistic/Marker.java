@@ -18,6 +18,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * Class for displaying the marker feature related to statistics
+ */
 public class Marker extends MarkerView {
     private MPPointF mOffset;
     private SimpleDateFormat sdf;

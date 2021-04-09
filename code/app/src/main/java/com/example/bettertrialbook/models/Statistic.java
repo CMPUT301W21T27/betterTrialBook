@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.text.DecimalFormat;
 
+/**
+ * Model for holding data related to statistics of an experiment
+ */
 public class Statistic {
 
     DecimalFormat df = new DecimalFormat("#.######");

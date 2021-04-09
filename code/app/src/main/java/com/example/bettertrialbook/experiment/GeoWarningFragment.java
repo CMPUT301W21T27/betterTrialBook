@@ -14,12 +14,12 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.bettertrialbook.R;
 
-/*
-* Fragment called when either:
-*   No username entered
-*   Username entered is already taken
-* Title of fragment changes depending on which reason it was called for
-* */
+/**
+ * Fragment called when either:
+ * No username entered
+ * Username entered is already taken
+ * Title of fragment changes depending on which reason it was called for
+ */
 public class GeoWarningFragment extends DialogFragment {
     private String message;
     private OnFragmentInteractionListener listener;
@@ -28,7 +28,9 @@ public class GeoWarningFragment extends DialogFragment {
         this.message = message;
     }
 
-    /* Ok pressed interface */
+    /**
+     * Ok pressed interface to continue after geolocation required warning displayed
+     */
     public interface OnFragmentInteractionListener{
         void onContPressed();
     }

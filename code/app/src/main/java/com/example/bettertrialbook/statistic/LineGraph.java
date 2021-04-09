@@ -5,21 +5,16 @@
  */
 package com.example.bettertrialbook.statistic;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.navigation.Navigator;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.R;
@@ -35,8 +30,10 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
-import java.util.Date;
 
+/**
+ * Activity for displaying the line graph feature
+ */
 public class LineGraph extends AppCompatActivity {
     private String experimentType;
     private ArrayList<String> label;

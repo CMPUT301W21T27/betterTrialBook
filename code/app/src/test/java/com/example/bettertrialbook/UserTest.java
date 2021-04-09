@@ -1,7 +1,3 @@
-/*
-Unit testing for User functionality
- */
-
 package com.example.bettertrialbook;
 
 import com.example.bettertrialbook.models.User;
@@ -11,9 +7,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/*
-* If parcelable causes problems: https://stackoverflow.com/a/54873453
-* */
+/**
+ * Unit testing for User functionality
+ * If parcelable causes problems: https://stackoverflow.com/a/54873453
+ */
 public class UserTest {
 
     User test;

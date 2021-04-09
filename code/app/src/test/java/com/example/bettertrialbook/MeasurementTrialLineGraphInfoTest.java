@@ -1,6 +1,3 @@
-/*
-    Test Unit for LineGraphInfo.java (Measurement Trial)
- */
 package com.example.bettertrialbook;
 
 import android.location.Location;
@@ -19,6 +16,9 @@ import java.util.Date;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
 
+/**
+ * Unit tests for the LineGraphInfo.java (Measurement Trial)
+ */
 public class MeasurementTrialLineGraphInfoTest {
     private ArrayList<Trial> mmTrials;
     private ArrayList<Trial> mmEmptyTrials;

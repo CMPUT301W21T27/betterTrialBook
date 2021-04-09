@@ -22,10 +22,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/*
-* Data Access Layer
-* Interacts with the Users collection in database
-* */
+/**
+ * Data Access Layer
+ * Interacts with the Users collection in database
+ */
+
 public class UserDAL {
 
     FirebaseFirestore db;
@@ -78,18 +79,31 @@ public class UserDAL {
     }
 
     // Interfaces for callbacks
+
+    /**
+     * Callback after finding user by their id
+     */
     public interface FindUserByIDCallback {
         void onCallback(User user);
     }
 
+    /**
+     * Callback after comparing new username to existing usernames
+     */
     public interface UsernameTakenCallback {
         void onCallback(boolean isNotTaken);
     }
 
+    /**
+     * Callback after retrieving all subscribed experiments for a user
+     */
     public interface GetSubscribedCallback {
         void onCallback(List<String> subscribed);
     }
 
+    /**
+     * Callback after checking if user is subscribed to a particualr experiment
+     */
     public interface IsSubscribedCallback {
         void onCallback(Boolean isSubscribed);
     }
@@ -170,12 +184,11 @@ public class UserDAL {
     }
 
     // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
-
     /**
      * Retrieves this device's user id.
      * This value will be persistent across sessions.
      * @param context An android context object, such as an Activity
-     * @return
+     * @return String of device user id
      */
     public String getDeviceUserId(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences("uniqueID", Context.MODE_PRIVATE);

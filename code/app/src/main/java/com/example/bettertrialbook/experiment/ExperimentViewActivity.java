@@ -34,10 +34,10 @@ import com.example.bettertrialbook.statistic.StatsNumber;
 
 import java.util.ArrayList;
 
-/*
-    Activity for viewing experiment details. Uses the ExperimentDAL to get the data
-    from the database. Uses the UserDAL to get the id of the user so that owner functions can
-    be hidden from non-owners.
+/**
+ * Activity for viewing experiment details. Uses the ExperimentDAL to get the data
+ * from the database. Uses the UserDAL to get the id of the user so that owner functions can
+ * be hidden from non-owners.
  */
 public class ExperimentViewActivity extends AppCompatActivity implements ConfirmationFragment.OnFragmentInteractionListener,
         TrialProfileFragment.OnFragmentInteractionListener, EditExperimentFragment.OnFragmentInteractionListener,GeoWarningFragment.OnFragmentInteractionListener {

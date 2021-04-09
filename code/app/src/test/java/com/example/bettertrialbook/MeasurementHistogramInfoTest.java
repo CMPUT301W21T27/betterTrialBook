@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
 
+/**
+ * Unit tests for the HistogramInfo.java (Measurement Trial)
+ */
 public class MeasurementHistogramInfoTest {
     private ArrayList<Trial> mmOddTrials;
     private ArrayList<Trial> mmEvenTrials;

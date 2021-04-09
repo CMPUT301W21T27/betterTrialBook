@@ -1,9 +1,3 @@
-/*
-    Test Unit for HistogramInfo.java (Count-Based Trial)
-
-    Remarks:
-    1)  CountTrial always require only 1 bin (Count).
- */
 package com.example.bettertrialbook;
 
 import android.location.Location;
@@ -22,6 +16,10 @@ import java.util.ArrayList;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
 
+/**
+ * Test Unit for HistogramInfo.java (Count-Based Trial)
+ * Remarks:CountTrial always require only 1 bin (Count).
+ */
 public class CountTrialHistogramInfoTest {
     private ArrayList<Trial> countTrial;
     private ArrayList<Trial> countTrialEmpty;

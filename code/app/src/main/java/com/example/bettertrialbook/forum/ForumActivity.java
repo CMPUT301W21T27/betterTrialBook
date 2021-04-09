@@ -1,7 +1,3 @@
-/*
-Contains the ForumActivity which handles the Question and Answering functionality.
- */
-
 package com.example.bettertrialbook.forum;
 
 import android.content.Intent;
@@ -78,6 +74,9 @@ public class ForumActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Sets the title of the experiment to the experiment id
+     */
     private void setTitle() {
         TextView title = findViewById(R.id.forum_experiment_title);
         title.setText(expId);

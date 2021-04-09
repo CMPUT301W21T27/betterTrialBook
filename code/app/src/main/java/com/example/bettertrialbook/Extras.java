@@ -1,9 +1,8 @@
-/*
-Key static variables that will be used throughout the project
- */
-
 package com.example.bettertrialbook;
 
+/**
+ * Key static variables that will be used throughout the project
+ */
 public final class Extras {
     public static final String EXPERIMENT_ID = "EXPERIMENT_ID";
     public static final String QUESTION = "QUESTION";

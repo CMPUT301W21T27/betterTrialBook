@@ -19,13 +19,19 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.bettertrialbook.R;
 
+/**
+ * Fragment for user to confirm whatever "serious" action they are taking
+ * (ending/publishing/blacklisting etc)
+ */
 public class ConfirmationFragment extends DialogFragment {
     private String tag = "";
     private String experimenterID = "";
     private OnFragmentInteractionListener listener;
     private Boolean blacklist = false;
 
-    /* Ok pressed interface */
+    /**
+     * Ok pressed interface returning a tag corresponding to which confirmation it was for
+     */
     public interface OnFragmentInteractionListener {
         void onOkPressedConfirm(String tag, String experimenterID);
     }

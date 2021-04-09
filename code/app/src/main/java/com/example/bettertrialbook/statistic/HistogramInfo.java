@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
+/**
+ * A model to to hold relevant data for the statistics and histogram graph
+ */
 public class HistogramInfo {
     private Statistic statistic;
     private String experimentType;

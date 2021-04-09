@@ -1,9 +1,7 @@
 package com.example.bettertrialbook.profile;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -56,10 +54,10 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
         displayInformation();
     }
 
+    /**
+     * Displays currently filled information depending on if user signed up or not
+     */
     public void displayInformation(){
-        //Displays information
-        //Sets name of button depending on if user signed up or not
-
         TextView display;
         Button button;
 
@@ -92,6 +90,10 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
         }
     }
 
+    /**
+     * Takes action based on signup vs edit contact button
+     * @param view
+     */
     public void buttonClicked(View view){
         //Check if button says signup or edit
         Button button = (Button) findViewById(R.id.button2);
@@ -106,15 +108,20 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
         }
     }
 
+    /**
+     * Calls sign up activity, Sends user object to sign up to update
+     * Expects updated user object as return
+     */
     public void userSignUp(){
-        // Calls sign up activity
-        // Sends user object to sign up to update
-        // Expects updated user object as return
+        //
         Intent intent = new Intent(this, SignUp.class);
         startActivityForResult(intent,1);
 
     }
 
+    /**
+     * Ends the activity and returns from the signup activity
+     */
     public void endActivity(){
         this.finish();
     }
@@ -138,7 +145,9 @@ public class ProfileViewActivity extends AppCompatActivity implements EditContac
         displayInformation();
     }
 
-    // Calls edit fragment
+    /**
+     * Calls edit fragment
+      */
     public void userEditInfo(){
         String email = user.getContact().getEmail();
         String phone = user.getContact().getPhone();

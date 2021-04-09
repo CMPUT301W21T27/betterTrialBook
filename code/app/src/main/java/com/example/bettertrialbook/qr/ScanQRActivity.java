@@ -1,5 +1,13 @@
 package com.example.bettertrialbook.qr;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -12,14 +20,6 @@ import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
-
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.You;
@@ -51,7 +51,7 @@ public class ScanQRActivity extends AppCompatActivity {
     private Button addTrialButton;
 
 
-    //https://developer.android.com/training/camerax/preview
+    // https://developer.android.com/training/camerax/preview
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,24 +62,33 @@ public class ScanQRActivity extends AppCompatActivity {
         addTrialButton = findViewById(R.id.add_scanned_trial);
     }
 
+    /**
+     * Ensures device permissions are obtained
+     */
     private void handlePermission() {
-//        https://developer.android.com/training/permissions/requesting
+        // https://developer.android.com/training/permissions/requesting
         int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
         if (permission == PackageManager.PERMISSION_GRANTED)
             return;
         requestPermissionLauncher.launch(Manifest.permission.CAMERA);
     }
 
-
+    /**
+     * Adds listener to camera to ensure functionality
+     */
     private void setupCamera() {
         addCameraProviderListener(processCameraProvider -> bind(processCameraProvider));
     }
 
+    /**
+     * Removes listener from camera
+     */
     private void tearDownCamera() {
         addCameraProviderListener(processCameraProvider -> processCameraProvider.unbindAll());
     }
-
-    // gets Camera provider and performs the specified callback
+    /**
+     * Gets Camera provider and performs the specified callback
+     */
     private void addCameraProviderListener(Callback<ProcessCameraProvider> callback) {
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         Executor cameraExecutor = ContextCompat.getMainExecutor(this);
@@ -95,6 +104,10 @@ public class ScanQRActivity extends AppCompatActivity {
         }, cameraExecutor);
     }
 
+    /**
+     * Binds the camera and sets it up
+     * @param cameraProvider
+     */
     void bind(@NonNull ProcessCameraProvider cameraProvider) {
         Log.d(tag, "binding camera");
         CameraSelector cameraSelector = new CameraSelector.Builder()
@@ -104,6 +117,10 @@ public class ScanQRActivity extends AppCompatActivity {
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, cameraPreview(), barcodeAnalyzer());
     }
 
+    /**
+     * Temporary preview of the camera
+     * @return Preview
+     */
     private Preview cameraPreview() {
         PreviewView previewView = findViewById(R.id.camera_preview);
         Preview preview = new Preview.Builder()
@@ -112,8 +129,12 @@ public class ScanQRActivity extends AppCompatActivity {
         return preview;
     }
 
+    /**
+     * Analyzes the scanned barcode
+     * @return ImageAnalysis
+     */
     private ImageAnalysis barcodeAnalyzer() {
-        //    https://developers.google.com/ml-kit/vision/barcode-scanning/android#java
+        // https://developers.google.com/ml-kit/vision/barcode-scanning/android#java
         ImageAnalysis imageAnalysis = new ImageAnalysis
                 .Builder()
                 .build();
@@ -127,6 +148,10 @@ public class ScanQRActivity extends AppCompatActivity {
         return imageAnalysis;
     }
 
+    /**
+     * Scans a QR code based on its ID
+     * @param qrId
+     */
     private void scanQR(String qrId) {
         new QRDAL().addQRCodeListener(qrId, qrCode -> {
             scannedQRCode = qrCode;
@@ -143,11 +168,18 @@ public class ScanQRActivity extends AppCompatActivity {
         }, null);
     }
 
-    // called once we find a trial that matches the given qr code.
+    /**
+     * called once we find a trial that matches the given qr code.
+     * @param t
+     */
     private void foundTrial(Trial t){
 
     }
 
+    /**
+     * Lets the trial button be clickable and copies it
+     * @param t
+     */
     private void setTrialToCopy(Trial t) {
         addTrialButton.setClickable(true);
         trialToCopy = t;
@@ -156,6 +188,10 @@ public class ScanQRActivity extends AppCompatActivity {
         makeToast("QR code recognized");
     }
 
+    /**
+     * Adds scanned trial to experiment and database
+     * @param v
+     */
     public void addScannedTrial(View v) {
         if (trialToCopy == null)
             return;
@@ -165,9 +201,12 @@ public class ScanQRActivity extends AppCompatActivity {
         makeToast("Added trial");
     }
 
+    /**
+     * Allows for repeated toast messages
+     * @param msg
+     */
     private void makeToast(String msg) {
         Toast toast = Toast.makeText(this,msg, Toast.LENGTH_SHORT);
         toast.show();
     }
-
 }

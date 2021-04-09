@@ -1,6 +1,3 @@
-/*
-Unit tests for the CountTrial class
- */
 
 package com.example.bettertrialbook;
 
@@ -17,6 +14,9 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Unit tests for the CountTrial class
+ */
 public class CountTrialTest {
     CountTrial testTrial;
     Geolocation mockGeolocation;

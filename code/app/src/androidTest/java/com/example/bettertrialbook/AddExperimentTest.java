@@ -1,7 +1,3 @@
-/*
-UI testing for adding experiments
- */
-
 package com.example.bettertrialbook;
 
 import android.widget.EditText;
@@ -13,7 +9,6 @@ import com.example.bettertrialbook.dal.Firestore;
 import com.example.bettertrialbook.experiment.ExperimentAddActivity;
 import com.example.bettertrialbook.experiment.ExperimentViewActivity;
 import com.example.bettertrialbook.home.MainActivity;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
@@ -25,6 +20,9 @@ import org.junit.rules.TestRule;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * UI testing for adding experiments
+ */
 public class AddExperimentTest {
     private Solo solo;
     public ActivityTestRule<MainActivity> rule;

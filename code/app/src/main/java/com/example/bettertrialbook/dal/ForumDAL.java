@@ -1,7 +1,3 @@
-/*
-A DAL for handling any forum interactions with the database.
- */
-
 package com.example.bettertrialbook.dal;
 
 import android.util.Log;
@@ -21,6 +17,9 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+/**
+ * A DAL for handling any forum interactions with the database.
+ */
 public class ForumDAL {
     FirebaseFirestore db = Firestore.getInstance();
     CollectionReference collRef = db.collection("Posts");
@@ -50,6 +49,11 @@ public class ForumDAL {
         });
     }
 
+    /**
+     * Updates a question in the database
+     * @param qId
+     * @param question
+     */
     public void updateQuestion(String qId, Question question) {
         collRef.document(qId).set(question);
     }

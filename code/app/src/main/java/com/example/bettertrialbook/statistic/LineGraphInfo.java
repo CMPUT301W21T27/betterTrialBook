@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.text.DecimalFormat;
 import java.util.LinkedHashSet;
 
+/**
+ * A model to to hold relevant data for the statistics and line graph
+ */
 public class LineGraphInfo {
     DecimalFormat df;
     Statistic statistic;

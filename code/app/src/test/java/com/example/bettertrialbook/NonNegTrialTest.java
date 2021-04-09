@@ -1,7 +1,3 @@
-/*
-Unit tests for the NonNegTrial class
- */
-
 package com.example.bettertrialbook;
 
 import android.location.Location;
@@ -17,6 +13,9 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Unit tests for the NonNegTrial class
+ */
 public class NonNegTrialTest {
     NonNegTrial testTrial;
     Geolocation mockGeolocation;

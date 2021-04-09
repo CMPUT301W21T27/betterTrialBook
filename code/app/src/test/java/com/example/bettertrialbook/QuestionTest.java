@@ -1,7 +1,3 @@
-/*
-Unit testing for posting a question
- */
-
 package com.example.bettertrialbook;
 
 import com.example.bettertrialbook.models.Question;
@@ -11,6 +7,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Unit testing for posting a question
+ */
 public class QuestionTest{
 
     @Test

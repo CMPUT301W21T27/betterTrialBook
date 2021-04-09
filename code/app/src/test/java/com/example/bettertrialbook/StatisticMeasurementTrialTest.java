@@ -1,6 +1,3 @@
-/*
-    Test Unit for Statistic.java (Measurement Trial)
- */
 package com.example.bettertrialbook;
 
 import android.location.Location;
@@ -18,6 +15,9 @@ import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertEquals;
 
+/**
+ * Test Unit for Statistic.java (Measurement Trial)
+ */
 public class StatisticMeasurementTrialTest {
     private ArrayList<Trial> mmOddTrials;
     private ArrayList<Trial> mmEvenTrials;

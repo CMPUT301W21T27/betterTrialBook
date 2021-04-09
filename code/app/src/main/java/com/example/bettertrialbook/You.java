@@ -1,6 +1,7 @@
 package com.example.bettertrialbook;
 
 import com.example.bettertrialbook.models.User;
+
 /**
  * You class - represents the current User
  * Allows access to user object from any activity without intents

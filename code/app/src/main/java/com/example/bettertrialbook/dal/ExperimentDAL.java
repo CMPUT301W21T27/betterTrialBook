@@ -57,7 +57,6 @@ public class ExperimentDAL {
     }
 
     // Interfaces for callbacks
-
     /**
      * Callback for finding experiments
      */

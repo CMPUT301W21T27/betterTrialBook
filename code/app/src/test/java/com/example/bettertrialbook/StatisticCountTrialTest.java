@@ -1,11 +1,3 @@
-/*
-    Test Unit for Statistic.java (CountTrial Version)
-
-    Remarks:
-    1)  experimentData will not be tested in CountTrial Version
-        Since all the value in the dataSet is 1.0, which indicates as observed.
-    2)  The results (Mean, Median, Standard Deviation, Quartiles) are meaningless in such type.
- */
 package com.example.bettertrialbook;
 
 import android.location.Location;
@@ -23,6 +15,14 @@ import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertEquals;
 
+/**
+ * Test Unit for Statistic.java (CountTrial Version)
+ *
+ *     Remarks:
+ *     1)  experimentData will not be tested in CountTrial Version
+ *         Since all the value in the dataSet is 1.0, which indicates as observed.
+ *     2)  The results (Mean, Median, Standard Deviation, Quartiles) are meaningless in such type.
+ */
 public class StatisticCountTrialTest {
     Statistic statistic = new Statistic();
     private ArrayList<Trial> countTrialOdd;

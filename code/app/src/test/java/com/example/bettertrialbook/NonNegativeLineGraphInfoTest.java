@@ -1,7 +1,3 @@
-/*
-    Test Unit for LineGraph.java (Non negative Trial)
- */
-
 package com.example.bettertrialbook;
 
 import android.location.Location;
@@ -20,6 +16,9 @@ import java.util.Date;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
 
+/**
+ * Test Unit for LineGraph.java (Non negative Trial)
+ */
 public class NonNegativeLineGraphInfoTest {
     private ArrayList<Trial> nonNegTrials;
     private ArrayList<Trial> nonNegEmptyTrials;

@@ -9,6 +9,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Unit tests for the Geolocation class
+ */
 public class GeolocationTest {
     Geolocation testGeolocation;
     Location mockLocation = new Location("");
