@@ -2,6 +2,7 @@ package com.example.bettertrialbook.statistic;
 
 import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.models.Trial;
+import com.example.bettertrialbook.models.Statistic;
 
 import java.util.Set;
 import java.util.ArrayList;
@@ -9,11 +10,10 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 
 public class HistogramInfo {
-
+    private Statistic statistic;
     private String experimentType;
     private ArrayList<Trial> trials;
     private ArrayList<Double> experimentData;
-    private Statistic statistic = new Statistic();
 
     /**
      * An constructor to initialize the methods related to the Histogram
@@ -25,6 +25,7 @@ public class HistogramInfo {
     public HistogramInfo(ArrayList<Trial> trials, String experimentType) {
         this.trials = trials;
         this.experimentType = experimentType;
+        this.statistic = new Statistic();
         this.experimentData = statistic.experimentData(this.trials);
     }
 
@@ -40,12 +41,14 @@ public class HistogramInfo {
 
         if (experimentData != null && experimentData.size() > 0) {
             // Get the number of Bins to group the dataSet
-            requiredBin = getNumberofBins();
+            requiredBin = Math.min(distinctExperimentData().size(), 5);
 
             // Get the frequency for each bin depends on the requiredBin
             if (requiredBin >= 5) {
+                // range style of bin method
                 binFrequency = getBinFrequencyA(requiredBin);
             } else if (requiredBin > 0 && requiredBin < 5) {
+                // categorize style of bin method
                 binFrequency = getBinFrequencyB(requiredBin);
             }
         } else {
@@ -63,10 +66,10 @@ public class HistogramInfo {
         ArrayList<String> labels = new ArrayList<>();
 
         if (experimentData != null && experimentData.size() > 0) {
-            int requiredBin = getNumberofBins();
+            int requiredBin = Math.min(distinctExperimentData().size(), 5);
 
+            // Depends on the experiment Type, there are different ways to create the labels.
             // When the required Bin is larger or equal to 5, get the range as the name for the bin
-            // When the required Bin is smaller than 5, get the exact element as the name for the bin
             if (requiredBin >= 5) {
                 Double diffForBins = rangeOfData() / requiredBin;
                 int diffForBin = diffForBins.intValue();
@@ -74,7 +77,6 @@ public class HistogramInfo {
                 int[] maxForEachBin = getMaxForEachBin(diffForBin, requiredBin);
                 int[] minForEachBin = getMinForEachBin(maxForEachBin, requiredBin);
 
-                // Depends on the experiment Type, there are different ways to create the labels.
                 if (experimentType.equals(Extras.COUNT_TYPE)) {
                     labels.add("Count");
                 } else if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
@@ -82,7 +84,7 @@ public class HistogramInfo {
                     labels.add("Success");
                 } else {
                     for (int i = 0; i < requiredBin; i++) {
-                        // For the last bin, it includes all the numbers above the mean
+                        // For the last bin, it includes all the numbers above the value
                         // For the regular bin, its range is from min to max.
                         if (i == requiredBin - 1) {
                             String min = String.valueOf(minForEachBin[i]);
@@ -97,6 +99,7 @@ public class HistogramInfo {
                     }
                 }
             }
+            // When the required Bin is smaller than 5, get the exact element as the name for the bin
             else if (requiredBin > 0 && requiredBin < 5) {
                 double[] categoryBin = getCategory(requiredBin);
                 if (experimentType.equals(Extras.COUNT_TYPE)) {
@@ -116,9 +119,8 @@ public class HistogramInfo {
         return labels;
     }
 
-    //------------------------------------Helper Method Below---------------------------------------
     /**
-     * Obtain the distinct value in the experiment
+     * Helper Method: Obtain the distinct value in the experiment
      * @return
      * An arrayList of distinct value in the experiment in ascending order
      */
@@ -136,7 +138,7 @@ public class HistogramInfo {
     }
 
     /**
-     *
+     * Helper Method
      * @return
      * The difference between the max value and the min value
      */
@@ -148,16 +150,7 @@ public class HistogramInfo {
     }
 
     /**
-     *
-     * @return
-     * The number of bins required to create the histogram (Max. 5)
-     */
-    public int getNumberofBins() {
-        return Math.min(distinctExperimentData().size(), 5);
-    }
-
-    /**
-     * Caluclate the maximum value for each bin
+     * Helper Method: Calculate the maximum value for each bin
      * @param diffForBin
      * The difference within the bin
      * @param requiredBin
@@ -188,7 +181,7 @@ public class HistogramInfo {
     }
 
     /**
-     * Calculate the minimum value for each bin
+     * Helper Method: Calculate the minimum value for each bin
      * @param maxForEachBin
      * A list of integer contains the maximum value for each bin
      * @param requiredBin
@@ -201,22 +194,33 @@ public class HistogramInfo {
         int[] minForEachBin = new int[requiredBin];
         minForEachBin[0] = 0;
 
+        // For the MeasurementType Trial, the bins will be classified as
+        // E.g. 1-2 (first bin), 2-3 (second bin)
+        // The maximum value of the bin is exclusive.
         if (experimentType.equals(Extras.MEASUREMENT_TYPE)) {
             for (int i = 1; i < requiredBin; i++) {
                 minForEachBin[i] = maxForEachBin[i - 1];
             }
-        } else {
+        }
+        // For the Non Negative Trial, the bins will be classified as
+        // E.g. 1-2 (first bin), 3-4 (second bin)
+        // The maximum value of the bin is inclusive since the type for the count is int.
+        else {
             minForEachBin[0] = 0;
             for (int i = 1; i < requiredBin; i++) {
                 minForEachBin[i] = maxForEachBin[i - 1] + 1;
             }
         }
 
+        // For Count Trial, the labels (Count) will be added directly in getLabels Method.
+        // For Binomial Trial, the labels (Failure, Success) will be added directly in
+        // getLabels Method.
+
         return minForEachBin;
     }
 
     /**
-     * Collect the frequency for each bins (At least equal or more than 5 bins)
+     * Helper Method: Collect the frequency for each bins (At least equal or more than 5 bins)
      * @param noOfBin
      * The number of bins we are going to created for the Histogram
      * @return
@@ -257,11 +261,11 @@ public class HistogramInfo {
     }
 
     /**
-     * Obtain the category (label) for each bin which are used to plot the histogram
+     * Helper Method: Obtain the category (label) for each bin which are used to plot the histogram
      * @param requiredBin
      * The number of bins we are going to created for the Histogram
      * @return
-     * An list of double value respesents as the label for the x-axis on the histogram
+     * An list of double value represents as the label for the x-axis on the histogram
      */
     public double[] getCategory(int requiredBin) {
         double[] category = new double[requiredBin];
@@ -274,9 +278,8 @@ public class HistogramInfo {
         return category;
     }
 
-
     /**
-     * Collect the frequency for each bins (Less than 5 bins)
+     * Helper Method: Collect the frequency for each bins (Less than 5 bins)
      * @param noOfBin
      * The number of bins we are going to created for the Histogram
      * @return

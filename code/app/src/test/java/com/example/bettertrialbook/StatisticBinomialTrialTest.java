@@ -6,8 +6,8 @@ package com.example.bettertrialbook;
 import android.location.Location;
 
 import com.example.bettertrialbook.models.Trial;
+import com.example.bettertrialbook.models.Statistic;
 import com.example.bettertrialbook.models.Geolocation;
-import com.example.bettertrialbook.statistic.Statistic;
 import com.example.bettertrialbook.models.BinomialTrial;
 
 import org.junit.Test;
@@ -62,6 +62,7 @@ public class StatisticBinomialTrialTest {
     public void testExperimentData() {
         ArrayList<Double> sorted = statistic.experimentData(mockBinomialTrialsOdd());
 
+        // Check if the dataList is sorted
         assertEquals(0.0, sorted.get(0));
         assertEquals(1.0, sorted.get(1));
         assertEquals(1.0, sorted.get(1));
@@ -75,7 +76,7 @@ public class StatisticBinomialTrialTest {
 
         assertEquals(0.5, mean1);
         assertEquals(0.0, mean2);
-        assertEquals(0.667, mean3);
+        assertEquals(0.666667, mean3);
     }
 
     @Test
@@ -97,7 +98,7 @@ public class StatisticBinomialTrialTest {
 
         assertEquals(0.5, stdDev1);
         assertEquals(0.0, stdDev2);
-        assertEquals(0.471, stdDev3);
+        assertEquals(0.471405, stdDev3);
     }
 
     @Test

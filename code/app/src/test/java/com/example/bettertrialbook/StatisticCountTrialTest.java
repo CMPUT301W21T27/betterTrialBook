@@ -2,24 +2,24 @@
     Test Unit for Statistic.java (CountTrial Version)
 
     Remarks:
-    experimentData will not be tested in CountTrial Version
-    As it will generate meaningless results in this set up.
+    1)  experimentData will not be tested in CountTrial Version
+        Since all the value in the dataSet is 1.0, which indicates as observed.
+    2)  The results (Mean, Median, Standard Deviation, Quartiles) are meaningless in such type.
  */
 package com.example.bettertrialbook;
 
 import android.location.Location;
 
-import com.example.bettertrialbook.models.BinomialTrial;
+import com.example.bettertrialbook.models.Trial;
+import com.example.bettertrialbook.models.Statistic;
 import com.example.bettertrialbook.models.CountTrial;
 import com.example.bettertrialbook.models.Geolocation;
-import com.example.bettertrialbook.models.Trial;
-import com.example.bettertrialbook.statistic.Statistic;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -35,7 +35,7 @@ public class StatisticCountTrialTest {
         return countTrial;
     }
 
-    private ArrayList<Trial> mockCountTrialOdd() {
+    private ArrayList<Trial> mockCountTrialEven() {
         ArrayList<Trial> countTrial = new ArrayList<>();
 
         countTrial.add(new CountTrial("1", "Terence", new Geolocation(new Location("")), new Date()));
@@ -46,7 +46,7 @@ public class StatisticCountTrialTest {
         return countTrial;
     }
 
-    private ArrayList<Trial> mockCountTrialEven() {
+    private ArrayList<Trial> mockCountTrialOdd() {
         ArrayList<Trial> countTrial = new ArrayList<>();
 
         countTrial.add(new CountTrial("1", "Terence", new Geolocation(new Location("")), new Date()));

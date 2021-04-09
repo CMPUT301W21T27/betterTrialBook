@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.bettertrialbook.R;
+import com.example.bettertrialbook.models.Statistic;
 import com.example.bettertrialbook.models.Trial;
 
 import java.util.ArrayList;

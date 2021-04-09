@@ -90,7 +90,7 @@ public class BinomialTrailLineGraphInfoTest {
         assertEquals(0.0, result1.get(1));
         assertEquals(0.0, result1.get(2));
         assertEquals(0.433, result1.get(3));
-        assertEquals(0.49, result1.get(4));
+        assertEquals(0.4899, result1.get(4));
         assertEquals(0.5, result1.get(5));
 
         assertNull(result2);

@@ -2,16 +2,16 @@ package com.example.bettertrialbook;
 
 import android.location.Location;
 
+import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.Geolocation;
 import com.example.bettertrialbook.models.MeasurementTrial;
-import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.statistic.HistogramInfo;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.Before;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
@@ -31,22 +31,22 @@ public class MeasurementHistogramInfoTest {
 
     private ArrayList<Trial> mockEvenMeasurementTrials() {
         ArrayList<Trial> mm = new ArrayList<>();
-        mm.add(new MeasurementTrial(1.5, "MeasureTestID1", "Person1", new Geolocation(new Location("")), new Date()));
-        mm.add(new MeasurementTrial(3.5, "MeasureTestID2", "Person2",  new Geolocation(new Location("")), new Date()));
-        mm.add(new MeasurementTrial(4.5, "MeasureTestID3", "Person3",  new Geolocation(new Location("")), new Date()));
-        mm.add(new MeasurementTrial(6.5, "MeasureTestID4", "Person4",  new Geolocation(new Location("")), new Date()));
+        mm.add(new MeasurementTrial(2.25, "MeasureTestID1", "Person1", new Geolocation(new Location("")), new Date()));
+        mm.add(new MeasurementTrial(3.34, "MeasureTestID2", "Person2",  new Geolocation(new Location("")), new Date()));
+        mm.add(new MeasurementTrial(2.20, "MeasureTestID3", "Person3",  new Geolocation(new Location("")), new Date()));
+        mm.add(new MeasurementTrial(2.32, "MeasureTestID4", "Person4",  new Geolocation(new Location("")), new Date()));
         return mm;
     }
 
     private ArrayList<Trial> mockOddMeasurementTrials() {
         ArrayList<Trial> mm = new ArrayList<>();
-        mm.add(new MeasurementTrial(1.1, "MeasureTestID1", "Person1",  new Geolocation(new Location("")), new Date()));
-        mm.add(new MeasurementTrial(2.2, "MeasureTestID2", "Person2",  new Geolocation(new Location("")), new Date()));
-        mm.add(new MeasurementTrial(3.3, "MeasureTestID3", "Person3",  new Geolocation(new Location("")), new Date()));
-        mm.add(new MeasurementTrial(3.3, "MeasureTestID3", "Person3",  new Geolocation(new Location("")), new Date()));
-        mm.add(new MeasurementTrial(3.3, "MeasureTestID3", "Person3",  new Geolocation(new Location("")), new Date()));
-        mm.add(new MeasurementTrial(4.4, "MeasureTestID4", "Person4",  new Geolocation(new Location("")), new Date()));
-        mm.add(new MeasurementTrial(5.5, "MeasureTestID5", "Person5",  new Geolocation(new Location("")), new Date()));
+        mm.add(new MeasurementTrial(3.29, "MeasureTestID1", "Person1",  new Geolocation(new Location("")), new Date()));
+        mm.add(new MeasurementTrial(2.20, "MeasureTestID2", "Person2",  new Geolocation(new Location("")), new Date()));
+        mm.add(new MeasurementTrial(1.10, "MeasureTestID3", "Person3",  new Geolocation(new Location("")), new Date()));
+        mm.add(new MeasurementTrial(3.30, "MeasureTestID3", "Person3",  new Geolocation(new Location("")), new Date()));
+        mm.add(new MeasurementTrial(5.50, "MeasureTestID3", "Person3",  new Geolocation(new Location("")), new Date()));
+        mm.add(new MeasurementTrial(4.40, "MeasureTestID4", "Person4",  new Geolocation(new Location("")), new Date()));
+        mm.add(new MeasurementTrial(3.31, "MeasureTestID5", "Person5",  new Geolocation(new Location("")), new Date()));
         return mm;
     }
 
@@ -67,13 +67,13 @@ public class MeasurementHistogramInfoTest {
         ArrayList<Integer> result2 = histogramInfo2.collectFrequency();
         ArrayList<Integer> result3 = histogramInfo3.collectFrequency();
 
-        // Result for odd, distinct item larger than 5
+        // Result for distinct item >= 5 in the data list
         assertEquals(0, (int) result1.get(0));
         assertEquals(1, (int) result1.get(1));
         assertEquals(1, (int) result1.get(2));
         assertEquals(3, (int) result1.get(3));
         assertEquals(2, (int) result1.get(4));
-        // Result for even, distinct item smaller than 5
+        // Result for distinct item < 5 in the data list
         assertEquals(1, (int) result2.get(0));
         assertEquals(1, (int) result2.get(1));
         assertEquals(1, (int) result2.get(2));
@@ -88,17 +88,18 @@ public class MeasurementHistogramInfoTest {
         ArrayList<String> label2 = histogramInfo2.getLabels();
         ArrayList<String> label3 = histogramInfo3.getLabels();
 
+        // Result for distinct item >= 5 in the data list
         assertEquals("0-1", label1.get(0));
         assertEquals("1-2", label1.get(1));
         assertEquals("2-3", label1.get(2));
         assertEquals("3-4", label1.get(3));
         assertEquals("4+", label1.get(4));
-
-        assertEquals("1.5", label2.get(0));
-        assertEquals("3.5", label2.get(1));
-        assertEquals("4.5", label2.get(2));
-        assertEquals("6.5", label2.get(3));
-
+        // Result for distinct item < 5 in the data list
+        assertEquals("2.2", label2.get(0));
+        assertEquals("2.25", label2.get(1));
+        assertEquals("2.32", label2.get(2));
+        assertEquals("3.34", label2.get(3));
+        // Result Empty
         assertNull(label3);
     }
 }

@@ -1,31 +1,24 @@
-/*
-    Plot the mean, median, standard deviation change over time.
- */
 package com.example.bettertrialbook.statistic;
 
-import android.util.Log;
-
 import com.example.bettertrialbook.Extras;
-import com.example.bettertrialbook.models.BinomialTrial;
-import com.example.bettertrialbook.models.CountTrial;
-import com.example.bettertrialbook.models.MeasurementTrial;
-import com.example.bettertrialbook.models.NonNegTrial;
 import com.example.bettertrialbook.models.Trial;
+import com.example.bettertrialbook.models.Statistic;
+import com.example.bettertrialbook.models.NonNegTrial;
+import com.example.bettertrialbook.models.BinomialTrial;
+import com.example.bettertrialbook.models.MeasurementTrial;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.ArrayList;
+import java.text.DecimalFormat;
+import java.util.LinkedHashSet;
 
 public class LineGraphInfo {
+    DecimalFormat df;
+    Statistic statistic;
+    SimpleDateFormat sdf;
     private String experimentType;
     private ArrayList<Trial> trials;
-    private Statistic statistic = new Statistic();
-    private DecimalFormat df = new DecimalFormat("#.###");
 
     /**
      * An constructor initialize the methods related to the LineChart
@@ -37,6 +30,9 @@ public class LineGraphInfo {
     public LineGraphInfo(ArrayList<Trial> trials, String type) {
         this.trials = trials;
         this.experimentType = type;
+        this.statistic = new Statistic();
+        this.df = new DecimalFormat("#.####");
+        this.sdf = new SimpleDateFormat("yyyy.MM.dd");
     }
 
     /**
@@ -52,7 +48,7 @@ public class LineGraphInfo {
         double value = 0;
         ArrayList<Double> meanOverTime = new ArrayList<>();
 
-        // Remarks: CountTrial does not have MeanOverTime methods
+        // Remarks: CountTrial does not use any MeanOverTime method
         // As the mean over time is meaningless data to count trial. (Disabled in UI)
         if (trials != null && trials.size() > 0) {
             for (int i = 0; i < trials.size(); i++) {
@@ -108,8 +104,8 @@ public class LineGraphInfo {
         if (trials.size() == 0) {
             return null;
         } else {
-            // Remarks: CountTrial does not have stdDevOverTime methods
-            // As the standard Deviation over time is meaningless data to count trial. (Disabled in UI)
+            // Remarks: CountTrial does not use stdDevOverTime method as
+            // the standard Deviation over time is meaningless data to count trial. (Disabled in UI)
             for (int i = 0; i < trials.size(); i++) {
                 sum = 0;
                 size = 0;
@@ -145,7 +141,7 @@ public class LineGraphInfo {
      * Obtains the median over time (number of trials as time progresses)
      * @return
      * An arrayList of double value contains the current median
-     * respect to the number of trials at that current time. (in asecending order)
+     * respect to the number of trials at that current time. (in ascending order)
      */
     public ArrayList<Double> MedianOverTime() {
         double median;
@@ -153,7 +149,7 @@ public class LineGraphInfo {
         ArrayList<Trial> temporaryArray = new ArrayList<>();  // Hold the trials up to the current number
         ArrayList<Double> medianOverTime = new ArrayList<>();
 
-        // Remarks: CountTrial does not have MedianOverTime methods
+        // Remarks: CountTrial does not use MedianOverTime method
         // As the median over time is meaningless data to count trial. (Disabled in UI)
         if (trials.size() > 0) {
             for (int i = 0; i < trials.size(); i++) {
@@ -161,6 +157,7 @@ public class LineGraphInfo {
                 for (int j = 0; j <= i; j++) {
                     temporaryArray.add(trials.get(j));
                 }
+                // dataList is a sorted in non-descending order arrayList
                 dataList = statistic.experimentData(temporaryArray);
                 // For Odd Count Data Set
                 if (dataList.size() % 2 == 1) {
@@ -188,8 +185,7 @@ public class LineGraphInfo {
         if (trials != null && trials.size() > 0) {
             for (String date : dates) {
                 for (Trial trial: trials) {
-                    String timeStamp = trial.getTimestamp().toString();
-                    String theDate = timeStamp.substring(4,11) + timeStamp.substring(24,28);
+                    String theDate = sdf.format(trial.getTimestamp());
                     if (experimentType.equals(Extras.COUNT_TYPE)) {
                         if (theDate.equals(date)) {
                             frequency += 1;
@@ -202,14 +198,12 @@ public class LineGraphInfo {
                         }
                     }
                     if (experimentType.equals(Extras.MEASUREMENT_TYPE)) {
-                        assert trial instanceof MeasurementTrial;
                         MeasurementTrial measurementTrial = (MeasurementTrial) trial;
                         if (theDate.equals(date)) {
                             frequency += measurementTrial.getMeasurement();
                         }
                     }
                     if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
-                        assert trial instanceof BinomialTrial;
                         BinomialTrial binomialTrial = (BinomialTrial) trial;
                         // Either success or fail will count towards the frequency
                         // for the number of trials per day
@@ -227,10 +221,9 @@ public class LineGraphInfo {
         return result;
     }
 
-    //-----------------------------------Helper Method----------------------------------------------
 
     /**
-     * Obtain the distinct dates (MMM DD YYYY) for the trails in the experiment
+     * Helper Method: Obtain the distinct dates (yyyy.MM.dd) for the trails in the experiment
      * @return
      * An arrayList of String of dates (MMM DD YYYY)
      */
@@ -238,15 +231,14 @@ public class LineGraphInfo {
         ArrayList<String> date = new ArrayList<>();
         Set<String> dateString = new LinkedHashSet<>();
 
+        // Add the String format (yyyy.MM.dd) into the arrayList
         if (trials != null && trials.size() > 0) {
             for (Trial trial : trials) {
-                String timeStamp = trial.getTimestamp().toString();
-                // Get the Month, Day and the Year from the timeStamp
-                String theDate = timeStamp.substring(4,11) + timeStamp.substring(24,28);
-                date.add(theDate);
+                date.add(sdf.format(trial.getTimestamp()));
             }
         }
 
+        // Find the distinct date in the arrayList
         dateString.addAll(date);
         date.clear();
         date.addAll(dateString);

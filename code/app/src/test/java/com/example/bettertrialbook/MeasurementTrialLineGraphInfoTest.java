@@ -84,9 +84,9 @@ public class MeasurementTrialLineGraphInfoTest {
 
         assertEquals(0.0, result1.get(0));
         assertEquals(0.55, result1.get(1));
-        assertEquals(0.898, result1.get(2));
-        assertEquals(1.23, result1.get(3));
-        assertEquals(1.556, result1.get(4));
+        assertEquals(0.8981, result1.get(2));
+        assertEquals(1.2298, result1.get(3));
+        assertEquals(1.5556, result1.get(4));
 
         assertNull(result2);
     }

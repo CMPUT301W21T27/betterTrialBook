@@ -1,3 +1,8 @@
+/* Credit details can be also be found in README.md
+ * Credit: Mar 31, 2021, PhilJay MPAndroidChart, Apache 2.0.
+ * https://github.com/PhilJay/MPAndroidChart
+ * Used the library for the line chart plotting
+ */
 package com.example.bettertrialbook.statistic;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -67,10 +72,12 @@ public class LineGraph extends AppCompatActivity {
             mean.setVisibility(View.INVISIBLE);
             median.setVisibility(View.INVISIBLE);
             stdDev.setVisibility(View.INVISIBLE);
+        } else {
+            resultOverTime.setVisibility(View.INVISIBLE);
         }
 
-        lineChartSetting(lineChart, trialDataList.size(), experimentType);
-        // ------Plot the graph depends on which result user wants to see.-----
+        lineChartSetting(lineChart, trialDataList.size());
+
         mean.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +125,7 @@ public class LineGraph extends AppCompatActivity {
             xLabels[i] = String.valueOf(i);
         }
 
-        // Create the data corresponding to the
+        // Create the data corresponding to the requirement
         if (category.equals("Mean")) {
             data = lineGraphInfo.MeanOverTime();
         } else if (category.equals(("Median"))) {
@@ -148,8 +155,8 @@ public class LineGraph extends AppCompatActivity {
         // Settings for the dataset
         dataset.setLineWidth(3f);
         dataset.setDrawValues(false);
-        dataset.setCircleRadius(10f);
-        dataset.setCircleHoleRadius(9f);
+        dataset.setCircleRadius(6f);
+        dataset.setCircleHoleRadius(5f);
 
         dataSets.add(dataset);
 
@@ -158,35 +165,39 @@ public class LineGraph extends AppCompatActivity {
         lineChart.setData(lineData);
 
         // Maker for the dataSet
-        IMarker marker = new Marker(this, R.layout.custom_marker_view, trialDataList, data);
+        IMarker marker = new Marker(this, R.layout.custom_marker_view, trialDataList, data, experimentType);
         lineChart.setMarker(marker);
+
         lineChart.invalidate();
     }
 
 
-    public void lineChartSetting(LineChart lineChart, int size, String type) {
+    public void lineChartSetting(LineChart lineChart, int size) {
         XAxis xAxis = lineChart.getXAxis();
         YAxis leftAxis = lineChart.getAxisLeft();
         YAxis rightAxis = lineChart.getAxisRight();
 
+        // LineChart setting
         lineChart.setDragEnabled(true);
         lineChart.setScaleEnabled(true);
         lineChart.setTouchEnabled(true);
+        lineChart.setExtraBottomOffset(50);
+        lineChart.setExtraRightOffset(50);
         lineChart.setVisibleXRangeMaximum(65f);
         lineChart.getLegend().setEnabled(false);
         lineChart.getDescription().setEnabled(false);
-        lineChart.setExtraBottomOffset(50);
 
-        xAxis.setTextSize(15f);
-        xAxis.setLabelCount(size);
+        // x-axis setting
+        xAxis.setTextSize(10f);
         xAxis.setAxisMinimum(0);
+        xAxis.setLabelCount(size);
         xAxis.setAxisMaximum(size);
         xAxis.setDrawGridLines(false);
         xAxis.setYOffset(20);
         xAxis.setAvoidFirstLastClipping(true);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-
-        if (experimentType.equals(Extras.COUNT_TYPE) || experimentType.equals(Extras.COUNT_TYPE)) {
+        // For Count Trials, the labels become the date
+        if (experimentType.equals(Extras.COUNT_TYPE)) {
             // Used Date as the label for the x-axis
             ArrayList<String> labels = new ArrayList<>();
             ArrayList<String> theDate = lineGraphInfo.getTheDates();
@@ -196,7 +207,10 @@ public class LineGraph extends AppCompatActivity {
             xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
         }
 
+        // Right y-axis setting
         rightAxis.setEnabled(false);
+
+        // Left y-axis setting
         leftAxis.setTextSize(15f);
         leftAxis.setLabelCount(size);
         leftAxis.setAxisMinimum(0);
