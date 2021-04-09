@@ -4,11 +4,15 @@ import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.Statistic;
 
+import java.text.DecimalFormat;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
+/**
+ * A model to to hold relevant data for the statistics and histogram graph
+ */
 public class HistogramInfo {
     private Statistic statistic;
     private String experimentType;
@@ -64,12 +68,15 @@ public class HistogramInfo {
      */
     public ArrayList<String> getLabels() {
         ArrayList<String> labels = new ArrayList<>();
+        DecimalFormat df = new DecimalFormat("#.##");
 
         if (experimentData != null && experimentData.size() > 0) {
             int requiredBin = Math.min(distinctExperimentData().size(), 5);
 
-            // Depends on the experiment Type, there are different ways to create the labels.
-            // When the required Bin is larger or equal to 5, get the range as the name for the bin
+            /* Depends on the experiment Type, there are different ways to create the labels.
+             * Count-Based Trial will always have 1 bin. (Count)
+             * Binomial Trail will always have 1 or 2 bins. (Failure and Success)
+             */
             if (requiredBin >= 5) {
                 Double diffForBins = rangeOfData() / requiredBin;
                 int diffForBin = diffForBins.intValue();
@@ -77,11 +84,35 @@ public class HistogramInfo {
                 int[] maxForEachBin = getMaxForEachBin(diffForBin, requiredBin);
                 int[] minForEachBin = getMinForEachBin(maxForEachBin, requiredBin);
 
-                if (experimentType.equals(Extras.COUNT_TYPE)) {
-                    labels.add("Count");
-                } else if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
-                    labels.add("Failure");
-                    labels.add("Success");
+                if (experimentType.equals(Extras.MEASUREMENT_TYPE) && diffForBin < 1) {
+                    // Handle the special case for the range of the bin here
+                    double[] mins = new double[requiredBin];
+                    double[] maxs = new double[requiredBin];
+
+                    mins[0] = experimentData.get(0);
+                    for (int i = 1; i < requiredBin; i++) {
+                        mins[i] = mins[i-1] + diffForBins;
+                    }
+
+                    maxs[0] = experimentData.get(0) + diffForBins;
+                    for (int j = 1; j < requiredBin; j++) {
+                        maxs[j] = maxs[j-1] + diffForBins;
+                    }
+
+                    for (int i = 0; i < requiredBin; i++) {
+                        // For the last bin, it includes all the numbers above the value
+                        // For the regular bin, its range is from min to max.
+                        if (i == requiredBin - 1) {
+                            String min = (df.format(mins[i]));
+                            String label = min + "+";
+                            labels.add(label);
+                        } else {
+                            String min = df.format(mins[i]);
+                            String max = df.format(maxs[i]);
+                            String label = min + '-' + max;
+                            labels.add(label);
+                        }
+                    }
                 } else {
                     for (int i = 0; i < requiredBin; i++) {
                         // For the last bin, it includes all the numbers above the value
@@ -105,8 +136,12 @@ public class HistogramInfo {
                 if (experimentType.equals(Extras.COUNT_TYPE)) {
                     labels.add("Count");
                 } else if (experimentType.equals(Extras.BINOMIAL_TYPE)) {
-                    labels.add("Failure");
-                    labels.add("Success");
+                    if (experimentData.contains(0.0)) {
+                        labels.add("Failure");
+                    }
+                    if (experimentData.contains(1.0)) {
+                        labels.add("Success");
+                    }
                 }
                     for (int i = 0; i < requiredBin; i++) {
                     labels.add(String.valueOf(categoryBin[i]));
@@ -231,31 +266,67 @@ public class HistogramInfo {
         ArrayList<Integer> binFrequency = new ArrayList<>();
 
         double range = rangeOfData();
+
+        int frequency;
+
         Double diffForBins = range / noOfBin;
         int diffForBin = diffForBins.intValue();
 
-        int[] maxForEachBin = getMaxForEachBin(diffForBin, noOfBin);
-        int[] minForEachBin = getMinForEachBin(maxForEachBin, noOfBin);
+        if (experimentType.equals(Extras.MEASUREMENT_TYPE) && diffForBin == 0) {
+            double[] mins = new double[noOfBin];
+            double[] maxs = new double[noOfBin];
 
-        int frequency;
-        for (int i = 0; i < noOfBin; i++) {
-            frequency = 0;
-            for (int j = 0; j < experimentData.size(); j++) {
-                // The last bin, only check if the value is larger than the minForEachBin[i] value
-                // Regular bins, check if the value is larger than the minForEachBin[i] value and
-                // smaller than maxForEachBin[i] value
-                if (i == noOfBin - 1) {
-                    if (experimentData.get(j) >= minForEachBin[i]) {
-                        frequency += 1;
-                    }
-                } else {
-                    if (experimentData.get(j) >= minForEachBin[i] && experimentData.get(j) <= maxForEachBin[i]) {
-                        frequency += 1;
+            mins[0] = experimentData.get(0);
+            for (int i = 1; i < noOfBin; i++) {
+                mins[i] = mins[i-1] + diffForBins;
+            }
+
+            maxs[0] = experimentData.get(0) + diffForBins;
+            for (int j = 1; j < noOfBin; j++) {
+                maxs[j] = maxs[j-1] + diffForBins;
+            }
+
+            for (int i = 0; i < noOfBin; i++) {
+                frequency = 0;
+                for (int j = 0; j < experimentData.size(); j++) {
+                    // The last bin, only check if the value is larger than the minForEachBin[i] value
+                    // Regular bins, check if the value is larger than the minForEachBin[i] value and
+                    // smaller than maxForEachBin[i] value
+                    if (i == noOfBin - 1) {
+                        if (experimentData.get(j) >= mins[i]) {
+                            frequency += 1;
+                        }
+                    } else {
+                        if (experimentData.get(j) >= mins[i] && experimentData.get(j) < maxs[i]) {
+                            frequency += 1;
+                        }
                     }
                 }
+                binFrequency.add(frequency);
             }
-            binFrequency.add(frequency);
-        }
+        } else{
+                int[] maxForEachBin = getMaxForEachBin(diffForBin, noOfBin);
+                int[] minForEachBin = getMinForEachBin(maxForEachBin, noOfBin);
+
+                for (int i = 0; i < noOfBin; i++) {
+                    frequency = 0;
+                    for (int j = 0; j < experimentData.size(); j++) {
+                        // The last bin, only check if the value is larger than the minForEachBin[i] value
+                        // Regular bins, check if the value is larger than the minForEachBin[i] value and
+                        // smaller than maxForEachBin[i] value
+                        if (i == noOfBin - 1) {
+                            if (experimentData.get(j) >= minForEachBin[i]) {
+                                frequency += 1;
+                            }
+                        } else {
+                            if (experimentData.get(j) >= minForEachBin[i] && experimentData.get(j) <= maxForEachBin[i]) {
+                                frequency += 1;
+                            }
+                        }
+                    }
+                    binFrequency.add(frequency);
+                }
+            }
 
         return binFrequency;
     }

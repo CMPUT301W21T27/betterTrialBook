@@ -1,6 +1,3 @@
-/*
-    Test Unit For Statistic.java (BinomialTrial Version)
- */
 package com.example.bettertrialbook;
 
 import android.location.Location;
@@ -18,6 +15,9 @@ import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertEquals;
 
+/**
+ * Test Unit For Statistic.java (BinomialTrial Version)
+ */
 public class StatisticBinomialTrialTest {
     Statistic statistic = new Statistic();
     private ArrayList<Trial> binomialTrialsOdd;

@@ -1,11 +1,9 @@
-/*
-UI testing for adding experiments
- */
-
 package com.example.bettertrialbook;
 
+import android.util.Log;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -13,7 +11,11 @@ import com.example.bettertrialbook.dal.Firestore;
 import com.example.bettertrialbook.experiment.ExperimentAddActivity;
 import com.example.bettertrialbook.experiment.ExperimentViewActivity;
 import com.example.bettertrialbook.home.MainActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
@@ -25,8 +27,12 @@ import org.junit.rules.TestRule;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * UI testing for adding experiments
+ */
 public class AddExperimentTest {
     private Solo solo;
+    FirebaseFirestore db;
     public ActivityTestRule<MainActivity> rule;
 
     @Rule
@@ -36,7 +42,8 @@ public class AddExperimentTest {
         return rule;
     }
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
+        db = Firestore.getInstance();
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
     }
 
@@ -143,6 +150,39 @@ public class AddExperimentTest {
      */
     @After
     public void tearDown() throws Exception{
+        //Delete users from emulator
+        db.collection("Users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("TEST", document.getId() + " => " + document.getData());
+                                db.collection("Users").document(document.getId()).delete();
+                            }
+                        } else {
+                            Log.d("TEST", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+        db.collection("Experiments")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("TEST", document.getId() + " => " + document.getData());
+                                db.collection("Experiments").document(document.getId()).delete();
+                            }
+                        } else {
+                            Log.d("TEST", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
         solo.finishOpenedActivities();
     }
 }

@@ -1,7 +1,3 @@
-/*
-    Test Unit for HistogramInfo.java (Binomial Trial)
- */
-
 package com.example.bettertrialbook;
 
 import android.location.Location;
@@ -20,6 +16,9 @@ import java.util.ArrayList;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertEquals;
 
+/**
+ * Test Unit for HistogramInfo.java (Binomial Trial)
+ */
 public class BinomialTrialHistogramInfoTest {
     private ArrayList<Trial> binomialTrialsOdd;
     private ArrayList<Trial> binomialTrialsEven;

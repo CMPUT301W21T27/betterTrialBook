@@ -1,9 +1,3 @@
-/*
- * Subscription List for the user that has subscribed
- * This subscriptionActivity cannot classify if the experiment is your own (auto subscription)
- * And the ones you subscribe to others
- */
-
 package com.example.bettertrialbook.home;
 
 import android.content.Intent;
@@ -26,6 +20,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Subscription List for the user that has subscribed
+ * This subscriptionActivity cannot classify if the experiment is your own (auto subscription)
+ * And the ones you subscribe to others
+ */
 public class SubscriptionActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private String userID;
     private Boolean aBoolean;

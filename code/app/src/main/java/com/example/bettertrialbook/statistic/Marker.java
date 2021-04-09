@@ -2,6 +2,7 @@
 package com.example.bettertrialbook.statistic;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * Class for displaying the marker feature related to statistics
+ */
 public class Marker extends MarkerView {
     private MPPointF mOffset;
     private SimpleDateFormat sdf;
@@ -44,25 +48,28 @@ public class Marker extends MarkerView {
         TextView label = findViewById(R.id.Label);
         TextView value = findViewById(R.id.DisplayValue);
         TextView display = findViewById(R.id.DisplayTime);
-
+        Log.d("Check", "Executed");
         if (!experimentType.equals(Extras.COUNT_TYPE)) {
             // Display the timeStamp for the point
             if (number > 0 && trials.get(number - 1) != null) {
                 Date date = trials.get(number - 1).getTimestamp();
-                display.setText(sdf.format(date));
-                display.setTextSize(15f);
-            } else {
-                label.setText("");
-                display.setText("");
-            }
-
-            // Display the value (result) for the point
-            if (number > 0 && data.get(number - 1) != null) {
                 value.setText(String.valueOf(data.get(number - 1)));
                 value.setTextSize(15f);
+                display.setText(sdf.format(date));
+                display.setTextSize(15f);
+                label.setText("Until");
             } else {
-                label.setText("");
+                value.setText("");
                 display.setText("");
+                label.setText("");
+            }
+        }
+        else {
+            LineGraphInfo lineGraphInfo = new LineGraphInfo(trials, experimentType);
+            ArrayList<String> theDates = lineGraphInfo.getTheDates();
+            if (theDates.get(number) != null) {
+                value.setText(String.valueOf(data.get(number)));
+                display.setText(theDates.get(number));
             }
         }
 

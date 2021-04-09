@@ -15,9 +15,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.bettertrialbook.R;
 
-/*
-* Fragment for entering new contact info
-* */
+/**
+ * Fragment for entering new contact info
+ */
 public class EditContactFragment extends DialogFragment {
     private String email = "";
     private String phone = "";
@@ -33,7 +33,9 @@ public class EditContactFragment extends DialogFragment {
         this.phone = phone;
     };
 
-    /* Ok pressed interface */
+    /**
+     * Ok pressed interface after collecting email and phone from user registration
+     */
     public interface OnFragmentInteractionListener{
         void onOkPressed(String email, String phone);
     }

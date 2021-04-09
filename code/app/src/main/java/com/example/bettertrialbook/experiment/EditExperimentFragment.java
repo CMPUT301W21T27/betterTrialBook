@@ -1,6 +1,3 @@
-/*
- * Fragment for editing experiment details like description or region
- * */
 package com.example.bettertrialbook.experiment;
 
 import android.app.AlertDialog;
@@ -18,6 +15,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.bettertrialbook.R;
 
+/**
+ * Fragment for editing experiment details like description or region
+ */
 public class EditExperimentFragment extends DialogFragment {
     private String description = "";
     private String region = "";
@@ -33,7 +33,9 @@ public class EditExperimentFragment extends DialogFragment {
         this.region = region;
     };
 
-    /* Ok pressed interface */
+    /**
+     * Ok pressed interface returning the update description/region or to delete the experiment
+     */
     public interface OnFragmentInteractionListener{
         void onOkPressed(String description, String region, Boolean delete);
     }

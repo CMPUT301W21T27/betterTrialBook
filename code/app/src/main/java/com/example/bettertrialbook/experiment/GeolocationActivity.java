@@ -31,9 +31,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 
-/*
-Handles the displaying of a map using Google Maps API
-Set up done using: Google Maps Platform, 2021-04-07, Apache 2.0, https://developers.google.com/maps/documentation/android-sdk/current-place-tutorial
+/**
+ * Handles the displaying of a map using Google Maps API
+ * Set up done using: Google Maps Platform, 2021-04-07, Apache 2.0, https://developers.google.com/maps/documentation/android-sdk/current-place-tutorial
  */
 public class GeolocationActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -162,6 +162,9 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
         }
     }
 
+    /**
+     * Gets the user's current location
+     */
     public void getLocation() {
         if (!allGeoLocations) {
             // selecting a location
@@ -238,8 +241,8 @@ public class GeolocationActivity extends FragmentActivity implements OnMapReadyC
         }
     }
 
-    /*
-    Communicates with the add trial fragments, sending the selected geolocation to the fragment
+    /**
+     * Communicates with the add trial fragments, sending the selected geolocation to the fragment
      */
     public void sendLocation(Geolocation geolocation) {
         Log.d("geolocation", "sent location");

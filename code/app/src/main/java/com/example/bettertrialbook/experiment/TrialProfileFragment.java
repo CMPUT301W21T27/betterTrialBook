@@ -20,10 +20,10 @@ import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.qr.CreateQRActivity;
 
-/*
-    Fragment for choosing an option after clicking on a trial/user. The owner can blacklist them
-    which hides all their trials and doesn't allow them to add additional trials. Everyone can
-    view someone else's profile
+/**
+ * Fragment for choosing an option after clicking on a trial/user. The owner can blacklist them
+ * which hides all their trials and doesn't allow them to add additional trials. Everyone can
+ * view someone else's profile
  */
 public class TrialProfileFragment extends DialogFragment {
     private TrialProfileFragment.OnFragmentInteractionListener listener;
@@ -33,7 +33,9 @@ public class TrialProfileFragment extends DialogFragment {
     private Trial trial;
     private boolean isExperimenter = false;
 
-    /* Ok pressed interface */
+    /**
+     * Ok pressed interface for either viewing profile or blacklisting user
+     */
     public interface OnFragmentInteractionListener {
         void onViewProfile();
 
@@ -70,6 +72,10 @@ public class TrialProfileFragment extends DialogFragment {
                 .setItems(availableActions(), (dialog, which) -> onActionClick(which)).create();
     }
 
+    /**
+     * list of potential options for user to choose
+     * @return
+     */
     private String[] availableActions() {
         if (isOwner) {
             if (isExperimenter) {
@@ -83,6 +89,10 @@ public class TrialProfileFragment extends DialogFragment {
         return new String[]{"View Profile", "Create QR Code"};
     }
 
+    /**
+     * Take action based on option clicked
+     * @param actionIndex
+     */
     private void onActionClick(int actionIndex) {
         if (actionIndex == 0)
             listener.onViewProfile();
@@ -98,13 +108,17 @@ public class TrialProfileFragment extends DialogFragment {
             onDeleteClick();
     }
 
-    // delete the trial from the experiment
+    /**
+     * delete the trial from the experiment
+     */
     private void onDeleteClick() {
         ExperimentDAL experimentDAL = new ExperimentDAL();
         experimentDAL.deleteTrial(experimentID, trial);
     }
 
-    // blacklist the user from the experiment
+    /**
+     * blacklist the user from the experiment
+     */
     private void onBlacklistClick() {
         if (experimenterID.equals(You.getUser().getID())) {
             Toast.makeText(getActivity(), "You cannot blacklist yourself", Toast.LENGTH_LONG).show();
@@ -114,7 +128,9 @@ public class TrialProfileFragment extends DialogFragment {
         }
     }
 
-    // create a qr code for the experiment
+    /**
+     * create a qr code for the experiment
+     */
     private void onCreateQRCodeClick() {
         Intent intent = new Intent(getContext(), CreateQRActivity.class);
         intent.putExtra(Extras.TRIAL_ID, trial.getTrialID());

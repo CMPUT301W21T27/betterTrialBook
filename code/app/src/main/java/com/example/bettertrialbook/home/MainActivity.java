@@ -1,6 +1,3 @@
-/*
-    TODO: Create QR Functionality
- */
 package com.example.bettertrialbook.home;
 
 import android.content.Intent;
@@ -172,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Checking if ID in Database, else adds it to database
         final String finalID = defaultIDValue;
 
-        // https://www.youtube.com/watch?v=0ofkvm97i0s - Callback
+        // https://www.youtube.com/watch?v=0ofkvm97i0s - Callback; included in README citations
         uDAL.findUserByID(defaultIDValue, new UserDAL.FindUserByIDCallback() {
             @Override
             public void onCallback(User user) {
@@ -258,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     /**
      *  Opens create experiment page
      *
-     * @param v - view to open
+     * @param view - view to open
      */
     public void createExperiment(View view) {
         Intent intent = new Intent(this, ExperimentAddActivity.class);

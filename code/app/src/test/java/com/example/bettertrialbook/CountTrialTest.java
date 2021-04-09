@@ -1,6 +1,3 @@
-/*
-Unit tests for the CountTrial class
- */
 
 package com.example.bettertrialbook;
 
@@ -17,20 +14,23 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Unit tests for the CountTrial class
+ */
 public class CountTrialTest {
     CountTrial testTrial;
     Geolocation mockGeolocation;
     Date date;
 
     private CountTrial mockTrial() {
-        return new CountTrial("testid", "testUser", new Geolocation(new Location("")), date);
+        return new CountTrial("testid", "testUser", mockGeolocation, date);
     }
 
     @Before
     public void setUp() {
+        mockGeolocation = new Geolocation(new Location(""));
         date = Calendar.getInstance().getTime();
         testTrial = mockTrial();
-        mockGeolocation = new Geolocation(new Location(""));
     }
 
     @Test

@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
 
+/**
+ * Unit tests for the HistogramInfo.java (Measurement Trial)
+ */
 public class MeasurementHistogramInfoTest {
     private ArrayList<Trial> mmOddTrials;
     private ArrayList<Trial> mmEvenTrials;
@@ -68,11 +71,11 @@ public class MeasurementHistogramInfoTest {
         ArrayList<Integer> result3 = histogramInfo3.collectFrequency();
 
         // Result for distinct item >= 5 in the data list
-        assertEquals(0, (int) result1.get(0));
+        assertEquals(1, (int) result1.get(0));
         assertEquals(1, (int) result1.get(1));
-        assertEquals(1, (int) result1.get(2));
-        assertEquals(3, (int) result1.get(3));
-        assertEquals(2, (int) result1.get(4));
+        assertEquals(3, (int) result1.get(2));
+        assertEquals(1, (int) result1.get(3));
+        assertEquals(1, (int) result1.get(4));
         // Result for distinct item < 5 in the data list
         assertEquals(1, (int) result2.get(0));
         assertEquals(1, (int) result2.get(1));
@@ -89,11 +92,11 @@ public class MeasurementHistogramInfoTest {
         ArrayList<String> label3 = histogramInfo3.getLabels();
 
         // Result for distinct item >= 5 in the data list
-        assertEquals("0-1", label1.get(0));
-        assertEquals("1-2", label1.get(1));
-        assertEquals("2-3", label1.get(2));
-        assertEquals("3-4", label1.get(3));
-        assertEquals("4+", label1.get(4));
+        assertEquals("1.1-1.98", label1.get(0));
+        assertEquals("1.98-2.86", label1.get(1));
+        assertEquals("2.86-3.74", label1.get(2));
+        assertEquals("3.74-4.62", label1.get(3));
+        assertEquals("4.62+", label1.get(4));
         // Result for distinct item < 5 in the data list
         assertEquals("2.2", label2.get(0));
         assertEquals("2.25", label2.get(1));

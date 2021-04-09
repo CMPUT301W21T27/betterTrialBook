@@ -1,7 +1,3 @@
-/*
-    Test Unit HistogramInfo.java (Non Negative Trial)
- */
-
 package com.example.bettertrialbook;
 
 import android.location.Location;
@@ -20,6 +16,9 @@ import java.util.ArrayList;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertEquals;
 
+/**
+ * Test Unit HistogramInfo.java (Non Negative Trial)
+ */
 public class NonNegativeHistogramInfoTest {
     private ArrayList<Trial> nonNegOddTrials;
     private ArrayList<Trial> nonNegEvenTrials;

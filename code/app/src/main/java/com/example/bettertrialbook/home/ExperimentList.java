@@ -1,8 +1,3 @@
-/*
-    A CustomList to display the search results
-    Generally finished
-*/
-
 package com.example.bettertrialbook.home;
 
 import android.content.Context;
@@ -22,8 +17,10 @@ import com.example.bettertrialbook.models.User;
 
 import java.util.ArrayList;
 
+/**
+    A CustomList to display the search results
+*/
 public class ExperimentList extends ArrayAdapter<ExperimentInfo> {
-
     private Context context;
     private ArrayList<ExperimentInfo> trials;
 

@@ -1,25 +1,23 @@
 package com.example.bettertrialbook.profile;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.You;
 import com.example.bettertrialbook.dal.UserDAL;
-import com.example.bettertrialbook.models.User;
 
-/*
-* Sign up activity
-* Takes user input for username and contact info
-* Users must enter a unique username, contact info optional
-* Can cancel signup or confirm
-* */
+/**
+ * Sign up activity
+ * Takes user input for username and contact info
+ * Users must enter a unique username, contact info optional
+ * Can cancel signup or confirm
+ */
 public class SignUp extends AppCompatActivity implements InvalidUsernameFragment.OnFragmentInteractionListener {
 
     private String username;
@@ -34,10 +32,18 @@ public class SignUp extends AppCompatActivity implements InvalidUsernameFragment
         setContentView(R.layout.sign_up_information);
     }
 
+    /**
+     * Close activity fragment if cancel is pressed
+     * @param view
+     */
     public void cancelPressed(View view){
         endActivity();
     }
 
+    /**
+     * Validate entered fields and update firebase data and return
+     * @param view
+     */
     public void confirmPressed(View view){
         TextView input;
 
@@ -78,6 +84,9 @@ public class SignUp extends AppCompatActivity implements InvalidUsernameFragment
         }
     }
 
+    /**
+     * Actually end the signup activity and return to the (updated profile view)
+     */
     public void endActivity(){
         //Ends the activity
         setResult(Activity.RESULT_OK,getIntent());

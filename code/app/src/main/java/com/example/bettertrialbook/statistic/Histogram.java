@@ -5,33 +5,36 @@
  */
 package com.example.bettertrialbook.statistic;
 
-import androidx.appcompat.widget.Toolbar;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.View;
-import android.view.Menu;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.graphics.Color;
 import android.content.Intent;
-import android.widget.TextView;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
-import com.example.bettertrialbook.R;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.example.bettertrialbook.Extras;
+import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.models.Trial;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ArrayList;
 
+/**
+ * Activity for displaying the histogram feature
+ */
 public class Histogram extends AppCompatActivity {
     String experimentType;
     private HistogramInfo histogramInfo;
@@ -66,8 +69,10 @@ public class Histogram extends AppCompatActivity {
         }
 
         // Histogram Graph plot and setting
-        barChartSetting(barChart, labels);
-        plotTheGraph(barChart);
+        if (trialDataList.size() > 0) {
+            barChartSetting(barChart, labels);
+            plotTheGraph(barChart);
+        }
     }
 
     // This method is used to handle the plotting the data of the histogram

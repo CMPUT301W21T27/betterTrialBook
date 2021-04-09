@@ -4,22 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
 
     tools:context=".qr.CreateQRActivity">
     <ImageView
         android:id="@+id/generated_qr_code"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/confirm_qr_code_generation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Confirm"
+        android:layout_marginVertical="20dp"
         android:onClick="onConfirm"
-        />
+        android:text="Register" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="scanExistingBarcode"
+        android:layout_marginBottom="20dp"
+        android:text="Scan My Own" />
+
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="272dp"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="Take a screenshot of this QR Code and then register it, or scan your own barcode." />
 
 </LinearLayout>

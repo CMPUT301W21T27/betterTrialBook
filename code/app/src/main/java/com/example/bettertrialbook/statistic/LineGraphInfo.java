@@ -1,5 +1,7 @@
 package com.example.bettertrialbook.statistic;
 
+import android.util.Log;
+
 import com.example.bettertrialbook.Extras;
 import com.example.bettertrialbook.models.Trial;
 import com.example.bettertrialbook.models.Statistic;
@@ -8,11 +10,15 @@ import com.example.bettertrialbook.models.BinomialTrial;
 import com.example.bettertrialbook.models.MeasurementTrial;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
 import java.util.LinkedHashSet;
 
+/**
+ * A model to to hold relevant data for the statistics and line graph
+ */
 public class LineGraphInfo {
     DecimalFormat df;
     Statistic statistic;
@@ -184,6 +190,7 @@ public class LineGraphInfo {
 
         if (trials != null && trials.size() > 0) {
             for (String date : dates) {
+                frequency = 0;
                 for (Trial trial: trials) {
                     String theDate = sdf.format(trial.getTimestamp());
                     if (experimentType.equals(Extras.COUNT_TYPE)) {

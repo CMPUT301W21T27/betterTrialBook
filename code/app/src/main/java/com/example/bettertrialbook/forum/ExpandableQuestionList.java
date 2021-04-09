@@ -16,8 +16,6 @@ import com.example.bettertrialbook.dal.Callback;
 import com.example.bettertrialbook.models.Question;
 import com.example.bettertrialbook.models.Reply;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +34,10 @@ public class ExpandableQuestionList extends BaseExpandableListAdapter {
         this.questions = new ArrayList<>();
     }
 
+    /**
+     * Adds the list of questions to the local list to update/display
+     * @param questions
+     */
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
         this.notifyDataSetChanged();
@@ -116,8 +118,14 @@ public class ExpandableQuestionList extends BaseExpandableListAdapter {
         return false;
     }
 
+    /**
+     * create a new view if the view hasn't been created yet or if we are passed a view with an incorrect layout
+     * @param q
+     * @param view
+     * @param parent
+     * @return
+     */
     private View getQuestionDetailsView(Question q, View view, ViewGroup parent) {
-        // create a new view if the view hasn't been created yet or if we are passed a view with an incorrect layout
         if (view == null || view.findViewById(R.id.post_reply) == null) {
             view = inflateLayout(R.layout.question_details, parent);
         }
@@ -129,8 +137,14 @@ public class ExpandableQuestionList extends BaseExpandableListAdapter {
         return view;
     }
 
+    /**
+     * create a new view if the view hasn't been created yet or if we are passed a view with an incorrect layout
+     * @param r
+     * @param view
+     * @param parent
+     * @return
+     */
     private View getReplyView(Reply r, View view, ViewGroup parent) {
-        // create a new view if the view hasn't been created yet or if we are passed a view with an incorrect layout
         if (view == null || view.findViewById(R.id.reply_body) == null) {
             view = inflateLayout(R.layout.reply, parent);
         }
@@ -143,6 +157,12 @@ public class ExpandableQuestionList extends BaseExpandableListAdapter {
         return view;
     }
 
+    /**
+     * inflates the layout from the parent
+     * @param layout
+     * @param parent
+     * @return
+     */
     private View inflateLayout(@LayoutRes int layout, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(this.context);
         return inflater.inflate(layout, parent, false);

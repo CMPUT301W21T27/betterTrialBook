@@ -16,9 +16,8 @@ import com.example.bettertrialbook.dal.ExperimentDAL;
 import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.ExperimentInfo;
 
-/*
-    Activity for adding a new experiment. Uses the ExperimentDAL to write the new experiment
-    to the database.
+/**
+ * Activity for adding new experiment. Uses the ExperimentDAL to write new experiment to database.
  */
 public class ExperimentAddActivity extends AppCompatActivity {
     String ownerId;
@@ -95,8 +94,8 @@ public class ExperimentAddActivity extends AppCompatActivity {
         });
     }
 
-    /*
-    Return to the experiment view activity
+    /**
+     * Return to the experiment view activity
      */
     public void openExperimentViewActivity(ExperimentInfo experimentInfo) {
         UserDAL userDAL = new UserDAL();

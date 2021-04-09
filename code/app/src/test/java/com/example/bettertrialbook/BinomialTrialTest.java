@@ -1,7 +1,3 @@
-/*
-Unit tests for the BinomialTrial class
- */
-
 package com.example.bettertrialbook;
 
 import android.location.Location;
@@ -19,20 +15,24 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Unit tests for the BinomialTrial class
+ */
 public class BinomialTrialTest {
     BinomialTrial testTrial;
     Geolocation mockGeolocation;
     Date date;
 
     private BinomialTrial mockTrial() {
-        return new BinomialTrial(true, "testid", "testUser", new Geolocation(new Location("")), date);
+        return new BinomialTrial(true, "testid", "testUser", mockGeolocation, date);
     }
 
     @Before
     public void setUp() {
+        mockGeolocation = new Geolocation(new Location(""));
         date = Calendar.getInstance().getTime();
         testTrial = mockTrial();
-        mockGeolocation = new Geolocation(new Location(""));
+
     }
 
     @Test

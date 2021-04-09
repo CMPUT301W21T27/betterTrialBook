@@ -1,7 +1,3 @@
-/*
-Unit tests for the NonNegTrial class
- */
-
 package com.example.bettertrialbook;
 
 import android.location.Location;
@@ -17,20 +13,24 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Unit tests for the NonNegTrial class
+ */
 public class NonNegTrialTest {
     NonNegTrial testTrial;
     Geolocation mockGeolocation;
     Date date;
 
     private NonNegTrial mockTrial() {
-        return new NonNegTrial(69, "testid", "testUser", new Geolocation(new Location("")), date);
+        return new NonNegTrial(69, "testid", "testUser", mockGeolocation, date);
     }
 
     @Before
     public void setUp() {
+        mockGeolocation = new Geolocation(new Location(""));
         date = Calendar.getInstance().getTime();
         testTrial = mockTrial();
-        mockGeolocation = new Geolocation(new Location(""));
+
     }
 
     @Test

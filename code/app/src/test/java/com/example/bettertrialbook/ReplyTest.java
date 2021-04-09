@@ -1,7 +1,3 @@
-/*
-Unit testing for posting an answer
- */
-
 package com.example.bettertrialbook;
 
 import com.example.bettertrialbook.models.Reply;
@@ -9,6 +5,9 @@ import com.example.bettertrialbook.models.Reply;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+/**
+ * Unit testing for posting an answer
+ */
 public class ReplyTest {
 
     @Test

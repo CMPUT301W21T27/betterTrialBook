@@ -1,14 +1,11 @@
-/*
-A child class of Post used for Questions in the forum
- */
-
 package com.example.bettertrialbook.models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+/**
+ * A child class of Post used for Questions in the forum
+ */
 public class Question extends Post {
     private String title;
     private List<Reply> replies;
@@ -19,14 +16,26 @@ public class Question extends Post {
         replies = new ArrayList<>();
     }
 
+    /**
+     * Gets the post's title
+     * @return String of the post title
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Sets the post's title
+     * @param title
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * Gets the post's list of replies
+     * @return List of replies for the question
+     */
     public List<Reply> getReplies() {
         return replies;
     }
@@ -44,6 +53,10 @@ public class Question extends Post {
                 '}';
     }
 
+    /**
+     * Gets the type of the post (question)
+     * @return String of the post type
+     */
     public String getType() {
         return type;
     }

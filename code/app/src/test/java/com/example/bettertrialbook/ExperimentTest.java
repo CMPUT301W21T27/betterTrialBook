@@ -1,7 +1,3 @@
-/*
-Unit tests for the Experiment class
- */
-
 package com.example.bettertrialbook;
 
 import com.example.bettertrialbook.models.ExperimentInfo;
@@ -11,6 +7,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Unit tests for the Experiment class
+ */
 public class ExperimentTest {
     ExperimentInfo testInfo;
 

@@ -3,7 +3,6 @@ package com.example.bettertrialbook.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
 /**
  * Contact Info object, holds Phone and email of User object
  */

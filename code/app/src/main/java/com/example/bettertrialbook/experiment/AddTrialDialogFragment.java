@@ -1,7 +1,3 @@
-/*
-    Fragment for adding a new trial to an experiment. Uses the ExperimentDAL to
-    add the new trial to the database.
-*/
 package com.example.bettertrialbook.experiment;
 
 import android.app.Activity;
@@ -35,9 +31,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
-/*
-Fragment for adding a new trial to an experiment. Uses the ExperimentDAL to add the new trial to the database.
-Based on: Android Developer, 2021-02-24, Apache 2.0, https://developer.android.com/reference/android/app/DialogFragment
+/**
+ * Fragment for adding a new trial to an experiment. Uses the ExperimentDAL to add the new trial to the database.
+ * Based on: Android Developer, 2021-02-24, Apache 2.0, https://developer.android.com/reference/android/app/DialogFragment
  */
 public class AddTrialDialogFragment extends DialogFragment {
     Geolocation geolocation = new Geolocation(null);

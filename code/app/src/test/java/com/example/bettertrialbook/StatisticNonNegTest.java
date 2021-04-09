@@ -1,6 +1,3 @@
-/*
-    Test Unit for Statistic.java (Non Negative Trial)
- */
 package com.example.bettertrialbook;
 
 import android.location.Location;
@@ -18,6 +15,9 @@ import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertEquals;
 
+/**
+ * Test Unit for Statistic.java (Non Negative Trial)
+ */
 public class StatisticNonNegTest {
     private ArrayList<Trial> nonNegOddTrials;
     private ArrayList<Trial> nonNegEvenTrials;

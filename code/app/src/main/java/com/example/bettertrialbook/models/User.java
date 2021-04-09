@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import java.util.List;
 
-
 /**
  * User object
  * Represents the app's Users with a username, ID, and contact info
@@ -73,25 +72,6 @@ public class User implements Parcelable {
     public List<String> getSubscribedExperiments() {
         return subscribed;
     }
-
-    // don't need these two functions below most likely
-    /**
-     * Adds experiment ID to list of subscribed experiments
-     * @param - Experiment to subscribe to
-     */
-    public void subscribeExperiment(String experimentID) {
-        subscribed.add(experimentID);
-    }
-
-    /**
-     * Removes experiment ID from list of subscribed experiments
-     * @param experimentID - Experiment to unsubscribe from
-     * @return - boolean to indicate success or failure
-     */
-    public boolean unsubscribeExperiment(String experimentID) {
-        return subscribed.remove(experimentID);
-    }
-
 
     @Override
     public boolean equals(Object obj){
