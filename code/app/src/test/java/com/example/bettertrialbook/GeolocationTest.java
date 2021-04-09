@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class GeolocationTest {
     Geolocation testGeolocation;
-    Location mockLocation = new Location("");
+    Location mockLocation;
 
 
     private Geolocation mockGeolocation() {
@@ -23,6 +23,9 @@ public class GeolocationTest {
 
     @Before
     public void setUp() {
+        mockLocation = new Location("");
+        mockLocation.setLatitude(10);
+        mockLocation.setLongitude(10);
         testGeolocation = mockGeolocation();
     }
 

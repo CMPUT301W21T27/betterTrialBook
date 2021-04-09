@@ -22,14 +22,15 @@ public class NonNegTrialTest {
     Date date;
 
     private NonNegTrial mockTrial() {
-        return new NonNegTrial(69, "testid", "testUser", new Geolocation(new Location("")), date);
+        return new NonNegTrial(69, "testid", "testUser", mockGeolocation, date);
     }
 
     @Before
     public void setUp() {
+        mockGeolocation = new Geolocation(new Location(""));
         date = Calendar.getInstance().getTime();
         testTrial = mockTrial();
-        mockGeolocation = new Geolocation(new Location(""));
+
     }
 
     @Test
