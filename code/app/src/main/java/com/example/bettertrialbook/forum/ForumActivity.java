@@ -80,5 +80,6 @@ public class ForumActivity extends AppCompatActivity {
     private void setTitle() {
         TextView title = findViewById(R.id.forum_experiment_title);
         title.setText(expId);
+        new ExperimentDAL().findExperimentByID(expId, experimentInfo -> title.setText(experimentInfo.getDescription()));
     }
 }

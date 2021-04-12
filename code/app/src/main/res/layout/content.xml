@@ -10,7 +10,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="250dp"
-        android:layout_height="98dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,15 +18,15 @@
 
         <TextView
             android:id="@+id/Description_Text"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="25sp"
             android:text="@string/description" />
 
         <TextView
             android:id="@+id/username_Text"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textSize="20sp"
             android:text="Owner: " />
@@ -38,8 +38,8 @@
 
             <TextView
                 android:id="@+id/TrialType_Text"
-                android:layout_width="199dp"
-                android:layout_height="35dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/trialType"
                 android:textSize="20sp" />

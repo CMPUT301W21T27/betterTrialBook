@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 
 import com.example.bettertrialbook.R;
 import com.example.bettertrialbook.dal.Callback;
+import com.example.bettertrialbook.dal.UserDAL;
 import com.example.bettertrialbook.models.Question;
 import com.example.bettertrialbook.models.Reply;
 
@@ -100,6 +101,7 @@ public class ExpandableQuestionList extends BaseExpandableListAdapter {
         title.setText(question.getTitle());
         replyCount.setText(question.getReplies().size() + " Response(s)");
         poster.setText("By: " + question.getPosterId().substring(0, 4));
+        new UserDAL().findUserByID(question.getPosterId(), user -> poster.setText("By: "+ user.getUsername()));
 
         return view;
     }
@@ -154,6 +156,8 @@ public class ExpandableQuestionList extends BaseExpandableListAdapter {
 
         body.setText(r.getText());
         poster.setText("By: " + r.getPosterId().substring(0, 4));
+        new UserDAL().findUserByID(r.getPosterId(), user -> poster.setText("By: "+ user.getUsername()));
+
         return view;
     }
 
